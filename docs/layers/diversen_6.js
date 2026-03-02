@@ -1,0 +1,1 @@
+var json_diversen_6 = {"type":"FeatureCollection","name":"diversen_6","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"id":"1","pagina":"https://jpmklink-creator.github.io/glas/gebouw_f1"},"geometry":{"type":"Point","coordinates":[5.958906631886765,51.651958808844434]}}]}

@@ -86,24 +86,42 @@ var lyr_mijnstreek_5 = new ol.layer.Vector({
                 interactive: true,
                 title: '<img src="styles/legend/mijnstreek_5.png" /> mijnstreek'
             });
+var format_diversen_6 = new ol.format.GeoJSON();
+var features_diversen_6 = format_diversen_6.readFeatures(json_diversen_6, 
+            {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+var jsonSource_diversen_6 = new ol.source.Vector({
+    attributions: ' ',
+});
+jsonSource_diversen_6.addFeatures(features_diversen_6);
+var lyr_diversen_6 = new ol.layer.Vector({
+                declutter: false,
+                source:jsonSource_diversen_6, 
+                style: style_diversen_6,
+                popuplayertitle: 'diversen',
+                interactive: true,
+                title: '<img src="styles/legend/diversen_6.png" /> diversen'
+            });
 
-lyr_OpenStreetMap_0.setVisible(true);lyr_oostbrabant_1.setVisible(true);lyr_maas_en_waal_2.setVisible(true);lyr_persberichten_3.setVisible(true);lyr_kerkfotografie_4.setVisible(true);lyr_mijnstreek_5.setVisible(true);
-var layersList = [lyr_OpenStreetMap_0,lyr_oostbrabant_1,lyr_maas_en_waal_2,lyr_persberichten_3,lyr_kerkfotografie_4,lyr_mijnstreek_5];
+lyr_OpenStreetMap_0.setVisible(true);lyr_oostbrabant_1.setVisible(true);lyr_maas_en_waal_2.setVisible(true);lyr_persberichten_3.setVisible(true);lyr_kerkfotografie_4.setVisible(true);lyr_mijnstreek_5.setVisible(true);lyr_diversen_6.setVisible(true);
+var layersList = [lyr_OpenStreetMap_0,lyr_oostbrabant_1,lyr_maas_en_waal_2,lyr_persberichten_3,lyr_kerkfotografie_4,lyr_mijnstreek_5,lyr_diversen_6];
 lyr_oostbrabant_1.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'kerknaam': 'kerknaam', 'bestand': 'bestand', });
 lyr_maas_en_waal_2.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'kerk': 'kerk', 'link': 'link', });
 lyr_persberichten_3.set('fieldAliases', {'id': 'id', 'bron': 'bron', 'link': 'link', 'gebouw': 'gebouw', });
 lyr_kerkfotografie_4.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'gebouw': 'gebouw', 'link': 'link', });
 lyr_mijnstreek_5.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'gebouw': 'gebouw', 'link': 'link', });
+lyr_diversen_6.set('fieldAliases', {'id': 'id', 'pagina': 'pagina', });
 lyr_oostbrabant_1.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'kerknaam': 'TextEdit', 'bestand': 'TextEdit', });
 lyr_maas_en_waal_2.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'kerk': 'TextEdit', 'link': 'TextEdit', });
 lyr_persberichten_3.set('fieldImages', {'id': 'TextEdit', 'bron': 'TextEdit', 'link': 'TextEdit', 'gebouw': 'TextEdit', });
 lyr_kerkfotografie_4.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', });
 lyr_mijnstreek_5.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', });
+lyr_diversen_6.set('fieldImages', {'id': 'TextEdit', 'pagina': 'TextEdit', });
 lyr_oostbrabant_1.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'kerknaam': 'no label', 'bestand': 'no label', });
 lyr_maas_en_waal_2.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'kerk': 'no label', 'link': 'no label', });
 lyr_persberichten_3.set('fieldLabels', {'id': 'no label', 'bron': 'no label', 'link': 'no label', 'gebouw': 'no label', });
 lyr_kerkfotografie_4.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'gebouw': 'no label', 'link': 'no label', });
 lyr_mijnstreek_5.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'gebouw': 'no label', 'link': 'no label', });
-lyr_mijnstreek_5.on('precompose', function(evt) {
+lyr_diversen_6.set('fieldLabels', {'id': 'no label', 'pagina': 'no label', });
+lyr_diversen_6.on('precompose', function(evt) {
     evt.context.globalCompositeOperation = 'normal';
 });
