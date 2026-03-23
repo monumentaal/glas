@@ -59,16 +59,36 @@ jobs:
           echo "lat=$LAT" >> $GITHUB_OUTPUT
           echo "lon=$LON" >> $GITHUB_OUTPUT
 
-      - name: Append to YAML (docs map!)
-        run: |
-          FILE="docs/_data/locations.yml"
+    - name: Append to community data
+  run: |
+    FILE="docs/data/community.js"
 
-          echo "" >> $FILE
-          echo "- name: \"${{ steps.extract.outputs.name }}\"" >> $FILE
-          echo "  lat: ${{ steps.geo.outputs.lat }}" >> $FILE
-          echo "  lng: ${{ steps.geo.outputs.lon }}" >> $FILE
-          echo "  url: \"${{ steps.extract.outputs.url }}\"" >> $FILE
-          echo "  description: \"${{ steps.extract.outputs.desc }}\"" >> $FILE
+    LAT=${{ steps.geo.outputs.lat }}
+    LON=${{ steps.geo.outputs.lon }}
+
+    NAME="${{ steps.extract.outputs.name }}"
+    URL="${{ steps.extract.outputs.url }}"
+    DESC="${{ steps.extract.outputs.desc }}"
+
+    sed '1s/^var.*= //' $FILE > temp.json
+    sed -i '$ s/;$//' temp.json
+
+    jq '.features += [{
+      "type": "Feature",
+      "properties": {
+        "name": "'"$NAME"'",
+        "url": "'"$URL"'",
+        "description": "'"$DESC"'"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": ['"$LON"', '"$LAT"']
+      }
+    }]' temp.json > updated.json
+
+    echo "var json_community = " > $FILE
+    cat updated.json >> $FILE
+    echo ";" >> $FILE
 
       - name: Commit changes
         run: |
