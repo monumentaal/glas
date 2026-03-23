@@ -125,7 +125,7 @@ var jsonSource_community = new ol.source.Vector({
 });
 jsonSource_community.addFeatures(features_community);
 
-var layer_community = new ol.layer.Vector({
+var lyr_layer_community = new ol.layer.Vector({
     declutter: true,
     source: jsonSource_community,
     style: style_kerkfotografie_4, // hergebruik stijl
@@ -135,7 +135,7 @@ var layer_community = new ol.layer.Vector({
 
 
 
-lyr_OpenStreetMap_0.setVisible(true);lyr_webpaginas_1.setVisible(true);lyr_boeken_2.setVisible(true);lyr_pers_3.setVisible(true);lyr_kerkfotografie_4.setVisible(true);lyr_mijnstreek_5.setVisible(true);lyr_maas_en_waal_6.setVisible(true);lyr_oostbrabant_7.setVisible(true);layer_community.setVisible(true);
+lyr_OpenStreetMap_0.setVisible(true);lyr_webpaginas_1.setVisible(true);lyr_boeken_2.setVisible(true);lyr_pers_3.setVisible(true);lyr_kerkfotografie_4.setVisible(true);lyr_mijnstreek_5.setVisible(true);lyr_maas_en_waal_6.setVisible(true);lyr_oostbrabant_7.setVisible(true);lyr_layer_community.setVisible(true);
 var layersList = [lyr_OpenStreetMap_0,lyr_webpaginas_1,lyr_boeken_2,lyr_pers_3,lyr_kerkfotografie_4,lyr_mijnstreek_5,lyr_maas_en_waal_6,lyr_oostbrabant_7,lyr_layer_community];
 lyr_webpaginas_1.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'link': 'link', 'gebouw': 'gebouw', 'extra': 'extra', });
 lyr_boeken_2.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'gebouw': 'gebouw', 'titel': 'titel', 'auteur': 'auteur', 'uitgever': 'uitgever', 'isbn': 'isbn', });
