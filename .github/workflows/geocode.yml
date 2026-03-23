@@ -44,9 +44,11 @@ jobs:
 
           POINT=$(echo $RESPONSE | jq -r '.response.docs[0].centroide_ll')
 
-          if [ "$POINT" = "null" ]; then
-            echo "Geen coördinaten gevonden!"
-            exit 1
+          POINT=$(echo $RESPONSE | jq -r '.response.docs[0].centroide_ll // empty')
+
+          if [ -z "$POINT" ]; then
+            echo "Geen coördinaten gevonden voor adres: ${{ steps.extract.outputs.address }}"
+            exit 0
           fi
 
           LON=$(echo $POINT | sed -E 's/POINT\(([0-9.]+) ([0-9.]+)\)/\1/')
