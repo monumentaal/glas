@@ -22,7 +22,7 @@ jobs:
           BODY="${{ github.event.issue.body }}"
 
           echo "----- DEBUG BODY -----"
-          echo "$BODY"
+          echo "$BODY" 
 
           NAME=$(echo "$BODY" | sed -n '/Naam locatie/{n;p;}')
           ADDRESS=$(echo "$BODY" | sed -n '/Adres/{n;p;}')
