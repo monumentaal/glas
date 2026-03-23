@@ -131,7 +131,24 @@ var lyr_layer_community = new ol.layer.Vector({
     style: style_kerkfotografie_4, // hergebruik stijl
     interactive: true,  
     title: 'Community inzendingen'
+});// --- COMMUNITY LAYER ---
+var format_community = new ol.format.GeoJSON();
+var features_community = format_community.readFeatures(json_community, 
+    {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+
+var jsonSource_community = new ol.source.Vector({
+    attributions: ' ',
 });
+jsonSource_community.addFeatures(features_community);
+
+var layer_community = new ol.layer.Vector({
+    declutter: true,
+    source: jsonSource_community,
+    style: null, // tijdelijk veilig
+    interactive: true,
+    title: 'Community inzendingen'
+});
+
 
 
 
