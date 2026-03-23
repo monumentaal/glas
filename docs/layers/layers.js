@@ -125,29 +125,26 @@ var jsonSource_community = new ol.source.Vector({
 });
 jsonSource_community.addFeatures(features_community);
 
-var lyr_layer_community = new ol.layer.Vector({
-    declutter: true,
-    source: jsonSource_community,
-    style: style_kerkfotografie_4, // hergebruik stijl
-    interactive: true,  
-    title: 'Community inzendingen'
-});// --- COMMUNITY LAYER ---
+// --- COMMUNITY LAYER ---
 var format_community = new ol.format.GeoJSON();
-var features_community = format_community.readFeatures(json_community, 
-    {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
 
-var jsonSource_community = new ol.source.Vector({
-    attributions: ' ',
+var features_community = format_community.readFeatures({
+  "type": "FeatureCollection",
+  "features": []
+}, 
+{dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+
+var source_community = new ol.source.Vector({
 });
-jsonSource_community.addFeatures(features_community);
+source_community.addFeatures(features_community);
 
 var layer_community = new ol.layer.Vector({
-    declutter: true,
-    source: jsonSource_community,
-    style: null, // tijdelijk veilig
-    interactive: true,
+    source: source_community,
+    style: null,
     title: 'Community inzendingen'
 });
+
+        
 
 
 
