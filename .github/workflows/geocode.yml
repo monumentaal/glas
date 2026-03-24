@@ -2,7 +2,9 @@ name: Geocode new locations
 
 on:
   workflow_dispatch:
-
+  issues:
+    types: [opened]
+    
 jobs:
   geocode:
     runs-on: ubuntu-latest
