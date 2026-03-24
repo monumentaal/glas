@@ -28,29 +28,22 @@ jobs:
         run: |
           FILE="docs/data/community.js"
 
-          LAT=${{ steps.geo.outputs.lat }}
-          LON=${{ steps.geo.outputs.lon }}
-
-          NAME="Test locatie"
-          URL="https://example.com"
-          DESC="test beschrijving"
-
           sed '1s/^var.*= //' $FILE > temp.json
           sed -i '$ s/;$//' temp.json
 
           jq '.features += [{
             "type": "Feature",
             "properties": {
-              "name": "'"$NAME"'",
-              "url": "'"$URL"'",
-              "description": "'"$DESC"'"
-            },
-           "geometry": {
-             "type": "Point",
-             "coordinates": ['"$LON"', '"$LAT"']
-           }
-          }]' temp.json > updated.json
+            "name": "Test locatie",
+            "url": "https://example.com",
+            "description": "test beschrijving"
+          },
+         "geometry": {
+            "type": "Point",
+            "coordinates": [4.90, 52.37]
+          }
+        }]' temp.json > updated.json
 
-          echo "var json_community = " > $FILE
-          cat updated.json >> $FILE
-          echo ";" >> $FILE
+    echo "var json_community = " > $FILE
+    cat updated.json >> $FILE
+    echo ";" >> $FILE
