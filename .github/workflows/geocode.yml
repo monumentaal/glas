@@ -1,5 +1,5 @@
 name: Geocode new locations
-
+ 
 on:
   workflow_dispatch:
   issues:
