@@ -1,5 +1,17 @@
-var features_community = format_community.readFeatures({
+var json_community = {
   "type": "FeatureCollection",
-  "features": []
-}, 
-{dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Testkerk",
+        "url": "https://example.com",
+        "description": "test"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.90, 52.37]
+      }
+    }
+  ]
+};
