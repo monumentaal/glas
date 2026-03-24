@@ -1,43 +1,11 @@
-name: Geocode new locations
+name: TEST WORKFLOW
 
 on:
   workflow_dispatch:
-  issues:
-    types: [opened]
-    
+
 jobs:
-  geocode:
+  test:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Extract fields
-        id: extract
-        run: |
-          echo "adres=test" >> $GITHUB_OUTPUT
-
-      - name: Geocode via PDOK
-        id: geo
-        run: |
-          echo "lat=52.37" >> $GITHUB_OUTPUT
-          echo "lon=4.90" >> $GITHUB_OUTPUT
-
-      - name: Append to community data
-        run: |
-          echo "CURRENT DIR:"
-          pwd
-
-          echo "FILES:"
-          ls docs
-          ls docs/data
-
-          echo "WRITE TEST"
-          echo "// test $(date)" >> ./docs/data/community.js
-
-          echo "CHECK RESULT:"
-          cat ./docs/data/community.js
+      - name: Hello test
+        run: echo "WORKFLOW RUNS!"
