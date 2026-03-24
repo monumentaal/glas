@@ -136,7 +136,7 @@ var lyr_oostbrabant_7 = new ol.layer.Vector({
 
 
 
-lyr_OpenStreetMap_0.setVisible(true);lyr_webpaginas_1.setVisible(true);lyr_boeken_2.setVisible(true);lyr_pers_3.setVisible(true);lyr_kerkfotografie_4.setVisible(true);lyr_mijnstreek_5.setVisible(true);lyr_maas_en_waal_6.setVisible(true);lyr_oostbrabant_7.setVisible(true);layer_community.setVisible(true);
+lyr_OpenStreetMap_0.setVisible(true);lyr_webpaginas_1.setVisible(true);lyr_boeken_2.setVisible(true);lyr_pers_3.setVisible(true);lyr_kerkfotografie_4.setVisible(true);lyr_mijnstreek_5.setVisible(true);lyr_maas_en_waal_6.setVisible(true);lyr_oostbrabant_7.setVisible(true);
 var layersList = [
   lyr_OpenStreetMap_0,
   lyr_webpaginas_1,
