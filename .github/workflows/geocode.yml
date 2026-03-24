@@ -25,25 +25,4 @@ jobs:
           echo "lon=4.90" >> $GITHUB_OUTPUT
 
       - name: Append to community data
-        run: |
-          FILE="docs/data/community.js"
-
-          sed '1s/^var.*= //' $FILE > temp.json
-          sed -i '$ s/;$//' temp.json
-
-          jq '.features += [{
-            "type": "Feature",
-            "properties": {
-            "name": "Test locatie",
-            "url": "https://example.com",
-            "description": "test beschrijving"
-          },
-         "geometry": {
-            "type": "Point",
-            "coordinates": [4.90, 52.37]
-          }
-        }]' temp.json > updated.json
-
-    echo "var json_community = " > $FILE
-    cat updated.json >> $FILE
-    echo ";" >> $FILE
+        run: echo "// test $(date)" >> docs/data/community.js
