@@ -1,9 +1,16 @@
-name: test
+name: Geocode new locations
 
 on: issues
 
 jobs:
-  test:
+  geocode:
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "werkt"
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Extract fields
+        id: extract
+        run: |
+          echo "Test extract werkt"
