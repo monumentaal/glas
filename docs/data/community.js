@@ -1,3 +1,5 @@
+console.log("COMMUNITY JS GELADEN");
+
 var json_community = {
   "type": "FeatureCollection",
   "features": [
