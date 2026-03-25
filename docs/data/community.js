@@ -1,7 +1,23 @@
-var json_community = {
-  "type": "FeatureCollection",
-  "features": []
-};
+name: TEST WRITE
 
-// test Wed Mar 25 12:19:41 UTC 2026
-// test Wed Mar 25 13:20:06 UTC 2026
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: echo "// test $(date)" >> docs/data/community.js
+
+      - run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/data/community.js
+          git commit -m "test" || echo "no change"
+          git push
