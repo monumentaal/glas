@@ -14,22 +14,26 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Append test
-        run: echo "// test $(date)" >> docs/data/community.js
-
-      - name: Commit changes      
+      - name: Append to community data
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          FILE="docs/data/community.js"
 
-          echo "STATUS BEFORE:"
-          git status
+          sed '1s/^var.*= //' $FILE > temp.json
+          sed -i '$ s/;$//' temp.json
 
-          git add docs/data/community.js
+          jq '.features += [{
+           "type": "Feature",
+           "properties": {
+             "name": "Test locatie",
+             "url": "https://example.com",
+             "description": "test beschrijving"
+          },
+          "geometry": {
+          "type": "Point",
+          "coordinates": [4.90, 52.37]
+          }
+          }]' temp.json > updated.json
 
-          echo "STATUS AFTER ADD:"
-          git status
-
-          git commit -m "update community" || echo "nothing to commit"
-
-          git push origin HEAD:main
+       echo "var json_community = " > $FILE
+       cat updated.json >> $FILE
+       echo ";" >> $FILE
