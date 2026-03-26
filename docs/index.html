@@ -102,14 +102,12 @@
           const doc = data.response.docs[0];
 
           // PDOK geeft RD (EPSG:28992), we zetten om naar lon/lat
-          const rdX = doc.centroide_rd.split('(')[1].split(' ')[0];
-          const rdY = doc.centroide_rd.split(' ')[1].replace(')', '');
+          const ll = doc.centroide_ll.replace('POINT(', '').replace(')', '').split(' ');
 
-          const coord = ol.proj.transform(
-            [parseFloat(rdX), parseFloat(rdY)],
-            'EPSG:28992',
-            'EPSG:4326'
-          );
+         const coord = [
+          parseFloat(ll[0]), // lon
+          parseFloat(ll[1])  // lat
+         ];
 
           // nieuwe feature
           const feature = {
