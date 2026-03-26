@@ -78,7 +78,9 @@
         <script src="./resources/qgis2web.js"></script> 
 
         <script>
+        s<script>
         window.voegToe = async function() {
+
           const plaats = document.getElementById('plaats').value;
           const straat = document.getElementById('straat').value;
           const huisnummer = document.getElementById('huisnummer').value;
@@ -88,7 +90,6 @@
 
           const query = `${straat} ${huisnummer}, ${postcode} ${plaats}`;
 
-          // PDOK geocoder
           const url = `https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?q=${encodeURIComponent(query)}`;
 
           const response = await fetch(url);
@@ -97,47 +98,43 @@
           if (data.response.docs.length === 0) {
             alert("Adres niet gevonden");
             return;
-          }
+              }
 
           const doc = data.response.docs[0];
 
-          // PDOK geeft RD (EPSG:28992), we zetten om naar lon/lat
+          // gebruik direct lat/lon (GEEN RD!)
           const ll = doc.centroide_ll.replace('POINT(', '').replace(')', '').split(' ');
 
-         const coord = [
-          parseFloat(ll[0]), // lon
-          parseFloat(ll[1])  // lat
-         ];
+          const coord = [
+            parseFloat(ll[0]),
+            parseFloat(ll[1])
+          ];
 
-          // nieuwe feature
+          console.log("COORD:", coord);
+
           const feature = {
-            "type": "Feature",
-            "properties": {
+             "type": "Feature",
+             "properties": {
               "name": naam,
-              "url": link,
-              "description": `${straat} ${huisnummer}, ${postcode} ${plaats}`
+             "url": link,
+            "description": `${straat} ${huisnummer}, ${postcode} ${plaats}`
             },
-            "geometry": {
-                "type": "Point",
-                "coordinates": coord
+                "geometry": {
+              "type": "Point",
+              "coordinates": coord
             }
           };
 
-    //    toevoegen aan bestaande data
-         json_community.features.push(feature);
-
-          // opnieuw tekenen (belangrijk!)
-         console.log("COORD:", coord);
-
         layer_community.getSource().addFeature(
           new ol.format.GeoJSON().readFeature(feature, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: 'EPSG:3857'
-          })
-        );
+              dataProjection: 'EPSG:4326',
+              featureProjection: 'EPSG:3857'
+            })
+          );
 
-              alert("Locatie toegevoegd!");
-     }
+          alert("Locatie toegevoegd!");
+        }
+
      </script>
 
 
