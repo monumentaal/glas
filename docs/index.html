@@ -134,7 +134,13 @@
 
           alert("Locatie toegevoegd!");
         }
+        const coord3857 = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
 
+        map.getView().animate({
+          center: coord3857,
+          zoom: 16,
+          duration: 1000
+        });
      </script>
 
 
