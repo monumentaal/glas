@@ -1,3 +1,13 @@
+<script>
+window.json_community = {
+  "type": "FeatureCollection",
+  "features": []
+};
+console.log("INLINE COMMUNITY OK");
+</script>
+
+
+
 var wms_layers = [];
 
 
