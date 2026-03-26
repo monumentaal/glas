@@ -1,3 +1,5 @@
+window.json_community = {
+
 console.log("COMMUNITY JS GELADEN");
 
 var json_community = {
