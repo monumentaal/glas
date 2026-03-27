@@ -83,25 +83,25 @@
         <script src="resources/photon-geocoder-autocomplete.min.js"></script>
         <script src="layers/webpaginas_1.js"></script><script src="layers/boeken_2.js"></script><script src="layers/pers_3.js"></script><script src="layers/kerkfotografie_4.js"></script><script src="layers/mijnstreek_5.js"></script><script src="layers/maas_en_waal_6.js"></script><script src="layers/oostbrabant_7.js"></script>
         <script src="styles/webpaginas_1_style.js"></script><script src="styles/boeken_2_style.js"></script><script src="styles/pers_3_style.js"></script><script src="styles/kerkfotografie_4_style.js"></script><script src="styles/mijnstreek_5_style.js"></script><script src="styles/maas_en_waal_6_style.js"></script><script src="styles/oostbrabant_7_style.js"></script>
-   //     <script src="./data/community.js"></script> -->
+        <script src="./data/community.js"></script> -->
 
        
-        <script>
-        var json_community = null;
+  //     <script>
+   //    var json_community = null;
 
-        fetch('./data/community.json')
-          .then(response => response.json())
-          .then(data => {
-            json_community = data;
+    //    fetch('./data/community.json')
+    //      .then(response => response.json())
+     //     .then(data => {
+    //        json_community = data;
 
             // pas NU layers laden
-            var script = document.createElement('script');
-            script.src = 'layers/layers.js';
-            document.body.appendChild(script);
-          });
-        </script>
+//var script = document.createElement('script');
+/script.src = 'layers/layers.js';
+ //           document.body.appendChild(script);
+   //       });
+ //       </script>
         
-     //  <script src="./layers/layers.js" type="text/javascript"></script> 
+       <script src="./layers/layers.js" type="text/javascript"></script> 
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script> 
 
