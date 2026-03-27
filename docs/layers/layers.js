@@ -188,3 +188,29 @@ lyr_oostbrabant_7.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'k
 lyr_oostbrabant_7.on('precompose', function(evt) {
     evt.context.globalCompositeOperation = 'normal';
 });
+lyr_community.set('fieldAliases', {
+    'name': 'Naam',
+    'straat': 'Straat',
+    'huisnummer': 'Huisnr',
+    'postcode': 'Postcode',
+    'plaats': 'Plaats',
+    'url': 'Website'
+});
+
+lyr_community.set('fieldImages', {
+    'name': 'TextEdit',
+    'straat': 'TextEdit',
+    'huisnummer': 'TextEdit',
+    'postcode': 'TextEdit',
+    'plaats': 'TextEdit',
+    'url': 'TextEdit'
+});
+
+lyr_community.set('fieldLabels', {
+    'name': 'inline label',
+    'straat': 'inline label',
+    'huisnummer': 'inline label',
+    'postcode': 'inline label',
+    'plaats': 'inline label',
+    'url': 'inline label'
+});
