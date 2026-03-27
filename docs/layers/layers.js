@@ -128,16 +128,20 @@ var features_community = format_community.readFeatures(json_community, {
 var source_community = new ol.source.Vector({});
 source_community.addFeatures(features_community);
 
-var layer_community = new ol.layer.Vector({
-  source: source_community,
-  style: new ol.style.Style({
-    image: new ol.style.Circle({
-      radius: 6,
-      fill: new ol.style.Fill({ color: 'red' })
-    })
-  })
-});
-
+style: function(feature) {
+    return new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 6,
+            fill: new ol.style.Fill({
+                color: 'red'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#ffffff',
+                width: 1
+            })
+        })
+    });
+}
 
 
 lyr_OpenStreetMap_0.setVisible(true);
