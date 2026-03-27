@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+        <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+        <style>
+        html, body {
+            background-color: #ffffff;
+        }
+        .ol-control > * {
+            background-color: #f8f8f8!important;
+            color: #444444!important;
+            border-radius: 0px;
+        }
+        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+            color: #444444!important;
+        }
+        .search-layer-input-search {
+            background-color: #f8f8f8!important;
+        }
+        .ol-control > *:focus, .ol-control >*:hover {
+            background-color: rgba(248, 248, 248, 0.7)!important;
+        } 
+        .ol-control {
+            background-color: rgba(255,255,255,.4) !important;
+            padding: 2px !important;
+        } 
+        </style>
+
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+
+    <div id="form-container" style="padding:10px;background:#fff;z-index:1000;position:absolute;">
+      <input id="plaats" placeholder="Plaats"><br>
+      <input id="straat" placeholder="Straat"><br>
+      <input id="huisnummer" placeholder="Huisnummer"><br>
+      <input id="postcode" placeholder="Postcode"><br>
+      <input id="naam" placeholder="Naam"><br>
+      <input id="link" placeholder="Website link"><br>
+      <button onclick="voegToe()">Voeg locatie toe</button>
+    </div>
+
+
+        
+        <div id="map">
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
+        </div>
+        <script src="resources/qgis2web_expressions.js"></script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="resources/photon-geocoder-autocomplete.min.js"></script>
+        <script src="layers/webpaginas_1.js"></script><script src="layers/boeken_2.js"></script><script src="layers/pers_3.js"></script><script src="layers/kerkfotografie_4.js"></script><script src="layers/mijnstreek_5.js"></script><script src="layers/maas_en_waal_6.js"></script><script src="layers/oostbrabant_7.js"></script>
+        <script src="styles/webpaginas_1_style.js"></script><script src="styles/boeken_2_style.js"></script><script src="styles/pers_3_style.js"></script><script src="styles/kerkfotografie_4_style.js"></script><script src="styles/mijnstreek_5_style.js"></script><script src="styles/maas_en_waal_6_style.js"></script><script src="styles/oostbrabant_7_style.js"></script>
+        <script src="./data/community.js"></script> -->
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script> 
+
+        <script>
+    
+        window.voegToe = async function() {
+
+          const plaats = document.getElementById('plaats').value;
+          const straat = document.getElementById('straat').value;
+          const huisnummer = document.getElementById('huisnummer').value;
+          const postcode = document.getElementById('postcode').value;
+          const naam = document.getElementById('naam').value;
+          const link = document.getElementById('link').value;
+
+          const query = `${straat} ${huisnummer}, ${postcode} ${plaats}`;
+
+          const url = `https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?q=${encodeURIComponent(query)}`;
+
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.response.docs.length === 0) {
+            alert("Adres niet gevonden");
+            return;
+              }
+
+          const doc = data.response.docs[0];
+
+          // gebruik direct lat/lon (GEEN RD!)
+          const ll = doc.centroide_ll.replace('POINT(', '').replace(')', '').split(' ');
+
+          const coord = [
+            parseFloat(ll[0]),
+            parseFloat(ll[1])
+          ];
+
+          console.log("COORD:", coord);
+
+          const feature = {
+             "type": "Feature",
+             "properties": {
+              "name": naam,
+             "url": link,
+            "description": `${straat} ${huisnummer}, ${postcode} ${plaats}`
+            },
+                "geometry": {
+              "type": "Point",
+              "coordinates": coord
+            }
+          };
+
+     layer_community.getSource().addFeature(
+          new ol.format.GeoJSON().readFeature(feature, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857'
+          })
+        );
+
+        const coord3857 = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
+
+        map.getView().animate({
+              center: coord3857,
+          zoom: 16,
+          duration: 1000
+        });
+
+       alert("Locatie toegevoegd!");
+    }
+            
+     </script>
+
+
+        
+    </body>
+</html>
