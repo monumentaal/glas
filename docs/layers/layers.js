@@ -208,7 +208,7 @@ layer_community.set('fieldImages', {
     'url': 'TextEdit'
 });
 
-lyr_community.set('fieldLabels', {
+layer_community.set('fieldLabels', {
     'name': 'inline label',
     'straat': 'inline label',
     'huisnummer': 'inline label',
