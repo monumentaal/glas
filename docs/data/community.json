@@ -1,0 +1,19 @@
+console.log("COMMUNITY JS GELADEN");
+
+var json_community = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { 
+        "name": "Test locatie",
+        "url": "",
+        "description": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.90, 52.37]
+      }
+    }
+  ]
+};
