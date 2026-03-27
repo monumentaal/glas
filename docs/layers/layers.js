@@ -126,7 +126,7 @@ var source_community = new ol.source.Vector({
     features: features_community
 });
 
-var lyr_community = new ol.layer.Vector({
+var layer_community = new ol.layer.Vector({
     declutter: false,
     source: source_community,
     style: function(feature) {
