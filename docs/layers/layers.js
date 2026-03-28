@@ -1,3 +1,5 @@
+console.log("START layers.js");
+
 var wms_layers = [];
 
 
@@ -158,6 +160,9 @@ lyr_mijnstreek_5.setVisible(true);
 lyr_maas_en_waal_6.setVisible(true);
 lyr_oostbrabant_7.setVisible(true);
 layer_community.setVisible(true);
+
+console.log("VOOR layersList");
+
 var layersList = [
   lyr_OpenStreetMap_0,
   lyr_webpaginas_1,
