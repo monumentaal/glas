@@ -190,75 +190,54 @@ if (location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
 </script>
 
 <script>
-var modify = new ol.interaction.Modify({
-  source: layer_community.getSource()
-});
+setTimeout(function() {
 
-map.addInteraction(modify);
-</script>
-<script>
-modify.on('modifyend', function(e) {
-  e.features.forEach(function(feature) {
-    var coord = feature.getGeometry().getCoordinates();
+  if (typeof layer_community === "undefined") {
+    console.log("layer_community nog niet klaar");
+    return;
+  }
 
-    // terug naar lat/lon
-    var coord4326 = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
-
-    console.log("Nieuwe coord:", coord4326);
-
-    // update in json_community
-    json_community.features.forEach(function(f) {
-      if (f.properties.name === feature.get('name')) {
-        f.geometry.coordinates = coord4326;
-      }
-    });
-
-    // opslaan lokaal
-    localStorage.setItem('community_data', JSON.stringify(json_community));
+  // 👉 interaction voor slepen
+  var modify = new ol.interaction.Modify({
+    source: layer_community.getSource()
   });
-});
+
+  map.addInteraction(modify);
+
+  // 👉 lock functie
+  var locked = false;
+
+  window.toggleLock = function() {
+    locked = !locked;
+
+    if (locked) {
+      map.removeInteraction(modify);
+      alert("Markers vastgezet");
+    } else {
+      map.addInteraction(modify);
+      alert("Markers weer verplaatsbaar");
+    }
+  };
+
+  // 👉 coords opslaan na slepen
+  modify.on('modifyend', function(e) {
+    e.features.forEach(function(feature) {
+      var coord = feature.getGeometry().getCoordinates();
+      var coord4326 = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+
+      json_community.features.forEach(function(f) {
+        if (f.properties.name === feature.get('name')) {
+          f.geometry.coordinates = coord4326;
+        }
+      });
+
+      localStorage.setItem('community_data', JSON.stringify(json_community));
+      console.log("Nieuwe coord:", coord4326);
+    });
+  });
+
+}, 1000); // wacht 1 seconde
 </script>
-<script>
-var locked = false;
-
-window.toggleLock = function() {
-  locked = !locked;
-
-  if (locked) {
-    map.removeInteraction(modify);
-    alert("Markers vastgezet");
-  } else {
-    map.addInteraction(modify);
-    alert("Markers weer verplaatsbaar");
-  }
-};
-</script>        
-        
-<script>
-// 👉 interaction voor slepen
-var modify = new ol.interaction.Modify({
-  source: layer_community.getSource()
-});
-
-map.addInteraction(modify);
-
-// 👉 lock functie
-var locked = false;
-
-window.toggleLock = function() {
-  locked = !locked;
-
-  if (locked) {
-    map.removeInteraction(modify);
-    alert("Markers vastgezet");
-  } else {
-    map.addInteraction(modify);
-    alert("Markers weer verplaatsbaar");
-  }
-};
-</script>
-        
-        
         
     </body>
 </html>
