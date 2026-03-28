@@ -182,15 +182,19 @@ window.downloadData = function() {
   document.body.removeChild(link);
 };
 </script>
-        
 <script>
 window.onload = function() {
-  if (location.hostname === "monumentaal.github.io") {
+  const isAdmin = window.location.search.includes("admin");
+
+  if (!isAdmin) {
     var el = document.getElementById("form-container");
     if (el) el.style.display = "none";
   }
 };
 </script>
+
+​
+
 
 <script>
 setTimeout(function() {
