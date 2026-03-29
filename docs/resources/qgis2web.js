@@ -151,6 +151,7 @@ var doHighlight = false;
 var doHover = false;
 
 function createPopupField(currentFeature, currentFeatureKeys, layer) {
+
     var popupText = '';
 
     for (var i = 0; i < currentFeatureKeys.length; i++) {
@@ -159,69 +160,16 @@ function createPopupField(currentFeature, currentFeatureKeys, layer) {
 
         if (key != 'geometry' && key != 'layerObject' && key != 'idO') {
 
-            var popupField = '';
+            var val = currentFeature.get(key);
 
-            // label instellingen
-            if (layer.get('fieldLabels')[key] == "hidden field") {
+            if (val === null || val === undefined || val === '') {
                 continue;
             }
 
-            if (layer.get('fieldLabels')[key] == "inline label - visible with data") {
-                if (currentFeature.get(key) == null) {
-                    continue;
-                }
-            }
-
-            // label veilig maken
             var label = layer.get('fieldAliases')[key] || key;
 
-            if (layer.get('fieldLabels')[key] == "inline label - always visible" ||
-                layer.get('fieldLabels')[key] == "inline label - visible with data") {
-
-                popupField += '<th>' + label + '</th><td>';
-
-            } else {
-                popupField += '<td colspan="2">';
-            }
-
-            if (layer.get('fieldLabels')[key] == "header label - visible with data") {
-                if (currentFeature.get(key) == null) {
-                    continue;
-                }
-            }
-
-            if (layer.get('fieldLabels')[key] == "header label - always visible" ||
-                layer.get('fieldLabels')[key] == "header label - visible with data") {
-
-                popupField += '<strong>' + label + '</strong><br />';
-            }
-
-            // waarde ophalen (veilig)
-            var val = currentFeature.get(key);
-
-            if (layer.get('fieldImages')[key] != "ExternalResource") {
-
-                if (val !== null && val !== undefined && val !== '') {
-                    popupField += autolinker.link(val.toLocaleString()) + '</td>';
-                }
-
-            } else {
-
-                var fieldValue = val;
-
-                if (fieldValue && /\.(gif|jpg|jpeg|tif|tiff|png|avif|webp|svg)$/i.test(fieldValue)) {
-                    popupField += '<img src="images/' + fieldValue.replace(/[\\\/:]/g, '_').trim() + '" /></td>';
-
-                } else if (fieldValue && /\.(mp4|webm|ogg|avi|mov|flv)$/i.test(fieldValue)) {
-                    popupField += '<video controls><source src="images/' + fieldValue.replace(/[\\\/:]/g, '_').trim() + '" type="video/mp4"></video></td>';
-
-                } else if (fieldValue && /\.(mp3|wav|ogg|aac|flac)$/i.test(fieldValue)) {
-                    popupField += '<audio controls><source src="images/' + fieldValue.replace(/[\\\/:]/g, '_').trim() + '" type="audio/mpeg"></audio></td>';
-
-                } else if (fieldValue !== null && fieldValue !== undefined && fieldValue !== '') {
-                    popupField += autolinker.link(fieldValue.toLocaleString()) + '</td>';
-                }
-            }
+            var popupField = '<th>' + label + '</th><td>';
+            popupField += autolinker.link(val.toLocaleString()) + '</td>';
 
             popupText += '<tr>' + popupField + '</tr>';
         }
