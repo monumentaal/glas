@@ -267,8 +267,23 @@ setTimeout(function() {
 
   if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
 
+    var selectStyle = new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 8,
+        fill: new ol.style.Fill({ color: 'yellow' }),
+        stroke: new ol.style.Stroke({ color: 'black', width: 2 })
+      })
+    });
+
+        
   const id = selectedFeature.get('id');
 
+  image: new ol.style.Circle({
+    radius: 8,
+    fill: new ol.style.Fill({ color: 'yellow' }),
+    stroke: new ol.style.Stroke({ color: 'black', width: 2 })
+  })
+});
   layer_community.getSource().removeFeature(selectedFeature);
 
   json_community.features = json_community.features.filter(function(f) {
