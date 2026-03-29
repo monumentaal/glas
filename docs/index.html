@@ -311,5 +311,34 @@ map.on('singleclick', function(evt) {
     }
   });
 });    
+
+window.deleteSelected = function() {
+
+  if (!selectedFeature) {
+    alert("Geen marker geselecteerd");
+    return;
+  }
+
+  if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
+
+  const id = selectedFeature.get('id');
+
+  // van kaart verwijderen
+  layer_community.getSource().removeFeature(selectedFeature);
+
+  // uit JSON verwijderen
+  json_community.features = json_community.features.filter(function(f) {
+    return f.properties.id !== id;
+  });
+
+  // opslaan
+  localStorage.setItem('community_data', JSON.stringify(json_community));
+
+  selectedFeature = null;
+
+  alert("Marker verwijderd");
+};
+
+        
     </body>
 </html>
