@@ -168,7 +168,8 @@ function createPopupField(currentFeature, currentFeatureKeys, layer) {
             }
             if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "inline label - always visible" ||
                 layer.get('fieldLabels')[currentFeatureKeys[i]] == "inline label - visible with data") {
-                popupField += '<th>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + '</th><td>';
+                var label = layer.get('fieldAliases')[currentFeatureKeys[i]] || currentFeatureKeys[i];
+					spopupField += '<th>' + label + '</th><td>';
             } else {
                 popupField += '<td colspan="2">';
             }
