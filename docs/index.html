@@ -153,7 +153,10 @@
           };
 
         // 👉 marker op kaart
-
+            
+        json_community.features = json_community.features.filter(function(f) {
+          return f.properties.name !== naam;
+        });
         json_community.features.push(feature);
             
         layer_community.getSource().addFeature(
