@@ -377,7 +377,15 @@ function onSingleClickFeatures(evt) {
                         currentFeature = clusteredFeatures[n];
                         currentFeatureKeys = currentFeature.getKeys();
                         popupText += '<li><table>';
-                        popupText += '<a><b>' + layer.get('popuplayertitle') + '</b></a>';
+						
+                    	 var title = layer.get('popuplayertitle');
+
+						if (!title) {
+    						title = 'limburg';
+						}
+
+popupText += '<a><b>' + title + '</b></a>';
+						
                         var content = createPopupField(currentFeature, currentFeatureKeys, layer);
 
 					// verwijder ALLE vormen van undefined
