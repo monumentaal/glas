@@ -231,7 +231,65 @@ window.addEventListener("load", function() {
 
 
 <script>
-V
+setTimeout(function() {
+
+  if (typeof layer_community === "undefined") {
+    console.log("layer_community nog niet klaar");
+    return;
+  }
+
+  var modify = new ol.interaction.Modify({
+    source: layer_community.getSource()
+  });
+
+  var isAdmin = window.location.search.includes("admin");
+
+  // 👉 alleen toevoegen als admin
+  if (isAdmin) {
+    map.addInteraction(modify);
+    console.log("Modify actief (admin)");
+  } else {
+    console.log("Modify uitgeschakeld (geen admin)");
+  }
+
+  // 👉 lock functie blijft werken
+  var locked = false;
+
+  window.toggleLock = function() {
+    locked = !locked;
+
+    if (locked) {
+      map.removeInteraction(modify);
+      alert("Markers vastgezet");
+    } else {
+      if (isAdmin) {
+        map.addInteraction(modify);
+      }
+      alert("Markers weer verplaatsbaar");
+    }
+  };
+
+  // 👉 coords opslaan na slepen
+  modify.on('modifyend', function(e) {
+    e.features.forEach(function(feature) {
+
+      var coord = feature.getGeometry().getCoordinates();
+      var coord4326 = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+
+      json_community.features.forEach(function(f) {
+        if (f.properties.id === feature.get('id')) {
+          f.geometry.coordinates = coord4326;
+        }
+      });
+
+      localStorage.setItem('community_data', JSON.stringify(json_community));
+
+      console.log("Nieuwe coord:", coord4326);
+    });
+  });
+
+}, 1000);
+    
 </script>
 
 window.deleteFeature = function(name) {
