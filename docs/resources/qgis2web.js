@@ -225,7 +225,13 @@ function onPointerMove(evt) {
                     currentFeatureKeys = currentFeature.getKeys();
                     popupText += '<li><table>'
                     popupText += '<a>' + '<b>' + layer.get('popuplayertitle') + '</b>' + '</a>';
-                    popupText += createPopupField(currentFeature, currentFeatureKeys, layer);
+                  var content = createPopupField(currentFeature, currentFeatureKeys, layer);
+
+				// verwijder ALLE vormen van undefined
+					content = content.replace(/undefined/g, '');
+						content = content.replace(/null/g, '');
+
+					popupText += content;
                     popupText += '</table></li>';    
                 }
             }
@@ -371,7 +377,13 @@ function onSingleClickFeatures(evt) {
                         currentFeatureKeys = currentFeature.getKeys();
                         popupText += '<li><table>';
                         popupText += '<a><b>' + layer.get('popuplayertitle') + '</b></a>';
-                        popupText += createPopupField(currentFeature, currentFeatureKeys, layer);
+                        var content = createPopupField(currentFeature, currentFeatureKeys, layer);
+
+					// verwijder ALLE vormen van undefined
+						content = content.replace(/undefined/g, '');
+						content = content.replace(/null/g, '');
+
+						popupText += content;
                         popupText += '</table></li>';    
                     }
                 }
