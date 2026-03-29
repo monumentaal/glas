@@ -243,7 +243,7 @@ setTimeout(function() {
   });
 
   var isAdmin = window.location.search.includes("admin");
-
+console.log("ADMIN CHECK:", window.location.search);
   // 👉 alleen toevoegen als admin
   if (isAdmin) {
     map.addInteraction(modify);
