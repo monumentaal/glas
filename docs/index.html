@@ -262,11 +262,11 @@ setTimeout(function() {
       var coord = feature.getGeometry().getCoordinates();
       var coord4326 = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
 
-      json_community.features.forEach(function(f) {
-        if (f.properties.name === feature.get('name')) {
-          f.geometry.coordinates = coord4326;
-        }
-      });
+    json_community.features.forEach(function(f) {
+      if (f.properties.id === feature.get('id')) {
+        f.geometry.coordinates = coord4326;
+      }
+    });
 
       localStorage.setItem('community_data', JSON.stringify(json_community));
       console.log("Nieuwe coord:", coord4326);
