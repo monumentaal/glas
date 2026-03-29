@@ -152,11 +152,9 @@ var doHover = false;
 
 function createPopupField(currentFeature, currentFeatureKeys, layer) {
     var popupText = '';
-	var val = currentFeature.get(currentFeatureKeys[i]);
-		if (val === null || val === undefined || val === '') {
-  		  continue;
-		}
+
     for (var i = 0; i < currentFeatureKeys.length; i++) {
+  
         if (currentFeatureKeys[i] != 'geometry' && currentFeatureKeys[i] != 'layerObject' && currentFeatureKeys[i] != 'idO') {
             var popupField = '';
             if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "hidden field") {
