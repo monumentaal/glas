@@ -182,12 +182,15 @@ function createPopupField(currentFeature, currentFeatureKeys, layer) {
                 layer.get('fieldLabels')[currentFeatureKeys[i]] == "header label - visible with data") {
                 popupField += '<strong>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + '</strong><br />';
             }
-            if (layer.get('fieldImages')[currentFeatureKeys[i]] != "ExternalResource") {
-				var val = currentFeature.get(currentFeatureKeys[i]);
+           if (layer.get('fieldImages')[currentFeatureKeys[i]] != "ExternalResource") {
 
-			if (val !== null && val !== undefined && val !== '') {
-			    popupField += autolinker.link(val.toLocaleString()) + '</td>';
-			} 
+    		var val = currentFeature.get(currentFeatureKeys[i]);
+
+   			 if (val !== null && val !== undefined && val !== '') {
+     		   popupField += autolinker.link(val.toLocaleString()) + '</td>';
+  		  }
+
+}
 			} else {
 				var fieldValue = currentFeature.get(currentFeatureKeys[i]);
 				if (/\.(gif|jpg|jpeg|tif|tiff|png|avif|webp|svg)$/i.test(fieldValue)) {
