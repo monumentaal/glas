@@ -300,6 +300,16 @@ window.deleteFeature = function(name) {
 };
 
 }   
-        
+    var selectedFeature = null;
+
+map.on('singleclick', function(evt) {
+  selectedFeature = null;
+
+  map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+    if (feature.get('id')) {
+      selectedFeature = feature;
+    }
+  });
+});    
     </body>
 </html>
