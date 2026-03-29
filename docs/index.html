@@ -327,15 +327,25 @@ window.deleteFeature = function(name) {
 }   
     var selectedFeature = null;
 
+var selectedFeature = null;
+
 map.on('singleclick', function(evt) {
+
   selectedFeature = null;
 
-  map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-    if (feature.get('id')) {
+  map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+
+    if (layer === layer_community && feature.get('id')) {
       selectedFeature = feature;
+      return true; // stop na eerste match
     }
+
   });
-});    
+
+  if (selectedFeature) {
+    console.log("Geselecteerd ID:", selectedFeature.get('id'));
+  }
+});
 
 window.deleteSelected = function() {
 
