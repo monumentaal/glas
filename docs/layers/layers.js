@@ -131,10 +131,11 @@ var source_community = new ol.source.Vector({
 var layer_community = new ol.layer.Vector({
 
 
-    title: 'limburg',
-    popuplayertitle: 'limburg',    
+     
     declutter: false,
     source: source_community,
+    title: 'limburg',
+    popuplayertitle: 'limburg',   
     style: function(feature) {
         return new ol.style.Style({
             image: new ol.style.Circle({
