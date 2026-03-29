@@ -174,7 +174,8 @@ function createPopupField(currentFeature, currentFeatureKeys, layer) {
             popupText += '<tr>' + popupField + '</tr>';
         }
     }
-
+	popupText = popupText.replace(/undefined/g, '');
+	popupText = popupText.replace(/null/g, '');
     return popupText;
 }
 
