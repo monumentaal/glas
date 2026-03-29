@@ -294,7 +294,12 @@ window.deleteFeature = function(name) {
 
   alert("Marker verwijderd");
 };
-       
+    function resetForm() {
+  ['plaats','straat','huisnummer','postcode','naam','link'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+}   
         
     </body>
 </html>
