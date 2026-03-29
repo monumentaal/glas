@@ -234,8 +234,15 @@ function onPointerMove(evt) {
             if (doPopup) {
                 popupText += '<li><table>';
                 popupText += '<a>' + '<b>' + layer.get('popuplayertitle') + '</b>' + '</a>';
-                popupText += createPopupField(currentFeature, currentFeatureKeys, layer);
+
+				
+               var content = createPopupField(currentFeature, currentFeatureKeys, layer);
+				content = content.replace(/undefined/g, '');
+				popupText += content;
+
+				
                 popupText += '</table></li>';
+				
             }
         }
     }
