@@ -178,8 +178,9 @@
           zoom: 16,
           duration: 1000
         });
-    // 👉 HIER toevoegen
-        resetForm();
+            
+        //leeg maken
+        
 
        alert("Locatie toegevoegd!");
             
@@ -223,11 +224,7 @@ window.addEventListener("load", function() {
   }
 });
     
-    function resetForm() {
-      ['plaats','straat','huisnummer','postcode','naam','link'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = "";
-      });
+
         
 </script>​
 
