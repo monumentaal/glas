@@ -259,44 +259,31 @@ setTimeout(function() {
   };
 
     window.deleteSelected = function() {
-    var selectedFeature = null;
-    if (!selectedFeature) {
-      alert("Geen marker geselecteerd");
+
+  if (!selectedFeature) {
+    alert("Geen marker geselecteerd");
     return;
-   }
+  }
 
   if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
 
-    var selectStyle = new ol.style.Style({
-      image: new ol.style.Circle({
-        radius: 8,
-        fill: new ol.style.Fill({ color: 'yellow' }),
-        stroke: new ol.style.Stroke({ color: 'black', width: 2 })
-      })
-    });
+  var id = selectedFeature.get('id');
 
-        
-  const id = selectedFeature.get('id');
-
-  image: new ol.style.Circle({
-    radius: 8,
-    fill: new ol.style.Fill({ color: 'yellow' }),
-    stroke: new ol.style.Stroke({ color: 'black', width: 2 })
-  })
-});
+  // van kaart verwijderen
   layer_community.getSource().removeFeature(selectedFeature);
 
+  // uit JSON verwijderen
   json_community.features = json_community.features.filter(function(f) {
     return f.properties.id !== id;
   });
 
+  // opslaan
   localStorage.setItem('community_data', JSON.stringify(json_community));
 
   selectedFeature = null;
 
   alert("Marker verwijderd");
 };
-
   modify.on('modifyend', function(e) {
     e.features.forEach(function(feature) {
       var coord = feature.getGeometry().getCoordinates();
