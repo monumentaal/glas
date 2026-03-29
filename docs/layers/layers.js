@@ -131,7 +131,8 @@ var source_community = new ol.source.Vector({
 var layer_community = new ol.layer.Vector({
 
 
-        
+    title: 'limburg',
+    popuplayertitle: 'limburg',    
     declutter: false,
     source: source_community,
     style: function(feature) {
