@@ -192,30 +192,30 @@ function resetForm() {
 
 window.toggleLock = function() {
 
-  console.log("LOCK BUTTON CLICKED");
-
   locked = !locked;
 
-  console.log("locked =", locked);
-
   if (locked) {
-    console.log("REMOVING MODIFY");
-    map.removeInteraction(modify);
-    alert("🔒 Markers vastgezet");
 
-    if (typeof resetForm === "function") {
-      resetForm();
-    }
+    map.getInteractions().forEach(function(interaction) {
+      if (interaction instanceof ol.interaction.Modify) {
+        map.removeInteraction(interaction);
+        console.log("MODIFY REMOVED");
+      }
+    });
+
+    alert("🔒 Lock actief");
 
   } else {
-    console.log("ADDING MODIFY");
-    if (isAdmin && modify) {
-      map.addInteraction(modify);
-    }
-    alert("🔓 Markers weer verplaatsbaar");
-  }
 
+    if (modify) {
+      map.addInteraction(modify);
+      console.log("MODIFY ADDED");
+    }
+
+    alert("🔓 Unlock actief");
+  }
 };
+            
             
         
 }    // wimdow voegtoe        
