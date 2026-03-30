@@ -117,66 +117,55 @@
           const link = document.getElementById('link').value;
 
           const query = `${straat} ${huisnummer}, ${postcode} ${plaats}`;
-
           const id = (plaats + "_" + naam)
             .toLowerCase()
             .replace(/\s+/g, "_")
-            .replace(/[^a-z0-9_]/g, "");
-
-            
+            .replace(/[^a-z0-9_]/g, "");          
           const url = `https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?q=${encodeURIComponent(query)}`;
-
           const response = await fetch(url);
           const data = await response.json();
-
           if (data.response.docs.length === 0) {
             alert("Adres niet gevonden");
             return;
               }
-
           const doc = data.response.docs[0];
-
           // gebruik direct lat/lon (GEEN RD!)
           const ll = doc.centroide_ll.replace('POINT(', '').replace(')', '').split(' ');
-
           const coord = [
             parseFloat(ll[0]),
             parseFloat(ll[1])
           ];
 
-          console.log("COORD:", coord);
-            
-     
+          console.log("COORD:", coord); 
             
           const feature = {
-             "type": "Feature",
+            "type": "Feature",
             "properties": {
                   "id": id,
                   "name": naam,
                   "url": `<a href="${link}" target="_blank">🔗 Website</a>`,
                   "description": `${straat} ${huisnummer}, ${postcode} ${plaats}`
-            },
-                "geometry": {
+            },  // prop
+              "geometry": {
               "type": "Point",
               "coordinates": coord
-            }
-          };
+            } // geo
+          }; // const
 
         // 👉 marker op kaart
             
         json_community.features = json_community.features.filter(function(f) {
           return f.properties.name !== naam;
         });
-
-        
+      
         json_community.features.push(feature);
             
         layer_community.getSource().addFeature(
           new ol.format.GeoJSON().readFeature(feature, {
             dataProjection: 'EPSG:4326',
             featureProjection: 'EPSG:3857'
-          })
-        );
+          })  // new
+        );  / layer
 
         // 👉 lokaal opslaan
         localStorage.setItem('community_data', JSON.stringify(json_community));
@@ -190,7 +179,6 @@
             
         //leeg maken
         
-
        alert("Locatie toegevoegd!");
             
 function resetForm() {
@@ -209,13 +197,13 @@ window.toggleLock = function() {
   if (locked) {
     map.removeInteraction(modify);
     alert("🔒 Markers vastgezet");
-  }
+  }  //if
     resetForm(); // die had je al            
- }    
+ }   //function 
         
         
-}            
-     </script>
+}    // wimdow voegtoe        
+</script>
 <script>
 window.downloadData = function() {
   if (!json_community) {
