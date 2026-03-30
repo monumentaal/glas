@@ -201,6 +201,18 @@ function resetForm() {
   document.getElementById('naam').value = "";
   document.getElementById('link').value = "";
 }
+
+window.toggleLock = function() {
+
+  locked = !locked;
+
+  if (locked) {
+    map.removeInteraction(modify);
+    alert("🔒 Markers vastgezet");
+
+    resetForm(); // die had je al
+
+            
 }    
             
      </script>
