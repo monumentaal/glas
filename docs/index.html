@@ -155,7 +155,7 @@
         // 👉 marker op kaart
             
         json_community.features = json_community.features.filter(function(f) {
-          return f.properties.name !== naam;
+          return f.properties.name !== id;
         });
       
         json_community.features.push(feature);
