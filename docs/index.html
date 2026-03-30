@@ -161,6 +161,12 @@
         json_community.features = json_community.features.filter(function(f) {
           return f.properties.name !== naam;
         });
+
+        const id = (plaats + "_" + naam)
+          .toLowerCase()
+          .replace(/\s+/g, "_")
+          .replace(/[^a-z0-9_]/g, "");
+            
         json_community.features.push(feature);
             
         layer_community.getSource().addFeature(
