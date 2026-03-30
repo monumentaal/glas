@@ -185,15 +185,16 @@
 
        alert("Locatie toegevoegd!");
             
-document.getElementById('plaats').value = "";
-document.getElementById('straat').value = "";
-document.getElementById('huisnummer').value = "";
-document.getElementById('postcode').value = "";
-document.getElementById('naam').value = "";
-document.getElementById('link').value = "";
-
+function resetForm() {
+  document.getElementById('plaats').value = "";
+  document.getElementById('straat').value = "";
+  document.getElementById('huisnummer').value = "";
+  document.getElementById('postcode').value = "";
+  document.getElementById('naam').value = "";
+  document.getElementById('link').value = "";
+}
             
-    }
+    
             
      </script>
 <script>
@@ -255,20 +256,22 @@ console.log("ADMIN CHECK:", window.location.search);
   // 👉 lock functie blijft werken
   var locked = false;
 
-  window.toggleLock = function() {
-    locked = !locked;
+ function updateLockUI() {
+  const btn = document.getElementById("lockBtn");
 
-    if (locked) {
-      map.removeInteraction(modify);
-      alert("Markers vastgezet");
-    } else {
-      if (isAdmin) {
-        map.addInteraction(modify);
-      }
-      alert("Markers weer verplaatsbaar");
-    }
-  };
+  if (!btn) return;
 
+  if (locked) {
+    btn.textContent = "🔒 Vast";
+    btn.style.background = "red";
+  } else {
+    btn.textContent = "🔓 Vrij";
+    btn.style.background = "green";
+  }
+}
+
+  updateLockUI();
+    
   // 👉 coords opslaan na slepen
   modify.on('modifyend', function(e) {
     e.features.forEach(function(feature) {
