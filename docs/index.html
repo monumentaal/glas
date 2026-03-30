@@ -202,17 +202,21 @@ window.toggleLock = function() {
     console.log("REMOVING MODIFY");
     map.removeInteraction(modify);
     alert("🔒 Markers vastgezet");
-    resetForm();
+
+    if (typeof resetForm === "function") {
+      resetForm();
+    }
 
   } else {
     console.log("ADDING MODIFY");
-    if (isAdmin) {
+    if (isAdmin && modify) {
       map.addInteraction(modify);
     }
     alert("🔓 Markers weer verplaatsbaar");
   }
-}; 
-        
+
+};
+            
         
 }    // wimdow voegtoe        
 </script>
