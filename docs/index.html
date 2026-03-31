@@ -73,8 +73,8 @@
 
       <button onclick="voegToe()">Voeg locatie toe</button>
       <button onclick="downloadData()">Opslaan</button>
-      <button onclick="toggleLock()">🔒 Lock / Unlock</button>
       <button onclick="deleteSelected()">🗑️ Verwijder geselecteerde marker</button>
+       <button id="lockBtn" onclick="toggleLock()">🔒 Lock / Unlock</button> 
     </div>
 
         
@@ -94,7 +94,19 @@ function resetForm() {
   document.getElementById('link').value = "";
 }
 
+function updateLockButton() {
+  const btn = document.getElementById("lockBtn");
 
+  if (!btn) return;
+
+  if (locked) {
+    btn.textContent = "🔒 Vast";
+    btn.style.background = "red";
+  } else {
+    btn.textContent = "🔓 Vrij";
+    btn.style.background = "green";
+  }
+}
         
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
@@ -371,14 +383,18 @@ window.toggleLock = function() {
   locked = !locked;
 
   if (locked) {
-    map.removeInteraction(modify);
-    console.log("LOCK AAN");
-    alert("🔒 Lock actief");
-  } else {
-    map.addInteraction(modify);
-    console.log("LOCK UIT");
-    alert("🔓 Unlock actief");
-  }
+  map.removeInteraction(modify);
+  alert("🔒 Lock actief");
+
+  resetForm();
+  updateLockButton();   // 👈 toevoegen
+
+} else {
+  map.addInteraction(modify);
+  alert("🔓 Unlock actief");
+
+  updateLockButton();   // 👈 toevoegen
+}
 };
 
 </script>
