@@ -400,6 +400,32 @@ window.toggleLock = function() {
 };
 
     
+</script<script>
+window.deleteSelected = function() {
+
+  if (!window.selectedFeature) {
+    alert("Geen marker geselecteerd");
+    return;
+  }
+
+  const id = selectedFeature.get('id');
+
+  if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
+
+  layer_community.getSource().removeFeature(selectedFeature);
+
+  json_community.features = json_community.features.filter(function(f) {
+    return f.properties.id !== id;
+  });
+
+  localStorage.setItem('community_data', JSON.stringify(json_community));
+
+  selectedFeature = null;
+
+  alert("Marker verwijderd");
+};
 </script>
+
+        
     </body>
 </html>
