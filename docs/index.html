@@ -301,14 +301,14 @@ window.deleteFeature = function(name) {
   const source = layer_community.getSource();
 
   source.getFeatures().forEach(function(feature) {
-    if (feature.get('name') === name) {
+    if (feature.get('id') === name) {
       source.removeFeature(feature);
     }
   });
 
   // uit JSON verwijderen
   json_community.features = json_community.features.filter(function(f) {
-    return f.properties.name !== name;
+    return f.properties.name !== id;
   });
 
   // opslaan
