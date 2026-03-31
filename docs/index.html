@@ -342,15 +342,6 @@ map.on('singleclick', function(evt) {
 
 });
 
-// 🔹 delete geselecteerde marker
-window.deleteSelected = function() {
-
-  console.log("DELETE CLICK");
-
-  if (!selectedFeature) {
-    alert("Geen marker geselecteerd");
-    return;
-  }
 
   const id = selectedFeature.get('id');
   console.log("ID:", id);
