@@ -298,17 +298,44 @@ console.log("ADMIN CHECK:", window.location.search);
 </script>
         
 <script>
-window.deleteFeature = function(id) {
 
-  if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
+// 🔹 globale vars
+var selectedFeature = null;
+var modify;
+var locked = false;
 
-  const source = layer_community.getSource();
+// 🔹 selectie (klik op marker)
+map.on('singleclick', function(evt) {
 
-  source.getFeatures().forEach(function(feature) {
-    if (feature.get('id') === id) {
-      source.removeFeature(feature);
+  selectedFeature = null;
+
+  map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+
+    if (feature.get('id')) {
+      selectedFeature = feature;
+      console.log("SELECTED:", feature.get('id'));
+      return true;
     }
+
   });
+
+});
+
+// 🔹 delete geselecteerde marker
+window.deleteSelected = function() {
+
+  console.log("DELETE CLICK");
+
+  if (!selectedFeature) {
+    alert("Geen marker geselecteerd");
+    return;
+  }
+
+  const id = selectedFeature.get('id');
+  console.log("ID:", id);
+
+  // van kaart verwijderen
+  layer_community.getSource().removeFeature(selectedFeature);
 
   // uit JSON verwijderen
   json_community.features = json_community.features.filter(function(f) {
@@ -318,165 +345,33 @@ window.deleteFeature = function(id) {
   // opslaan
   localStorage.setItem('community_data', JSON.stringify(json_community));
 
-  alert("Marker verwijderd");
-};
-</script>
-<script>        
-var selectedFeature = null;
-
-var selectedFeature = null;
-
-map.on('singleclick', function(evt) {
-
   selectedFeature = null;
 
-  // reset styles
-  layer_community.getSource().getFeatures().forEach(function(f) {
-    f.setStyle(null);
-  });
-
-  map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-
-    // 🔥 GEEN layer check meer
-    if (feature.get('id')) {
-      selectedFeature = feature;
-
-      console.log("SELECTED:", feature.get('id'));
-
-     // feature.setStyle(selectStyle);
-      return true;
-    }
-
-  });
-
-});
-
-window.deleteSelected = function() {
-
-  console.log("DELETE CLICK");
-
-  if (!selectedFeature) {
-    alert("Geen marker geselecteerd");
-    console.log("GEEN selectedFeature");
-    return;
-  }
-
-  console.log("SELECTED FEATURE:", selectedFeature);
-
-  const id = selectedFeature.get('id');
-  console.log("ID:", id);
-
-  layer_community.getSource().removeFeature(selectedFeature);
-
-  json_community.features = json_community.features.filter(function(f) {
-    return f.properties.id !== id;
-  });
-
-  localStorage.setItem('community_data', JSON.stringify(json_community));
-
   alert("Marker verwijderd");
 };
-        
-        <script>
+
+// 🔹 lock / unlock markers
 window.toggleLock = function() {
+
+  if (!modify) {
+    console.log("modify nog niet klaar");
+    return;
+  }
 
   locked = !locked;
 
   if (locked) {
-
-    map.getInteractions().forEach(function(interaction) {
-      if (interaction instanceof ol.interaction.Modify) {
-        map.removeInteraction(interaction);
-        console.log("MODIFY REMOVED");
-      }
-    });
-
+    map.removeInteraction(modify);
+    console.log("LOCK AAN");
     alert("🔒 Lock actief");
-
   } else {
-
-    if (modify) {
-      map.addInteraction(modify);
-      console.log("MODIFY ADDED");
-    }
-
+    map.addInteraction(modify);
+    console.log("LOCK UIT");
     alert("🔓 Unlock actief");
   }
 };
- </script>       
-    <script>
 
-var selectedFeature = null;
-
-map.on('singleclick', function(evt) {
-
-  selectedFeature = null;
-
-  layer_community.getSource().getFeatures().forEach(function(f) {
-    f.setStyle(null);
-  });
-
-  map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-
-    if (layer === layer_community && feature.get('id')) {
-      selectedFeature = feature;
-      feature.setStyle(selectStyle);
-      return true;
-    }
-
-  });
-
-});
-    </script>
-        
-<script>
-
-var selectStyle = new ol.style.Style({
-  image: new ol.style.Circle({
-    radius: 8,
-    fill: new ol.style.Fill({
-      color: 'red'
-    }),
-    stroke: new ol.style.Stroke({
-      color: 'white',
-      width: 2
-    })
-  })
-});
-
-
-  <script>  
-window.deleteSelected = function() {
-
-  if (!selectedFeature) {
-    alert("Geen marker geselecteerd");
-    return;
-  }
-
-  const id = selectedFeature.get('id');
-
-  if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
-
-  layer_community.getSource().removeFeature(selectedFeature);
-
-  json_community.features = json_community.features.filter(function(f) {
-    return f.properties.id !== id;
-  });
-
-  localStorage.setItem('community_data', JSON.stringify(json_community));
-
-  selectedFeature = null;
-
-  alert("Marker verwijderd");
-};
-  </script>
-        
-<script>
-window.deleteSelected = function() {
-  alert("DELETE WERKT");
-};
 </script>
-        
-</script>    
+
     </body>
 </html>
