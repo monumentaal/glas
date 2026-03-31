@@ -426,6 +426,22 @@ map.on('singleclick', function(evt) {
     </script>
         
 <script>
+<script>
+var selectStyle = new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 8,
+    fill: new ol.style.Fill({
+      color: 'red'
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'white',
+      width: 2
+    })
+  })
+});
+</script>
+
+  <script>  
 window.deleteSelected = function() {
 
   if (!selectedFeature) {
