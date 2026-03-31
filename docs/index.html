@@ -275,6 +275,7 @@ console.log("ADMIN CHECK:", window.location.search);
   // 👉 alleen toevoegen als admin
   if (isAdmin) {
     map.addInteraction(modify);
+    updateLockButton();
     console.log("Modify actief (admin)");
   } else {
     console.log("Modify uitgeschakeld (geen admin)");
