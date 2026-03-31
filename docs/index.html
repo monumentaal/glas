@@ -160,10 +160,15 @@
       
         json_community.features.push(feature);
             
-        layer_community.getSource().addFeature(
-          new ol.format.GeoJSON().readFeature(feature, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: 'EPSG:3857'
+const olFeature = new ol.format.GeoJSON().readFeature(feature, {
+  dataProjection: 'EPSG:4326',
+  featureProjection: 'EPSG:3857'
+});
+
+// 🔥 BELANGRIJK
+olFeature.set('id', id);
+
+layer_community.getSource().addFeature(olFeature);
           }) // new 
           );  //layer
 
