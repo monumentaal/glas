@@ -330,15 +330,20 @@ map.on('singleclick', function(evt) {
 
   selectedFeature = null;
 
+  // reset styles
   layer_community.getSource().getFeatures().forEach(function(f) {
-    f.setStyle(null); // reset style
+    f.setStyle(null);
   });
 
-  map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+  map.forEachFeatureAtPixel(evt.pixel, function(feature) {
 
-    if (layer === layer_community && feature.get('id')) {
+    // 🔥 GEEN layer check meer
+    if (feature.get('id')) {
       selectedFeature = feature;
-      feature.setStyle(selectStyle); // 👈 highlight
+
+      console.log("SELECTED:", feature.get('id'));
+
+      feature.setStyle(selectStyle);
       return true;
     }
 
