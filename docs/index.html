@@ -294,31 +294,28 @@ console.log("ADMIN CHECK:", window.location.search);
 </script>
         
 <script>
-window.deleteFeature = function(name) {
+window.deleteFeature = function(id) {
 
   if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
 
   const source = layer_community.getSource();
 
   source.getFeatures().forEach(function(feature) {
-    if (feature.get('id') === name) {
+    if (feature.get('id') === id) {
       source.removeFeature(feature);
     }
   });
 
   // uit JSON verwijderen
   json_community.features = json_community.features.filter(function(f) {
-    return f.properties.name !== id;
+    return f.properties.id !== id;
   });
 
   // opslaan
   localStorage.setItem('community_data', JSON.stringify(json_community));
 
   alert("Marker verwijderd");
-
-
-}  
-
+};
 </script>
         
 var selectedFeature = null;
