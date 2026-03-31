@@ -400,6 +400,56 @@ window.toggleLock = function() {
   }
 };
  </script>       
+    <script>
+
+var selectedFeature = null;
+
+map.on('singleclick', function(evt) {
+
+  selectedFeature = null;
+
+  layer_community.getSource().getFeatures().forEach(function(f) {
+    f.setStyle(null);
+  });
+
+  map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+
+    if (layer === layer_community && feature.get('id')) {
+      selectedFeature = feature;
+      feature.setStyle(selectStyle);
+      return true;
+    }
+
+  });
+
+});
+    </script>
         
+<script>
+window.deleteSelected = function() {
+
+  if (!selectedFeature) {
+    alert("Geen marker geselecteerd");
+    return;
+  }
+
+  const id = selectedFeature.get('id');
+
+  if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
+
+  layer_community.getSource().removeFeature(selectedFeature);
+
+  json_community.features = json_community.features.filter(function(f) {
+    return f.properties.id !== id;
+  });
+
+  localStorage.setItem('community_data', JSON.stringify(json_community));
+
+  selectedFeature = null;
+
+  alert("Marker verwijderd");
+};
+
+</script>    
     </body>
 </html>
