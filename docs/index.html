@@ -417,14 +417,15 @@ function handleSelect(evt) {
 
     if (feature.get('id')) {
       selectedFeature = feature;
+
       console.log("SELECTED:", feature.get('id'));
-      return true;
-    } // if
 
-  });// map
+      return false; // 👈 BELANGRIJK
+    }
 
-} //handle
+  });
 
+}
  
   // van kaart verwijderen
  // layer_community.getSource().removeFeature(selectedFeature);
