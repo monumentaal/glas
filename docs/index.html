@@ -364,15 +364,13 @@ function handleSelect(evt) {
       selectedFeature = feature;
       console.log("SELECTED:", feature.get('id'));
       return true;
-    }
+    } // if
 
-  });
+  });// map
 
-}
+} //handle
 
-  const id = selectedFeature.get('id');
-  console.log("ID:", id);
-
+ 
   // van kaart verwijderen
   layer_community.getSource().removeFeature(selectedFeature);
 
