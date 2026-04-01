@@ -162,6 +162,33 @@ var communitySource = new ol.source.Vector({
     featureProjection: 'EPSG:3857'
   })
 });
+
+var layer_community = new ol.layer.Vector({
+  source: communitySource,
+  title: "Community",
+  style: new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: 6,
+      fill: new ol.style.Fill({ color: 'blue' }),
+      stroke: new ol.style.Stroke({ color: 'white', width: 2 })
+    })
+  })
+});
+
+// 👉 toevoegen aan kaart
+map.addLayer(layer_community);
+
+</script>
+
+        
+<script>
+
+var communitySource = new ol.source.Vector({
+  features: new ol.format.GeoJSON().readFeatures(json_community, {
+    dataProjection: 'EPSG:4326',
+    featureProjection: 'EPSG:3857'
+  })
+});
 <script>
 var layer_community = new ol.layer.Vector({
   source: communitySource,
