@@ -419,7 +419,9 @@ window.toggleLock = function() {
         <script>
 window.deleteSelected = function() {
 
-  if (!window.selectedFeature) {
+  console.log("DELETE CLICK");
+
+  if (!selectedFeature) {
     alert("Geen marker geselecteerd");
     return;
   }
