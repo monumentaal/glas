@@ -288,9 +288,7 @@ window.addEventListener("load", function() {
 <script>
 setTimeout(function() {
 
-  if (typeof layer_community === "undefined") {
-    console.log("layer_community nog niet klaar");
-    return;
+ if (!layer_community) return;
   }
 
   modify = new ol.interaction.Modify({
