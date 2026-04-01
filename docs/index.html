@@ -326,7 +326,10 @@ var modify;
 var locked = false;
 
 // 🔹 selectie (klik op marker)
-map.on('singleclick', function(evt) {
+map.on('singleclick', handleSelect);
+map.on('pointerup', handleSelect);
+
+function handleSelect(evt) {
 
   selectedFeature = null;
 
@@ -340,8 +343,7 @@ map.on('singleclick', function(evt) {
 
   });
 
-});
-
+}
 
   const id = selectedFeature.get('id');
   console.log("ID:", id);
