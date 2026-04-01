@@ -428,7 +428,8 @@ function handleSelect(evt) {
  
   // van kaart verwijderen
   layer_community.getSource().removeFeature(selectedFeature);
-
+  const id = selectedFeature.get('id');
+    
   // uit JSON verwijderen
   json_community.features = json_community.features.filter(function(f) {
     return f.properties.id !== id;
