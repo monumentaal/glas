@@ -353,7 +353,7 @@ setTimeout(function() {
   var isAdmin = window.location.search.includes("admin");
   console.log("ADMIN CHECK:", window.location.search);
 
-  if (isAdmin) {
+ if (isAdmin && !locked) { {
     map.addInteraction(modify);
     console.log("Modify actief (admin)");
   }
