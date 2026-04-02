@@ -176,10 +176,41 @@ var layer_community = new ol.layer.Vector({
 
         
         <script src="./resources/Autolinker.min.js"></script>
-        <script src="./resources/qgis2web.js"></script> 
+        <script src="./resources/qgis2web.js"></script> <script>
 
-        <script>
-    
+            <script>
+
+setTimeout(function() {
+
+  if (!window.map) return;
+
+  var source = new ol.source.Vector({
+    features: new ol.format.GeoJSON().readFeatures(json_community, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857'
+    })
+  });
+
+  window.layer_community = new ol.layer.Vector({
+    source: source,
+    title: "Community",
+    style: new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 7,
+        fill: new ol.style.Fill({ color: '#007bff' }),
+        stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 })
+      })
+    })
+  });
+
+  map.addLayer(layer_community);
+
+  console.log("community geladen:", source.getFeatures().length);
+
+}, 500);
+
+</script>
+        
         window.voegToe = async function() {
 
           const plaats = document.getElementById('plaats').value;
