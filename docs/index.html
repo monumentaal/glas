@@ -472,6 +472,14 @@ window.deleteSelected = function() {
 
 <script>
 
+features geladen glas:515:11
+alles actief
+
+
+</script>  
+
+<script>
+
 setTimeout(function() {
 
   if (!window.map) {
@@ -479,87 +487,38 @@ setTimeout(function() {
     return;
   }
 
-  // 🔥 COMMUNITY LAYER (als nog niet bestaat)
-  if (!window.layer_community) {
-
-    var communitySource = new ol.source.Vector();
-
-    window.layer_community = new ol.layer.Vector({
-      source: communitySource,
-      title: "Community"
-    });
-
-    map.addLayer(layer_community);
-    console.log("community layer toegevoegd");
-  }
-
-  const source = layer_community.getSource();
-  source.clear();
-
-  // 🔥 FEATURES LADEN
-  json_community.features.forEach(function(feature) {
-
-    const olFeature = new ol.format.GeoJSON().readFeature(feature, {
-      dataProjection: 'EPSG:4326',
-      featureProjection: 'EPSG:3857'
-    });
-
-    olFeature.set('id', feature.properties.id);
-    olFeature.set('name', feature.properties.name);
-    olFeature.set('description', feature.properties.description);
-    olFeature.set('url', feature.properties.url);
-
-    source.addFeature(olFeature);
+  // 🔥 maak source + features direct
+  var features = new ol.format.GeoJSON().readFeatures(json_community, {
+    dataProjection: 'EPSG:4326',
+    featureProjection: 'EPSG:3857'
   });
 
-  console.log("features geladen");
+  // 🔥 properties goed zetten
+  features.forEach(function(f, i) {
+    const props = json_community.features[i].properties;
 
-  // 🔥 MODIFY (lock systeem)
-  window.modify = new ol.interaction.Modify({
-    source: source
+    f.set('id', props.id);
+    f.set('name', props.name);
+    f.set('description', props.description);
+    f.set('url', props.url);
   });
 
-  if (!locked) {
-    map.addInteraction(modify);
-  }
-
-  // 🔥 POPUP + OVERLAY
-  window.overlay = new ol.Overlay({
-    element: document.getElementById('popup'),
-    autoPan: true
+  var source = new ol.source.Vector({
+    features: features
   });
 
-  map.addOverlay(overlay);
-
-  map.on('singleclick', function(evt) {
-
-    map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-
-      if (feature.get('name')) {
-
-        var content = "<b>" + feature.get('name') + "</b><br>" +
-                      (feature.get('description') || "") + "<br>" +
-                      (feature.get('url') || "");
-
-        document.getElementById('popup-content').innerHTML = content;
-
-        overlay.setPosition(evt.coordinate);
-
-        return true;
-      }
-
-    });
-
+  window.layer_community = new ol.layer.Vector({
+    source: source,
+    title: "Community"
   });
 
-  console.log("alles actief");
+  map.addLayer(layer_community);
+
+  console.log("community layer + features geladen");
 
 }, 1000);
 
-
-</script>  
-
-
+</script>
 
 <!-- 👇 HIER komt stap 4 -->
 <script>
