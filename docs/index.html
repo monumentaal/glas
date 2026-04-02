@@ -365,11 +365,18 @@ var locked = false;
 
 // 🔹 selectie (klik op marker)
 map.on('pointerup', handleSelect);
+var selectStyle = new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 8,
+    fill: new ol.style.Fill({ color: 'red' }),
+    stroke: new ol.style.Stroke({ color: 'white', width: 2 })
+  })
+}); 
     
 function handleSelect(evt) {
 
   selectedFeature = null;
-
+  feature.setStyle(selectStyle);
   map.forEachFeatureAtPixel(evt.pixel, function(feature) {
 
     if (feature.get('id')) {
