@@ -472,37 +472,7 @@ window.deleteSelected = function() {
 
 <script>
 
-setTimeout(function() {
-
-  if (!window.map) {
-    console.log("map nog niet klaar");
-    return;
-  }
-
-  // 🔥 maak source + features direct
-  var features = new ol.format.GeoJSON().readFeatures(json_community, {
-    dataProjection: 'EPSG:4326',
-    featureProjection: 'EPSG:3857'
-  });
-
-  // 🔥 properties goed zetten
-  features.forEach(function(f, i) {
-    const props = json_community.features[i].properties;
-
-    f.set('id', props.id);
-    f.set('name', props.name);
-    f.set('description', props.description);
-    f.set('url', props.url);
-  });
-
-  var source = new ol.source.Vector({
-    features: features
-  });
-
-}
-           </script>
-    
-  <script>
+<script>
 
 setTimeout(function() {
 
@@ -542,35 +512,6 @@ setTimeout(function() {
 }, 1000);
 
 </script>
-
-</script>
-
-<script>
-
-map.on('singleclick', function(evt) {
-
-  map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-
-    if (feature.get('name')) {
-
-      var content = "<b>" + feature.get('name') + "</b><br>" +
-                    (feature.get('description') || "") + "<br>" +
-                    (feature.get('url') || "");
-
-      document.getElementById('popup-content').innerHTML = content;
-
-      overlay.setPosition(evt.coordinate);
-
-      return true;
-    }
-
-  });
-
-});
-
-</script>
-
-
         
     </body>
 </html>
