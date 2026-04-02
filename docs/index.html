@@ -473,8 +473,6 @@ window.toggleLock = function() {
         <script>
 window.deleteSelected = function() {
 
-  console.log("DELETE CLICK");
-
   if (!selectedFeature) {
     alert("Geen marker geselecteerd");
     return;
@@ -482,10 +480,16 @@ window.deleteSelected = function() {
 
   const id = selectedFeature.get('id');
 
-  if (!confirm("Weet je zeker dat je deze marker wilt verwijderen?")) return;
+  const source = layer_community.getSource();
 
-  layer_community.getSource().removeFeature(selectedFeature);
+  // 🔥 zoek echte feature
+  source.getFeatures().forEach(function(f) {
+    if (f.get('id') === id) {
+      source.removeFeature(f);
+    }
+  });
 
+  // JSON bijwerken
   json_community.features = json_community.features.filter(function(f) {
     return f.properties.id !== id;
   });
