@@ -470,8 +470,6 @@ window.deleteSelected = function() {
 };
 </script>
 
- 
-
 <script>
 
 setTimeout(function() {
@@ -481,13 +479,57 @@ setTimeout(function() {
     return;
   }
 
-  // 🔥 GLOBAAL maken
+  // 🔥 COMMUNITY LAYER (als nog niet bestaat)
+  if (!window.layer_community) {
+
+    var communitySource = new ol.source.Vector();
+
+    window.layer_community = new ol.layer.Vector({
+      source: communitySource,
+      title: "Community"
+    });
+
+    map.addLayer(layer_community);
+    console.log("community layer toegevoegd");
+  }
+
+  const source = layer_community.getSource();
+  source.clear();
+
+  // 🔥 FEATURES LADEN
+  json_community.features.forEach(function(feature) {
+
+    const olFeature = new ol.format.GeoJSON().readFeature(feature, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857'
+    });
+
+    olFeature.set('id', feature.properties.id);
+    olFeature.set('name', feature.properties.name);
+    olFeature.set('description', feature.properties.description);
+    olFeature.set('url', feature.properties.url);
+
+    source.addFeature(olFeature);
+  });
+
+  console.log("features geladen");
+
+  // 🔥 MODIFY (lock systeem)
+  window.modify = new ol.interaction.Modify({
+    source: source
+  });
+
+  if (!locked) {
+    map.addInteraction(modify);
+  }
+
+  // 🔥 POPUP + OVERLAY
   window.overlay = new ol.Overlay({
     element: document.getElementById('popup'),
     autoPan: true
   });
 
-  map.addOverlay(window.overlay);
+  map.addOverlay(overlay);
 
   map.on('singleclick', function(evt) {
 
@@ -501,8 +543,7 @@ setTimeout(function() {
 
         document.getElementById('popup-content').innerHTML = content;
 
-        // 🔥 NU werkt dit
-        window.overlay.setPosition(evt.coordinate);
+        overlay.setPosition(evt.coordinate);
 
         return true;
       }
@@ -511,7 +552,7 @@ setTimeout(function() {
 
   });
 
-  console.log("popup werkt nu");
+  console.log("alles actief");
 
 }, 1000);
 
