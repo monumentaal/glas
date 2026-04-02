@@ -539,6 +539,37 @@ setTimeout(function() {
 
 }, 500);
 
-</script>      
+</script>  
+
+
+
+<!-- 👇 HIER komt stap 4 -->
+<script>
+
+map.on('singleclick', function(evt) {
+
+  map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+
+    if (feature.get('name')) {
+
+      var content = "<b>" + feature.get('name') + "</b><br>" +
+                    (feature.get('description') || "") + "<br>" +
+                    (feature.get('url') || "");
+
+      document.getElementById('popup-content').innerHTML = content;
+
+      overlay.setPosition(evt.coordinate);
+
+      return true;
+    }
+
+  });
+
+});
+
+</script>
+
+
+        
     </body>
 </html>
