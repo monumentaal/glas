@@ -271,11 +271,12 @@ const olFeature = new ol.format.GeoJSON().readFeature(feature, {
   featureProjection: 'EPSG:3857'
 });
 
-// 🔥 BELANGRIJK
-
+// 🔥 ALLES expliciet zetten
 olFeature.set('id', feature.properties.id);
+olFeature.set('name', feature.properties.name);
+olFeature.set('description', feature.properties.description);
+
 layer_community.getSource().addFeature(olFeature);
-        
 
         // 👉 lokaal opslaan
         localStorage.setItem('community_data', JSON.stringify(json_community));
