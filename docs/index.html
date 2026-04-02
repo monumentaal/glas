@@ -455,15 +455,20 @@ setTimeout(function() {
 
     map.forEachFeatureAtPixel(evt.pixel, function(feature) {
 
-      if (feature.get('name')) {
+      if (feature) {
 
-        document.getElementById('popup-content').innerHTML =
-          "<b>" + feature.get('name') + "</b><br>" +
-          (feature.get('description') || "") + "<br>" +
-          (feature.get('url') || "");
+        const name = feature.get('name') || feature.get('id') || "Onbekend";
+const desc = feature.get('description') || "";
+const url = feature.get('url') || "";
 
-        // 🔥 gebruik window.overlay
-        window.overlay.setPosition(evt.coordinate);
+const popup = document.getElementById('popup');
+
+document.getElementById('popup-content').innerHTML =
+  "<b>" + name + "</b><br>" + desc + "<br>" + url;
+
+popup.style.display = 'block';
+
+window.overlay.setPosition(evt.coordinate);
 
         return true;
       }
