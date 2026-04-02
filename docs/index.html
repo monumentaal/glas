@@ -341,11 +341,6 @@ window.addEventListener("load", function() {
 
 <script>
 
-
-
-
-
-
   function updateLockButton() {
   const btn = document.getElementById("lockBtn");
   if (!btn) return;
@@ -370,11 +365,6 @@ var locked = false;
 
 // 🔹 selectie (klik op marker)
 map.on('singleclick', handleSelect);
-//map.on('pointerup', handleSelect);
-
-map.on('singleclick', function(evt) {
-  console.log("POPUP CLICK TEST");
-});
     
 function handleSelect(evt) {
 
