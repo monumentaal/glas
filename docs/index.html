@@ -342,85 +342,8 @@ window.addEventListener("load", function() {
 
 
 <script>
-<script>
 
-setTimeout(function() {
 
-  if (!window.map) {
-    console.log("map nog niet klaar (popup)");
-    return;
-  }
-
-  map.on('singleclick', function(evt) {
-
-    map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-
-      if (feature.get('name')) {
-
-        var content = "<b>" + feature.get('name') + "</b><br>" +
-                      (feature.get('description') || "") + "<br>" +
-                      (feature.get('url') || "");
-
-        document.getElementById('popup-content').innerHTML = content;
-
-        if (window.overlay) {
-          overlay.setPosition(evt.coordinate);
-        }
-
-        return true;
-      }
-
-    });
-
-  });
-
-  console.log("popup actief");
-
-}, 1000);
-
-</script><script>
-<script>
-
-setTimeout(function() {
-
-  if (!window.map) {
-    console.log("map nog niet klaar");
-    return;
-  }
-
-  // 🔥 overlay aanmaken (HIER!)
-  var overlay = new ol.Overlay({
-    element: document.getElementById('popup'),
-    autoPan: true
-  });
-
-  map.addOverlay(overlay);
-
-  // 🔥 popup click handler
-  map.on('singleclick', function(evt) {
-
-    map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-
-      if (feature.get('name')) {
-
-        var content = "<b>" + feature.get('name') + "</b><br>" +
-                      (feature.get('description') || "") + "<br>" +
-                      (feature.get('url') || "");
-
-        document.getElementById('popup-content').innerHTML = content;
-
-        overlay.setPosition(evt.coordinate);
-
-        return true;
-      }
-
-    });
-
-  });
-
-  console.log("popup + overlay actief");
-
-}, 1000);
 
 
 
