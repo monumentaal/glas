@@ -500,10 +500,22 @@ setTimeout(function() {
   });
 
   window.layer_community = new ol.layer.Vector({
-    source: source,
-    title: "Community"
-  });
-
+  source: source,
+  title: "Community",
+  style: new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: 7,
+      fill: new ol.style.Fill({
+        color: '#007bff'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#ffffff',
+        width: 2
+      })
+    })
+  })
+});
+    
   map.addLayer(layer_community);
 
   console.log("community layer + features geladen");
