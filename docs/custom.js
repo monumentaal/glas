@@ -15,9 +15,9 @@ window.addEventListener("load", function () {
         '<div class="tab-content active" id="info">' +
         'Deze kaart toont monumentaal glas in Nederland.<br><br>' +
         'klik op een marker bijeen gebouw en er verschijnt in <br> ' +
-        'popup met link naar op internet aanwezige informatie<br>
-        '</div>' +
-
+        'popup met link naar op internet aanwezige informatie<br>' +
+        '</div>' 
+    
         '<div class="tab-content" id="bron">' +
         'Bronnen:<br>' +
         '- Eigen inventarisatie<br>' +
