@@ -36,7 +36,7 @@
         </style>
 <style>
 #map {
-  position: relative;   /* 👈 CRUCIAAL */
+  position: relative;
 }
 
 .info-panel {
@@ -45,13 +45,58 @@
   left: 10px;
   z-index: 9999;
 
-  background: white;
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-  max-width: 260px;
+  width: 340px;
+  max-width: 90%;
 
-  font: 12px/14px Arial, Helvetica, sans-serif;
+  background: white;
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+
+  font: 14px/18px Arial, Helvetica, sans-serif;
+}
+
+.info-header {
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-content {
+  margin-top: 10px;
+  display: none;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* tabs */
+.tabs {
+  margin-bottom: 8px;
+}
+
+.tab {
+  padding: 4px 8px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  margin-right: 4px;
+  border-radius: 3px;
+}
+
+.tab.active {
+  background: #ccc;
+  font-weight: bold;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
 }
 </style>        
         <title></title>
