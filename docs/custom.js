@@ -1,26 +1,23 @@
-const observer = new MutationObserver(function () {
+window.addEventListener("load", function () {
 
-    let topLeft = document.querySelector(".leaflet-top.leaflet-left");
+    let interval = setInterval(function () {
 
-    if (topLeft && !document.querySelector(".info-panel")) {
+        let topLeft = document.querySelector(".leaflet-top.leaflet-left");
 
-        let div = document.createElement("div");
-        div.className = "leaflet-control info-panel";
+        if (topLeft) {
+            clearInterval(interval);
 
-        div.innerHTML =
-            '<div class="info-header">ℹ️ Toelichting</div>' +
-            '<div class="info-content">Hier jouw uitleg over de kaart.</div>';
+            let div = document.createElement("div");
+            div.className = "leaflet-control info-panel";
 
-        topLeft.appendChild(div);
+            div.innerHTML =
+                '<div class="info-header">ℹ️ Toelichting</div>' +
+                '<div class="info-content">Dit is een testtekst.</div>';
 
-        observer.disconnect(); // stop zodra gelukt
-    }
-});
+            topLeft.appendChild(div);
+        }
 
-// kijk naar veranderingen in de pagina
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
+    }, 500);
 });
 
 
