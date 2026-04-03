@@ -10,14 +10,15 @@ window.addEventListener("load", function () {
 
         '<div class="info-content">' +
 
-        '<div class="tabs">' +
-        '<button class="tab active" data-tab="info">Info</button>' +
-        '<button class="tab" data-tab="bron">Bron</button>' +
-        '</div>' +
+    //    '<div class="tabs">' +
+  //      '<button class="tab active" data-tab="info">Info</button>' +
+     //   '<button class="tab" data-tab="bron">Bron</button>' +
+     //   '</div>' +
 
         '<div class="tab-content active" id="info">' +
-        'Deze kaart toont glas-in-lood ramen in Nederland.<br><br>' +
-        'Gebruik de legenda om lagen aan/uit te zetten.' +
+        'Deze kaart toont monumentaal glas in Nederland.<br><br>' +
+        'klik op een marker bijeen gebouw en er verschijnt in <br> ' +
+        'popup met link naar op internet aanwezige informatie<br>
         '</div>' +
 
         '<div class="tab-content" id="bron">' +
