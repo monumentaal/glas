@@ -27,12 +27,11 @@ window.addEventListener("load", function () {
         infoControl.onAdd = function () {
             var div = L.DomUtil.create('div', 'info-panel');
 
-            div.innerHTML = `
-                <div class="info-header">ℹ️ Toelichting</div>
-                <div class="info-content">
-                    Hier jouw uitleg over de kaart.
-                </div>
-            `;
+            div.innerHTML =
+    '<div class="info-header">ℹ️ Toelichting</div>' +
+    '<div class="info-content">' +
+    'Hier jouw uitleg over de kaart.' +
+    '</div>';
 
             L.DomEvent.disableClickPropagation(div);
             return div;
