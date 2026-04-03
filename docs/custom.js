@@ -1,29 +1,26 @@
-function waitForLeafletUI() {
+const observer = new MutationObserver(function () {
 
     let topLeft = document.querySelector(".leaflet-top.leaflet-left");
 
-    if (!topLeft) {
-        // blijf proberen tot hij bestaat
-        setTimeout(waitForLeafletUI, 300);
-        return;
+    if (topLeft && !document.querySelector(".info-panel")) {
+
+        let div = document.createElement("div");
+        div.className = "leaflet-control info-panel";
+
+        div.innerHTML =
+            '<div class="info-header">ℹ️ Toelichting</div>' +
+            '<div class="info-content">Hier jouw uitleg over de kaart.</div>';
+
+        topLeft.appendChild(div);
+
+        observer.disconnect(); // stop zodra gelukt
     }
+});
 
-    // voorkom dubbel toevoegen
-    if (document.querySelector(".info-panel")) return;
-
-    let div = document.createElement("div");
-    div.className = "leaflet-control info-panel";
-
-    div.innerHTML =
-        '<div class="info-header">ℹ️ Toelichting</div>' +
-        '<div class="info-content">Hier jouw uitleg over de kaart.</div>';
-
-    topLeft.appendChild(div);
-}
-
-// start pas NA volledige load
-window.addEventListener("load", function () {
-    waitForLeafletUI();
+// kijk naar veranderingen in de pagina
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
 });
 
 
