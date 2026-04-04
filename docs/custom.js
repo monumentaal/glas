@@ -1,50 +1,47 @@
-// wacht tot DOM klaar is
-document.addEventListener("DOMContentLoaded", function () {
+// wacht tot pagina klaar is
+window.addEventListener("load", function () {
 
-    function init() {
+    function addPanel() {
 
-        // zoek de kaart div
         let mapDiv = document.getElementById("map");
 
         if (!mapDiv) {
-            setTimeout(init, 300);
+            setTimeout(addPanel, 300);
             return;
         }
 
-        // voorkom dubbel toevoegen
+        // voorkom dubbel
         if (document.querySelector(".info-panel")) return;
 
-        // 🔽 INFOPANEEL
         let div = document.createElement("div");
         div.className = "info-panel";
 
         div.innerHTML =
-            '<div class="info-header"><span class="arrow">▶</span> Over deze kaart</div>' +
+            '<div class="info-header">▶ Over deze kaart</div>' +
             '<div class="info-content">' +
-            '<input type="text" id="searchBox" placeholder="Zoek plaats..." />' +
-            '<div>Deze kaart toont glas-in-lood ramen.</div>' +
+            'Dit is een testtekst.<br><br>' +
+            'Hier komt jouw uitleg.' +
             '</div>';
 
         mapDiv.appendChild(div);
 
-        console.log("infoblok toegevoegd ✅");
+        console.log("infoblok geplaatst ✅");
     }
 
-    init();
+    addPanel();
 });
 
 
-// 🔽 inklappen
+// inklappen
 document.addEventListener("click", function(e) {
-    if (e.target.closest(".info-header")) {
+    if (e.target.classList.contains("info-header")) {
 
-        let header = e.target.closest(".info-header");
+        let header = e.target;
         let content = header.nextElementSibling;
-        let arrow = header.querySelector(".arrow");
 
         let open = content.style.display === "block";
 
         content.style.display = open ? "none" : "block";
-        arrow.textContent = open ? "▶" : "▼";
+        header.textContent = (open ? "▶ " : "▼ ") + "Over deze kaart";
     }
 });
