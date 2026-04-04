@@ -47,3 +47,31 @@ document.addEventListener("click", function(e) {
         header.textContent = (open ? "▶ " : "▼ ") + "Over deze kaart";
     }
 });
+
+document.addEventListener("keydown", function(e) {
+
+    if (e.target.id === "searchBox" && e.key === "Enter") {
+
+        let query = e.target.value;
+
+        fetch("https://nominatim.openstreetmap.org/search?format=json&q=" + query)
+            .then(r => r.json())
+            .then(data => {
+
+                if (data.length > 0) {
+
+                    let lat = parseFloat(data[0].lat);
+                    let lon = parseFloat(data[0].lon);
+
+                    // OpenLayers kaart (jouw geval!)
+                    if (window.map) {
+                        map.getView().setCenter(ol.proj.fromLonLat([lon, lat]));
+                        map.getView().setZoom(13);
+                    }
+
+                } else {
+                    alert("Plaats niet gevonden");
+                }
+            });
+    }
+});
