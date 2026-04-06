@@ -1,4 +1,8 @@
 // wacht tot pagina klaar is
+
+console.log("CUSTOM WORDT GELADEN");
+alert("CUSTOM ACTIEF");
+
 window.addEventListener("load", function () {
 
     function addPanel() {
