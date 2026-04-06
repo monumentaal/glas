@@ -111,7 +111,7 @@ window.addEventListener("load", function () {
 
         mapDiv.appendChild(div);
 
-        console.log("infoblok geplaatst ✅");
+        console.log("infoblok geplaatst ");
     }
 
     addPanel();
