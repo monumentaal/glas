@@ -19,16 +19,18 @@ window.addEventListener("load", function () {
         let div = document.createElement("div");
         div.className = "info-panel";
 
-        div.innerHTML =
-            '<div class="info-header">▶ Over deze kaart</div>' +
-            '<div class="info-content">' +
-            'zoek op plaats'+
-            '<input type="text" id="searchBox" placeholder="Zoek plaats..." />' +
-            'Klik op een marker dan komt een popup met een link '+
-            'naar informatie <br><br>' +
-           
-            '</div>';
-
+       
+            div.innerHTML = `
+    <div class="info-header">▶ Over deze kaart</div>
+    <div class="info-content">
+        <div>Zoek op plaats:</div>
+        <input type="text" id="searchBox" placeholder="Zoek plaats..." />
+        
+        <div style="margin-top:8px;">
+            Klik op een marker, dan verschijnt een popup met een link naar informatie.
+        </div>
+    </div>
+`;
         mapDiv.appendChild(div);
 
         console.log("infoblok geplaatst ✅");
