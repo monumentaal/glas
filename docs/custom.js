@@ -189,7 +189,43 @@ if (overlay && content) {
 
     findFeature();
 }
+function openPopup(feature, coord) {
 
+    lastClickedFeature = feature;
+
+    let overlay = map.getOverlays().getArray()[0];
+    let content = document.getElementById("popup-content");
+    let container = document.getElementById("popup");
+
+    if (!overlay || !content || !container) {
+        console.log("Popup elementen ontbreken");
+        return;
+    }
+
+    // content vullen
+    let props = feature.getProperties();
+    let html = "";
+
+    for (let key in props) {
+        if (key !== "geometry") {
+            html += "<b>" + key + "</b>: " + props[key] + "<br>";
+        }
+    }
+
+    content.innerHTML = html;
+
+    // 🔴 BELANGRIJK: popup zichtbaar maken
+    container.style.display = "block";
+
+    // positie zetten
+    overlay.setPosition(coord);
+
+    // soms nodig: force redraw
+    map.render();
+
+    // knop toevoegen
+    setTimeout(addShareButtonToPopup, 200);
+}
 
 // ---------- knop in popup ----------
 function addShareButtonToPopup() {
