@@ -112,7 +112,7 @@ function openFromId() {
         if (!source.getFeatures) return;
 
         // 🔴 HIER zit de echte fix
-        if (layerName && layer.get("title") !== layerName) return;
+       if (layerName && !layer.get("title").includes(layerName)) return;
 
         source.getFeatures().forEach(function(f) {
 
