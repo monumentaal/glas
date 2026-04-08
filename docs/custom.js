@@ -129,28 +129,22 @@ function openFromId() {
 
             lastClickedFeature = found;
 
-            // ---------- popup openen ----------
-            let popup = document.getElementById("popup");
-            let content = document.getElementById("popup-content");
+// simulate click via pixel
+let pixel = map.getPixelFromCoordinate(coord);
 
-            if (popup && content) {
+map.forEachFeatureAtPixel(pixel, function(feature) {
+    if (feature === found) {
+        // trigger normale popup flow
+        map.dispatchEvent({
+            type: "singleclick",
+            coordinate: coord,
+            pixel: pixel
+        });
+    }
+});
 
-                let props = found.getProperties();
-                let html = "";
-
-                for (let key in props) {
-                    if (key !== "geometry") {
-                        html += "<b>" + key + "</b>: " + props[key] + "<br>";
-                    }
-                }
-
-                content.innerHTML = html;
-
-                let overlay = map.getOverlays().getArray()[0];
-                if (overlay) {
-                    overlay.setPosition(coord);
-                }
-            }
+// share knop opnieuw toevoegen
+setTimeout(addShareButtonToPopup, 300);
 
         } else {
             setTimeout(findFeature, 300);
