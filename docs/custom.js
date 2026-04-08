@@ -94,13 +94,50 @@ function openFromId() {
 
     if (!id) return;
 
-    function findFeature() {
+   function findFeature() {
 
-        if (!window.layersList) {
-            setTimeout(findFeature, 300);
-            return;
-        }
+    if (!window.layersList) {
+        setTimeout(findFeature, 300);
+        return;
+    }
 
+    let found = null;
+
+    layersList.forEach(function(layer) {
+
+        if (!layer.getSource) return;
+
+        let source = layer.getSource();
+
+        // alleen vector layers
+        if (!source.getFeatures) return;
+
+        source.getFeatures().forEach(function(f) {
+
+            // check normale feature
+            if (f.get("id") == id) {
+                found = f;
+            }
+
+            // check cluster (belangrijk bij qgis2web!)
+            if (f.get("features")) {
+                f.get("features").forEach(function(innerFeature) {
+                    if (innerFeature.get("id") == id) {
+                        found = innerFeature;
+                    }
+                });
+            }
+
+        });
+
+    });
+
+    if (found) {
+        console.log("Feature gevonden:", found);
+    } else {
+        setTimeout(findFeature, 300);
+    }
+}
         let found = null;
 
         layersList.forEach(function(layer) {
