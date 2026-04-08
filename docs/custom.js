@@ -204,31 +204,7 @@ function findFeature() {
                         
                         
 // popup ophalen
-lastClickedFeature = found;
-
-// popup ophalen
-let overlay = map.getOverlays().getArray()[0];
-let content = document.getElementById("popup-content");
-
-if (overlay && content) {
-
-    let props = found.getProperties();
-    let html = "";
-
-    for (let key in props) {
-        if (key !== "geometry") {
-            html += "<b>" + key + "</b>: " + props[key] + "<br>";
-        }
-    }
-
-    content.innerHTML = html;
-
-    overlay.setPosition(coord);
-
-    // knop toevoegen NA render
-    setTimeout(addShareButtonToPopup, 200);
-}
-       
+   
 
     findFeature();
 }
