@@ -125,7 +125,7 @@ function openFromId() {
             if (f.get("features")) {
                 f.get("features").forEach(function(inner) {
                     if (inner.get("id") == id) {
-  function findFeature() {
+function findFeature() {
 
     if (!window.layersList) {
         setTimeout(findFeature, 300);
@@ -145,10 +145,12 @@ function openFromId() {
 
         source.getFeatures().forEach(function(f) {
 
+            // normale feature
             if (f.get("id") == id) {
                 found = f;
             }
 
+            // cluster support
             if (f.get("features")) {
                 f.get("features").forEach(function(inner) {
                     if (inner.get("id") == id) {
@@ -161,7 +163,6 @@ function openFromId() {
 
     });
 
-    // ✅ HIER moet dit staan (binnen de functie!)
     if (found) {
 
         let coord = found.getGeometry().getCoordinates();
@@ -175,6 +176,7 @@ function openFromId() {
         setTimeout(findFeature, 300);
     }
 }
+                        
 // popup ophalen
 lastClickedFeature = found;
 
