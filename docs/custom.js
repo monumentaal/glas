@@ -82,39 +82,75 @@ window.addEventListener("load", function () {
         }
     }
 
-    zoomFromLink();
+   function zoomFromLink() {
 
-
-    // ---------- 🔍 zoeken ----------
-    let searchBox = document.getElementById("searchBox");
-
-    if (searchBox) {
-        searchBox.addEventListener("keydown", function(e) {
-
-            if (e.key === "Enter") {
-
-                let query = this.value;
-
-                fetch("https://nominatim.openstreetmap.org/search?format=json&q=" + query + ", Netherlands")
-                    .then(r => r.json())
-                    .then(data => {
-
-                        if (data.length > 0) {
-
-                            let lat = parseFloat(data[0].lat);
-                            let lon = parseFloat(data[0].lon);
-
-                            map.getView().setCenter(ol.proj.fromLonLat([lon, lat]));
-                            map.getView().setZoom(13);
-
-                        } else {
-                            alert("Plaats niet gevonden");
-                        }
-                    });
-            }
-        });
+    if (!window.map || !window.layersList) {
+        setTimeout(zoomFromLink, 400);
+        return;
     }
 
+    if (lat && lon) {
+
+        let targetLonLat = [parseFloat(lon), parseFloat(lat)];
+        let targetCoord = ol.proj.fromLonLat(targetLonLat);
+
+        let foundFeature = null;
+
+        // 🔍 zoek feature in alle lagen
+        layersList.forEach(function(layer) {
+
+            if (layer.getSource && layer.getSource().getFeatures) {
+
+                let features = layer.getSource().getFeatures();
+
+                features.forEach(function(f) {
+
+                    let geom = f.getGeometry();
+
+                    if (geom && geom.getType() === "Point") {
+
+                        let coord = geom.getCoordinates();
+                        let lonlat = ol.proj.toLonLat(coord);
+
+                        let dist = Math.abs(lonlat[0] - targetLonLat[0]) +
+                                   Math.abs(lonlat[1] - targetLonLat[1]);
+
+                        if (dist < 0.0005) { // ≈ 50 meter
+                            foundFeature = f;
+                        }
+                    }
+                });
+            }
+        });
+
+        if (foundFeature) {
+
+            let coord = foundFeature.getGeometry().getCoordinates();
+
+            map.getView().setCenter(coord);
+            map.getView().setZoom(16);
+
+            lastClickedFeature = foundFeature;
+
+            // 💬 popup openen
+            setTimeout(function () {
+                if (typeof highlightFeature === "function") {
+                    highlightFeature(foundFeature);
+                }
+            }, 300);
+
+        } else {
+            // fallback
+            map.getView().setCenter(targetCoord);
+            map.getView().setZoom(14);
+        }
+
+    } else {
+        map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
+        map.getView().setZoom(8);
+    }
+}
+    
 
     // ---------- 📍 klik op marker ----------
     map.on("singleclick", function(evt) {
