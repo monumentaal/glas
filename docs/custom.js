@@ -1,15 +1,21 @@
-// ---------- 🔗 helper ----------
-function getParam(name) {
-    let url = new URL(window.location.href);
-    return url.searchParams.get(name);
+// ---------- 🔗 helpers ----------
+function getParams() {
+    return new URLSearchParams(window.location.search);
 }
+
+let lastClickedFeature = null;
 
 
 // ---------- 🚀 hoofd ----------
 window.addEventListener("load", function () {
 
+    if (!window.map) {
+        setTimeout(arguments.callee, 300);
+        return;
+    }
+
     let mapDiv = document.getElementById("map");
-    if (!mapDiv || !window.map) return;
+    if (!mapDiv) return;
 
     // ---------- 📦 infoblok ----------
     if (!document.querySelector(".info-panel")) {
@@ -22,10 +28,6 @@ window.addEventListener("load", function () {
             <div class="info-content" style="display:block;">
                 <div>Zoek op plaats:</div>
                 <input type="text" id="searchBox" placeholder="Zoek plaats..." />
-                
-                <button id="copyLinkBtn" style="margin-top:8px;">
-                    📋 Deel huidige kaart
-                </button>
 
                 <div style="margin-top:8px;">
                     Klik op een marker voor informatie.
@@ -37,49 +39,53 @@ window.addEventListener("load", function () {
     }
 
 
-    // ---------- 🌍 startpositie ----------
-   let params = new URLSearchParams(window.location.search);
+    // ---------- 🌍 start / link ----------
+    let params = getParams();
 
-let lat = params.get("lat");
-let lon = params.get("lon");
-let zoom = params.get("zoom");
+    let lat = params.get("lat");
+    let lon = params.get("lon");
+    let zoom = params.get("zoom");
 
-console.log("PARAMS:", lat, lon, zoom);
+    function zoomFromLink() {
 
-    if (lat && lon) {
-
-        // 🔗 via link openen
-        let coord = ol.proj.fromLonLat([parseFloat(lon), parseFloat(lat)]);
-        map.getView().setCenter(coord);
-        map.getView().setZoom(zoom ? parseInt(zoom) : 15);
-
-        // 🔥 probeer popup (veilig)
-        try {
-            if (typeof highlightFeature === "function") {
-
-                map.once("rendercomplete", function () {
-
-                    map.forEachFeatureAtPixel(
-                        map.getPixelFromCoordinate(coord),
-                        function (feature) {
-                            highlightFeature(feature);
-                        }
-                    );
-
-                });
-            }
-        } catch (e) {
-            console.log("popup niet geopend");
+        if (!window.map) {
+            setTimeout(zoomFromLink, 300);
+            return;
         }
 
-    } else {
-        // standaard Nederland
-        map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
-        map.getView().setZoom(8);
+        if (lat && lon) {
+
+            let coord = ol.proj.fromLonLat([
+                parseFloat(lon),
+                parseFloat(lat)
+            ]);
+
+            map.getView().setCenter(coord);
+            map.getView().setZoom(zoom ? parseInt(zoom) : 15);
+
+            // popup openen
+            setTimeout(function () {
+                map.forEachFeatureAtPixel(
+                    map.getPixelFromCoordinate(coord),
+                    function (feature) {
+                        lastClickedFeature = feature;
+                        if (typeof highlightFeature === "function") {
+                            highlightFeature(feature);
+                        }
+                    }
+                );
+            }, 500);
+
+        } else {
+            map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
+            map.getView().setZoom(8);
+        }
     }
 
+    zoomFromLink();
 
-    // ---------- 🔍 zoekfunctie ----------
+
+    // ---------- 🔍 zoeken ----------
     let searchBox = document.getElementById("searchBox");
 
     if (searchBox) {
@@ -110,59 +116,57 @@ console.log("PARAMS:", lat, lon, zoom);
     }
 
 
-    // ---------- 🔗 deel-knop ----------
-    let btn = document.getElementById("copyLinkBtn");
+    // ---------- 📍 klik op marker ----------
+    map.on("singleclick", function(evt) {
 
-    if (btn) {
-        btn.addEventListener("click", function() {
+        map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+            lastClickedFeature = feature;
 
-            let center = ol.proj.toLonLat(map.getView().getCenter());
-            let zoom = map.getView().getZoom();
-
-            let url = window.location.origin + window.location.pathname +
-                "?lat=" + center[1].toFixed(5) +
-                "&lon=" + center[0].toFixed(5) +
-                "&zoom=" + Math.round(zoom);
-
-            navigator.clipboard.writeText(url);
-
-            alert("Link gekopieerd!");
+            // ⬇️ voeg knop toe in popup (na openen)
+            setTimeout(addShareButtonToPopup, 200);
         });
-    }
+
+    });
+
 });
-// ---------- 📍 openen via link (WERKT ALTIJD) ----------
-(function() {
 
-    let params = new URLSearchParams(window.location.search);
 
-    let lat = params.get("lat");
-    let lon = params.get("lon");
-    let zoom = params.get("zoom");
+// ---------- 🔗 knop in popup ----------
+function addShareButtonToPopup() {
 
-    function zoomToLocation() {
+    let popup = document.getElementById("popup-content");
+    if (!popup || !lastClickedFeature) return;
 
-        if (!window.map) {
-            setTimeout(zoomToLocation, 300);
-            return;
-        }
+    // voorkom dubbel
+    if (popup.querySelector(".share-btn")) return;
 
-        if (lat !== null && lon !== null) {
+    let btn = document.createElement("button");
+    btn.className = "share-btn";
+    btn.innerText = "🔗 Deel deze marker";
+    btn.style.marginTop = "10px";
 
-            let coord = ol.proj.fromLonLat([
-                parseFloat(lon),
-                parseFloat(lat)
-            ]);
+    btn.onclick = function () {
 
-            map.getView().setCenter(coord);
-            map.getView().setZoom(zoom ? parseInt(zoom) : 15);
+        let coord = ol.proj.toLonLat(
+            lastClickedFeature.getGeometry().getCoordinates()
+        );
 
-            console.log("Zoom toegepast:", lat, lon);
-        }
-    }
+        let zoom = map.getView().getZoom();
 
-    zoomToLocation();
+        let url = window.location.origin + window.location.pathname +
+            "?lat=" + coord[1].toFixed(5) +
+            "&lon=" + coord[0].toFixed(5) +
+            "&zoom=" + Math.round(zoom);
 
-})();
+        navigator.clipboard.writeText(url);
+
+        alert("Link gekopieerd!");
+    };
+
+    popup.appendChild(btn);
+}
+
+
 // ---------- 🔽 inklappen ----------
 document.addEventListener("click", function(e) {
 
