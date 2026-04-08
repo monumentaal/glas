@@ -130,8 +130,39 @@ console.log("PARAMS:", lat, lon, zoom);
         });
     }
 });
+// ---------- 📍 openen via link (WERKT ALTIJD) ----------
+(function() {
 
+    let params = new URLSearchParams(window.location.search);
 
+    let lat = params.get("lat");
+    let lon = params.get("lon");
+    let zoom = params.get("zoom");
+
+    function zoomToLocation() {
+
+        if (!window.map) {
+            setTimeout(zoomToLocation, 300);
+            return;
+        }
+
+        if (lat !== null && lon !== null) {
+
+            let coord = ol.proj.fromLonLat([
+                parseFloat(lon),
+                parseFloat(lat)
+            ]);
+
+            map.getView().setCenter(coord);
+            map.getView().setZoom(zoom ? parseInt(zoom) : 15);
+
+            console.log("Zoom toegepast:", lat, lon);
+        }
+    }
+
+    zoomToLocation();
+
+})();
 // ---------- 🔽 inklappen ----------
 document.addEventListener("click", function(e) {
 
