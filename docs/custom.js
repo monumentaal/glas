@@ -126,9 +126,44 @@ function openFromId() {
             lastClickedFeature = found;
 
             // popup openen
-            if (typeof highlightFeature === "function") {
-                highlightFeature(found);
+            // ---------- popup openen ----------
+try {
+
+    // popup elementen (qgis2web standaard)
+    let popup = document.getElementById("popup");
+    let content = document.getElementById("popup-content");
+
+    if (popup && content) {
+
+        let coord = found.getGeometry().getCoordinates();
+
+        // inhoud ophalen (zoals bij klikken)
+        let props = found.getProperties();
+
+        let html = "";
+
+        for (let key in props) {
+            if (key !== "geometry") {
+                html += "<b>" + key + "</b>: " + props[key] + "<br>";
             }
+        }
+
+        content.innerHTML = html;
+
+        // positie popup zetten
+        popup.style.display = "block";
+
+        if (map.getOverlayById) {
+            let overlay = map.getOverlays().getArray()[0];
+            if (overlay) {
+                overlay.setPosition(coord);
+            }
+        }
+    }
+
+} catch (e) {
+    console.log("popup fout", e);
+}
 
         } else {
             setTimeout(findFeature, 300);
