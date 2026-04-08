@@ -104,11 +104,21 @@ function openFromId() {
         let found = null;
 
         layersList.forEach(function(layer) {
+       
+    if (!layer.getSource) return;
 
-            if (layer.getSource && layer.getSource().getFeatures) {
+    let source = layer.getSource();
 
-                // check juiste laag (indien meegegeven)
-                if (layerName && layer.get("title") !== layerName) return;
+    // alleen vector layers hebben features
+    if (!source.getFeatures) return;
+
+    let features = source.getFeatures();
+
+    if (features.includes(lastClickedFeature)) {
+        layerName = layer.get("title");
+    }
+
+});
 
                 layer.getSource().getFeatures().forEach(function(f) {
 
