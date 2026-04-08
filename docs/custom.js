@@ -133,10 +133,11 @@ function openFromId() {
 
         if (found) {
 
+           
             let coord = found.getGeometry().getCoordinates();
 
-// 🔥 projectie fix
-coord = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
+// ✅ correcte projectie conversie
+coord = ol.proj.fromLonLat(coord);
             
             map.getView().setCenter(coord);
             map.getView().setZoom(16);
