@@ -1,3 +1,4 @@
+
 // ---------- globale variabelen ----------
 let lastClickedFeature = null;
 
@@ -189,6 +190,8 @@ if (overlay && content) {
 
     findFeature();
 }
+
+
 function openPopup(feature, coord) {
 
     lastClickedFeature = feature;
