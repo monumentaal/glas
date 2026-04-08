@@ -105,20 +105,20 @@ function openFromId() {
 
         layersList.forEach(function(layer) {
        
-    if (!layer.getSource) return;
+           if (!layer.getSource) return;
 
-    let source = layer.getSource();
+           let source = layer.getSource();
 
-    // alleen vector layers hebben features
-    if (!source.getFeatures) return;
+        // alleen vector layers hebben features
+           if (!source.getFeatures) return;
 
-    let features = source.getFeatures();
+         let features = source.getFeatures();
 
-    if (features.includes(lastClickedFeature)) {
-        layerName = layer.get("title");
-    }
+          if (features.includes(lastClickedFeature)) {
+            layerName = layer.get("title");
+            }
 
-});
+           });
 
                 layer.getSource().getFeatures().forEach(function(f) {
 
@@ -127,7 +127,7 @@ function openFromId() {
                     }
 
                 });
-            }
+            
         });
 
         if (found) {
