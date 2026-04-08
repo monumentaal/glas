@@ -141,20 +141,30 @@ function openFromId() {
             map.getView().setZoom(16);
 
             // simulate click (BELANGRIJK)
-            let pixel = map.getPixelFromCoordinate(coord);
+            lastClickedFeature = found;
 
-            map.dispatchEvent({
-                type: "singleclick",
-                coordinate: coord,
-                pixel: pixel
-            });
+// popup ophalen
+let overlay = map.getOverlays().getArray()[0];
+let content = document.getElementById("popup-content");
 
-            // fix feature + knop NA popup render
-            setTimeout(function() {
-                lastClickedFeature = found;
-                addShareButtonToPopup();
-            }, 300);
+if (overlay && content) {
 
+    let props = found.getProperties();
+    let html = "";
+
+    for (let key in props) {
+        if (key !== "geometry") {
+            html += "<b>" + key + "</b>: " + props[key] + "<br>";
+        }
+    }
+
+    content.innerHTML = html;
+
+    overlay.setPosition(coord);
+
+    // knop toevoegen NA render
+    setTimeout(addShareButtonToPopup, 200);
+}
         } else {
             setTimeout(findFeature, 300);
         }
