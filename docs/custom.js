@@ -85,11 +85,12 @@ window.addEventListener("load", function init() {
 });
 
 
-// ---------- openen via ID ----------
+// ---------- openen via ID + layer ----------
 function openFromId() {
 
     let params = new URLSearchParams(window.location.search);
     let id = params.get("id");
+    let layerName = params.get("layer");
 
     if (!id) return;
 
@@ -105,6 +106,9 @@ function openFromId() {
         layersList.forEach(function(layer) {
 
             if (layer.getSource && layer.getSource().getFeatures) {
+
+                // check juiste laag (indien meegegeven)
+                if (layerName && layer.get("title") !== layerName) return;
 
                 layer.getSource().getFeatures().forEach(function(f) {
 
@@ -125,45 +129,28 @@ function openFromId() {
 
             lastClickedFeature = found;
 
-            // popup openen
             // ---------- popup openen ----------
-try {
+            let popup = document.getElementById("popup");
+            let content = document.getElementById("popup-content");
 
-    // popup elementen (qgis2web standaard)
-    let popup = document.getElementById("popup");
-    let content = document.getElementById("popup-content");
+            if (popup && content) {
 
-    if (popup && content) {
+                let props = found.getProperties();
+                let html = "";
 
-        let coord = found.getGeometry().getCoordinates();
+                for (let key in props) {
+                    if (key !== "geometry") {
+                        html += "<b>" + key + "</b>: " + props[key] + "<br>";
+                    }
+                }
 
-        // inhoud ophalen (zoals bij klikken)
-        let props = found.getProperties();
+                content.innerHTML = html;
 
-        let html = "";
-
-        for (let key in props) {
-            if (key !== "geometry") {
-                html += "<b>" + key + "</b>: " + props[key] + "<br>";
+                let overlay = map.getOverlays().getArray()[0];
+                if (overlay) {
+                    overlay.setPosition(coord);
+                }
             }
-        }
-
-        content.innerHTML = html;
-
-        // positie popup zetten
-        popup.style.display = "block";
-
-        if (map.getOverlayById) {
-            let overlay = map.getOverlays().getArray()[0];
-            if (overlay) {
-                overlay.setPosition(coord);
-            }
-        }
-    }
-
-} catch (e) {
-    console.log("popup fout", e);
-}
 
         } else {
             setTimeout(findFeature, 300);
@@ -191,8 +178,19 @@ function addShareButtonToPopup() {
 
         let id = lastClickedFeature.get("id");
 
+        // laag bepalen
+        let layerName = "";
+
+        layersList.forEach(function(layer) {
+            let features = layer.getSource().getFeatures();
+            if (features.includes(lastClickedFeature)) {
+                layerName = layer.get("title");
+            }
+        });
+
         let url = window.location.origin + window.location.pathname +
-            "?id=" + id;
+            "?id=" + id +
+            "&layer=" + encodeURIComponent(layerName);
 
         navigator.clipboard.writeText(url);
 
