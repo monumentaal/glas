@@ -110,41 +110,37 @@ if (lat && lon && window.map && window.layersList) {
     });
 
 
-    // ---------- 📍 openen via link ----------
-    let lat = getParam("lat");
-    let lon = getParam("lon");
-    let zoom = getParam("zoom");
+   // ---------- 📍 openen via link (VEILIG) ----------
+let lat = getParam("lat");
+let lon = getParam("lon");
+let zoom = getParam("zoom");
 
-    if (lat && lon) {
+if (lat && lon && window.map) {
 
-        let coord = ol.proj.fromLonLat([parseFloat(lon), parseFloat(lat)]);
+    let coord = ol.proj.fromLonLat([parseFloat(lon), parseFloat(lat)]);
 
-        map.getView().setCenter(coord);
-        map.getView().setZoom(zoom ? parseInt(zoom) : 15);
+    map.getView().setCenter(coord);
+    map.getView().setZoom(zoom ? parseInt(zoom) : 15);
 
-        // ---------- ⭐ highlight marker ----------
-        let highlight = new ol.Feature({
-            geometry: new ol.geom.Point(coord)
-        });
+    // probeer popup te openen (alleen als functie bestaat)
+    try {
+        if (typeof highlightFeature === "function") {
 
-        highlight.setStyle(new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 10,
-                fill: new ol.style.Fill({color: 'rgba(255,0,0,0.4)'}),
-                stroke: new ol.style.Stroke({color: '#ff0000', width: 2})
-            })
-        }));
+            map.once("rendercomplete", function () {
 
-        let vectorLayer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [highlight]
-            })
-        });
+                map.forEachFeatureAtPixel(
+                    map.getPixelFromCoordinate(coord),
+                    function (feature) {
+                        highlightFeature(feature);
+                    }
+                );
 
-        map.addLayer(vectorLayer);
+            });
+        }
+    } catch (e) {
+        console.log("popup niet gevonden", e);
     }
-});
-
+}
 
 // ---------- 🔽 inklappen ----------
 document.addEventListener("click", function(e) {
