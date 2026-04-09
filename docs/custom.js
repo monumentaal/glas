@@ -93,7 +93,7 @@ function openFromId() {
 
     let params = new URLSearchParams(window.location.search);
     let id = params.get("id");
-    let layerName = params.get("layer");
+   
 
     if (!id) return;
 
