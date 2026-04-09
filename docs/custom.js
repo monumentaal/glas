@@ -81,7 +81,7 @@ window.addEventListener("load", function init() {
     });
 
     // ---------- openen via URL ----------
-    openFromId();
+ setTimeout(openFromId, 500);
 
 });
 
