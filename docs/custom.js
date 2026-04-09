@@ -295,7 +295,8 @@ function addShareButtonToPopup() {
         });
 
         let url = window.location.origin + window.location.pathname +
-            "?id=" + id +
+            let url = window.location.origin + window.location.pathname +
+    "?id=" + id;
             "&layer=" + encodeURIComponent(layerName);
 
         navigator.clipboard.writeText(url);
