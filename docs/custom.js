@@ -82,10 +82,9 @@ window.addEventListener("load", function init() {
 
     // ---------- openen via URL ----------
  map.once("rendercomplete", function () {
-    openFromId();
+    setTimeout(openFromId, 200);
 });
 
-});
 
 
 // ---------- openen via ID ----------
