@@ -81,7 +81,9 @@ window.addEventListener("load", function init() {
     });
 
     // ---------- openen via URL ----------
- setTimeout(openFromId, 500);
+ map.once("rendercomplete", function () {
+    openFromId();
+});
 
 });
 
