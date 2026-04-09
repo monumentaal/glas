@@ -191,9 +191,6 @@ function openPopup(feature, coord) {
     content.innerHTML = html;
 
  
-   
-    // soms nodig: force redraw
-    map.render();
 
     // knop toevoegen
     setTimeout(addShareButtonToPopup, 200);
