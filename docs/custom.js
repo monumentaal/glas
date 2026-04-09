@@ -136,10 +136,15 @@ function openFromId() {
         if (found) {
 
            
-            let coord = found.getGeometry().getCoordinates();
+ let coord = found.getGeometry().getCoordinates();
 
-// ✅ correcte projectie conversie
-coord = ol.proj.fromLonLat(coord);
+// 🔍 check volgorde (belangrijk!)
+if (coord[0] > 90) {
+    // waarschijnlijk al EPSG:3857 → niets doen
+} else {
+    // EPSG:4326 → transformeren
+    coord = ol.proj.fromLonLat(coord);
+}
             
             map.getView().setCenter(coord);
             map.getView().setZoom(16);
