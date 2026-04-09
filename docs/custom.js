@@ -172,11 +172,8 @@ function findFeature() {
         let source = layer.getSource();
         if (!source.getFeatures) return;
 
-        if (layerName && !layer.get("title").includes(layerName)) return;
-
         source.getFeatures().forEach(function(f) {
 
-            // normale feature
             if (f.get("id") == id) {
                 found = f;
             }
@@ -198,6 +195,8 @@ function findFeature() {
 
         let coord = found.getGeometry().getCoordinates();
 
+        coord = ol.proj.fromLonLat(coord); // jouw EPSG:4326 fix
+
         map.getView().setCenter(coord);
         map.getView().setZoom(16);
 
@@ -206,6 +205,7 @@ function findFeature() {
     } else {
         setTimeout(findFeature, 300);
     }
+}
 
                         
                         
