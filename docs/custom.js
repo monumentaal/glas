@@ -156,56 +156,6 @@ coord = ol.proj.fromLonLat(coord);
 
 
 
-function findFeature() {
-
-    if (!window.layersList) {
-        setTimeout(findFeature, 300);
-        return;
-    }
-
-    let found = null;
-
-    layersList.forEach(function(layer) {
-
-        if (!layer.getSource) return;
-
-        let source = layer.getSource();
-        if (!source.getFeatures) return;
-
-        source.getFeatures().forEach(function(f) {
-
-            if (f.get("id") == id) {
-                found = f;
-            }
-
-            // cluster support
-            if (f.get("features")) {
-                f.get("features").forEach(function(inner) {
-                    if (inner.get("id") == id) {
-                        found = inner;
-                    }
-                });
-            }
-
-        });
-
-    });
-
-    if (found) {
-
-        let coord = found.getGeometry().getCoordinates();
-
-        coord = ol.proj.fromLonLat(coord); // jouw EPSG:4326 fix
-
-        map.getView().setCenter(coord);
-        map.getView().setZoom(16);
-
-        openPopup(found, coord);
-
-    } else {
-        setTimeout(findFeature, 300);
-    }
-}
 
                         
                         
