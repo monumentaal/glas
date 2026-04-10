@@ -123,9 +123,10 @@ if (e.key === "Enter") {
     } else {
 
         alert("Geen resultaten gevonden");
-    });
-}
-            
+    }
+});
+    }    
+                
 
 
 // ---------- openen via ID ----------
