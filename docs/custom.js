@@ -37,7 +37,6 @@ window.addEventListener("load", function init() {
     map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
     map.getView().setZoom(8);
 
-
     // ---------- zoeken ----------
     let searchBox = document.getElementById("searchBox");
 
@@ -102,7 +101,6 @@ window.addEventListener("load", function init() {
                     let f = results[0];
                     let coord = f.getGeometry().getCoordinates();
 
-                    // projectie fix
                     if (coord[0] < 10) {
                         coord = ol.proj.fromLonLat(coord);
                     }
@@ -124,7 +122,6 @@ window.addEventListener("load", function init() {
         });
     }
 
-
     // ---------- klik op marker ----------
     map.on("singleclick", function(evt) {
 
@@ -135,13 +132,12 @@ window.addEventListener("load", function init() {
 
     });
 
-
     // ---------- openen via URL ----------
     map.once("rendercomplete", function () {
         setTimeout(openFromId, 200);
     });
 
-}); // ✅ init correct afgesloten
+}); // ✅ INIT CORRECT AFGESLOTEN
 
 
 
@@ -225,7 +221,6 @@ function openPopup(feature, coord) {
 
     for (let key in props) {
 
-        // trefwoorden niet tonen
         if (key === "geometry" || key === "trefwoorden") continue;
 
         html += "<b>" + key + "</b>: " + props[key] + "<br>";
