@@ -280,7 +280,7 @@ function openPopup(feature, coord) {
 
     for (let key in props) {
 
-    if (key === "geometry" || key === "trefwoorden") {
+    if (key === "geometry" || key === "trefwoord") {
         continue;
     }
 
