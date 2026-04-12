@@ -66,7 +66,7 @@ window.addEventListener("load", function init() {
                             let value = String(props[key]).toLowerCase();
 
                             if (value.includes(query)) {
-                                results.push(f);
+                               searchResults.push(f);
                                 break;
                             }
                         }
@@ -84,7 +84,7 @@ window.addEventListener("load", function init() {
                                     let value = String(props[key]).toLowerCase();
 
                                     if (value.includes(query)) {
-                                        results.push(inner);
+                                       searchResults.push(inner);
                                         break;
                                     }
                                 }
@@ -96,28 +96,20 @@ window.addEventListener("load", function init() {
 
                 });
 
-                if (results.length > 0) {
+                if (searchResults.length > 0) {
 
-                    let f = results[0];
-                    let coord = f.getGeometry().getCoordinates();
+    showResultsList();
 
-                    if (coord[0] < 10) {
-                        coord = ol.proj.fromLonLat(coord);
-                    }
+    let f = searchResults[0];
 
-                    map.getView().animate({
-                        center: coord,
-                        zoom: 16,
-                        duration: 800
-                    });
+    let coord = f.getGeometry().getCoordinates();
 
-                    openPopup(f, coord);
+    if (coord[0] < 10) {
+        coord = ol.proj.fromLonLat(coord);
+    }
 
-                    alert(results.length + " resultaat(en) gevonden");
-
-                } else {
-                    alert("Geen resultaten gevonden");
-                }
+    map.getView().animate({
+       
             }
         });
     }
@@ -278,3 +270,52 @@ document.addEventListener("click", function(e) {
         header.innerHTML = (open ? "▶ " : "▼ ") + "Over deze kaart";
     }
 });
+function showResultsList() {
+
+    // oude lijst verwijderen
+    let old = document.getElementById("resultsList");
+    if (old) old.remove();
+
+    let container = document.createElement("div");
+    container.id = "resultsList";
+    container.style.marginTop = "10px";
+    container.style.maxHeight = "150px";
+    container.style.overflowY = "auto";
+    container.style.background = "#fff";
+    container.style.padding = "5px";
+
+    searchResults.forEach(function(f, index) {
+
+        let props = f.getProperties();
+
+        // kies wat je wilt tonen (naam veld)
+        let label = props.naam || props.name || props.titel || ("Resultaat " + (index+1));
+
+        let item = document.createElement("div");
+        item.innerText = label;
+        item.style.cursor = "pointer";
+        item.style.padding = "4px";
+
+        item.onclick = function() {
+
+            let coord = f.getGeometry().getCoordinates();
+
+            if (coord[0] < 10) {
+                coord = ol.proj.fromLonLat(coord);
+            }
+
+            map.getView().animate({
+                center: coord,
+                zoom: 16,
+                duration: 800
+            });
+
+            openPopup(f, coord);
+        };
+
+        container.appendChild(item);
+    });
+
+    document.querySelector(".info-content").appendChild(container);
+}
+        
