@@ -37,7 +37,7 @@ window.addEventListener("load", function init() {
     map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
     map.getView().setZoom(8);
 
- // ---------- zoeken ----------
+// ---------- zoeken ----------
 let searchBox = document.getElementById("searchBox");
 
 if (searchBox) {
