@@ -108,7 +108,7 @@ if (searchBox) {
 
                 map.getView().animate({
                     center: coord,
-                    zoom: 16,
+                    zoom: 18,
                     duration: 800
                 });
 
