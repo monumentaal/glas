@@ -230,7 +230,30 @@ function openPopup(feature, coord) {
 
     content.innerHTML = html;
     overlay.setPosition(coord);
+let linksId = props.links_id;
 
+if (linksId) {
+
+    fetch("links.json")
+        .then(response => response.json())
+        .then(data => {
+
+            if (data[linksId]) {
+
+                let linksHtml = "<hr><b>Links</b><br>";
+
+                data[linksId].forEach(function(item) {
+                    linksHtml +=
+                        '<a href="' + item.url + '" target="_blank">' +
+                        item.titel +
+                        '</a><br>';
+                });
+
+                content.innerHTML += linksHtml;
+            }
+        });
+}
+    
     setTimeout(addShareButtonToPopup, 200);
 }
 
