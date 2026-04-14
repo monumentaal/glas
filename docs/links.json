@@ -1,1 +1,19 @@
+{
+  "kerk_uden": [
+    {
+      "titel": "Parochie",
+      "url": "https://voorbeeld.nl"
+    },
+    {
+      "titel": "Fotoalbum",
+      "url": "https://voorbeeld2.nl"
+    }
+  ],
 
+  "kerk_oss": [
+    {
+      "titel": "Artikel",
+      "url": "https://voorbeeld3.nl"
+    }
+  ]
+}
