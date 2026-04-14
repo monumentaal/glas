@@ -335,7 +335,7 @@ function showInfo() {
 
         <p>
         <b>Laag Boeken</b><br>
-        Gebouwen waar boeken met foto’s en beschrijvingen van monumentaal glas zijn te vinden.
+        Gebouwen waarvan boeken met foto’s en beschrijvingen van monumentaal glas zijn te vinden.
         </p>
 
         <p>
