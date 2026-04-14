@@ -217,6 +217,8 @@ function openPopup(feature, coord) {
     let content = document.getElementById("popup-content");
 
     if (!overlay || !content) return;
+overlay.setPosition(undefined);
+content.innerHTML = "";
 
     let props = feature.getProperties();
     let html = "";
