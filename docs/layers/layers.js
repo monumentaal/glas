@@ -7,9 +7,10 @@ var wms_layers = [];
             
             
             source: new ol.source.XYZ({
-            attributions: ' ',
-                url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-            })
+    attributions: '© CARTO',
+    crossOrigin: 'anonymous',
+    url: 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+})
         });
 var format_webpaginas_1 = new ol.format.GeoJSON();
 var features_webpaginas_1 = format_webpaginas_1.readFeatures(json_webpaginas_1, 
