@@ -1,3 +1,5 @@
+alert("custom.js geladen");
+
 // ---------- globale variabelen ----------
 let lastClickedFeature = null;
 let searchResults = [];
