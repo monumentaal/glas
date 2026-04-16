@@ -155,19 +155,6 @@ if (searchBox) {
 } // einde init
 
 window.addEventListener("load", init);
-function init() {
-
-    if (!window.map || !window.layersList) {
-        setTimeout(init, 300);
-        return;
-    }
-
-    let mapDiv = document.getElementById("map");
-    if (!mapDiv) return;
-
-    // jouw bestaande code hier...
-
-}
 
 window.addEventListener("load", init);
 // ---------- openen via ID ----------
