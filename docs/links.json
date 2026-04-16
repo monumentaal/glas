@@ -1,19 +1,28 @@
 {
-  "emmeloord": [
+  "1": [
     {
-      "titel": "foto 1",
-      "url": "https://beeldbank.cultureelerfgoed.nl/rce-mediabank/detail/07396b75-fd28-4e3d-d82c-8e3f94bc0e75/media/13afacd9-16db-f4bb-29de-0746d9f749d4?mode=detail&view=horizontal&q=glas%20in%20lood&rows=1&page=298"
+      "titel": "Winschoten foto 1",
+      "url": "https://beeldbank.cultureelerfgoed.nl/rce-mediabank/detail/0e091ec7-7780-1768-2293-5a3cbc61b300/media/d2b10f08-ccf4-21d7-b587-6522944f2515?mode=detail&view=horizontal&q=glas%20in%20lood&rows=1&page=1039"
     },
     {
-      "titel": "Fotoalbum",
-      "url": "https://voorbeeld2.nl"
-    }
-  ],
-
-  "kerk_oss": [
+      "titel": "Winschoten foto 2",
+      "url": "https://beeldbank.cultureelerfgoed.nl/rce-mediabank/detail/d3fe2bff-a3e7-1593-1093-b650f759fa22/media/25135471-9a01-838f-7066-07b57cf02020?mode=detail&view=horizontal&q=glas%20in%20lood&rows=1&page=1045"
+    },
     {
-      "titel": "Artikel",
-      "url": "https://voorbeeld3.nl"
+      "titel": "Winschoten foto 3",
+      "url": "https://beeldbank.cultureelerfgoed.nl/rce-mediabank/detail/c01e783a-0d93-fbe9-b47b-5cc8d61fa2af/media/2a10076c-d614-f569-d1a7-e1eaaa20c006?mode=detail&view=horizontal&q=glas%20in%20lood&rows=1&page=1048"
+    },
+    {
+      "titel": "Winschoten foto 4",
+      "url": "https://beeldbank.cultureelerfgoed.nl/rce-mediabank/detail/b9645ab6-58a9-81f1-8341-88ba508af968/media/b126bd5c-e5b8-80b4-0cf0-73b79459da2a?mode=detail&view=horizontal&q=glas%20in%20lood&rows=1&page=1050"
+    },
+    {
+      "titel": "Winschoten foto 5",
+      "url": "https://beeldbank.cultureelerfgoed.nl/rce-mediabank/detail/dec2662b-7568-ec80-329c-05479e5436fe/media/95b888e4-7551-e3b9-bfac-8aa7e60b78ab?mode=detail&view=horizontal&q=glas%20in%20lood&rows=1&page=1051"
+    },
+    {
+      "titel": "Winschoten foto 6",
+      "url": "https://beeldbank.cultureelerfgoed.nl/rce-mediabank/detail/f2a7b11b-5e4f-8ec1-b73d-8586ca132935/media/5a0a374e-85e6-0dd5-fd5b-8f1020890077?mode=detail&view=horizontal&q=glas%20in%20lood&rows=1&page=1052"
     }
   ]
 }
