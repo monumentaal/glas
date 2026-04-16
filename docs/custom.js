@@ -246,7 +246,7 @@ content.innerHTML = "";
 
     content.innerHTML = html;
     overlay.setPosition(coord);
-llet linksId = props.link_id;
+let linksId = props.link_id;
 
 if (linksId) {
     fetch("links.json")
