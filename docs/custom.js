@@ -157,7 +157,7 @@ function showInfo() {
         beeldbank zijn opgenomen.
         </p>
         <p>
-        <b>Laag kuntenaars</b><br>
+        <b>Laag Kunstenaars</b><br>
         Een eerste selectie van gebouwen waarvan foto’s en informatie vvan 
         indivudele kunstenaaars zijn  te vinden
         </p>      
