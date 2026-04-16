@@ -245,7 +245,7 @@ content.innerHTML = "";
 
     content.innerHTML = html;
     overlay.setPosition(coord);
-let linksId = props.links_id;
+let linksId = props.link_id;
 
 if (linksId) {
 
