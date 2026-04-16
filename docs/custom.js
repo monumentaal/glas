@@ -117,10 +117,11 @@ function init() {
     });
 }
 
-window.addEventListener("load", function () {
-    setTimeout(init, 1000);
-});
-
+setInterval(function () {
+    if (window.map && window.layersList && document.getElementById("map")) {
+        init();
+    }
+}, 500);
 // ---------- zoeken helper ----------
 function checkFeatureForSearch(f, query) {
     let props = f.getProperties();
