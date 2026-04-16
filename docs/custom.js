@@ -1,5 +1,7 @@
+// ---------- globale variabelen ----------
 let lastClickedFeature = null;
 
+// ---------- start ----------
 window.addEventListener("load", function () {
 
     setTimeout(function () {
@@ -8,8 +10,9 @@ window.addEventListener("load", function () {
         map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
         map.getView().setZoom(8);
 
-        // infoblok
+        // ---------- infoblok ----------
         if (!document.querySelector(".info-panel")) {
+
             let div = document.createElement("div");
             div.className = "info-panel";
             div.style.position = "absolute";
@@ -41,12 +44,64 @@ window.addEventListener("load", function () {
             document.getElementById("map").appendChild(div);
         }
 
-        // marker klik
+        // ---------- zoeken ----------
+        let searchBox = document.getElementById("searchBox");
+
+        if (searchBox) {
+            searchBox.addEventListener("keydown", function (e) {
+
+                if (e.key !== "Enter") return;
+
+                let query = this.value.toLowerCase();
+
+                layersList.forEach(function (layer) {
+
+                    if (!layer.getSource) return;
+
+                    let source = layer.getSource();
+                    if (!source.getFeatures) return;
+
+                    source.getFeatures().forEach(function (f) {
+
+                        let props = f.getProperties();
+
+                        for (let key in props) {
+
+                            if (key === "geometry") continue;
+
+                            let value = String(props[key]).toLowerCase();
+
+                            if (value.includes(query)) {
+
+                                let coord = f.getGeometry().getCoordinates();
+
+                                if (coord[0] < 10) {
+                                    coord = ol.proj.fromLonLat(coord);
+                                }
+
+                                map.getView().animate({
+                                    center: coord,
+                                    zoom: 18,
+                                    duration: 800
+                                });
+
+                                openPopup(f, coord);
+                                return;
+                            }
+                        }
+                    });
+                });
+            });
+        }
+
+        // ---------- klik op marker ----------
         map.on("singleclick", function (evt) {
 
             let feature = map.forEachFeatureAtPixel(
                 evt.pixel,
-                function (feature) { return feature; },
+                function (feature) {
+                    return feature;
+                },
                 { hitTolerance: 10 }
             );
 
@@ -58,6 +113,7 @@ window.addEventListener("load", function () {
     }, 1000);
 });
 
+// ---------- popup ----------
 function openPopup(feature, coord) {
 
     lastClickedFeature = feature;
@@ -77,6 +133,15 @@ function openPopup(feature, coord) {
 
         if (key === "geometry") continue;
 
+        // gewone link klikbaar
+        if (key === "link" && props[key]) {
+            html += '<b>Link</b>: <a href="' + props[key] + '" target="_blank">' +
+                    props[key] +
+                    '</a><br>';
+            continue;
+        }
+
+        // link_id naar bronnenlijst
         if (key === "link_id" && props[key]) {
             html += '<b>Links</b>: <a href="#" onclick="showLinks(' + props[key] + '); return false;">Bekijk bronnen</a><br>';
             continue;
@@ -89,6 +154,7 @@ function openPopup(feature, coord) {
     overlay.setPosition(coord);
 }
 
+// ---------- bronnenlijst ----------
 function showLinks(id) {
 
     let content = document.getElementById("popup-content");
@@ -111,6 +177,7 @@ function showLinks(id) {
         });
 }
 
+// ---------- toelichting ----------
 function showInfo() {
 
     let old = document.getElementById("infoWindow");
@@ -145,38 +212,24 @@ function showInfo() {
         in Limburg. De eerste drie zijn volledig opgenomen.
         </p>
 
-        <p>
-        <b>Laag Webpagina’s</b><br>
+        <p><b>Laag Webpagina’s</b><br>
         Individuele webpagina’s waar gebouwen te vinden zijn met foto’s en/of gegevens
-        over monumentaal glas.
-        </p>
+        over monumentaal glas.</p>
 
-        <p>
-        <b>Laag Beeldbank RCE</b><br>
+        <p><b>Laag Beeldbank RCE</b><br>
         Een eerste selectie van gebouwen waarvan foto’s van monumentaal glas in de
-        beeldbank zijn opgenomen.
-        </p>
-        <p>
-        <b>Laag Kunstenaars</b><br>
-        Een eerste selectie van gebouwen waarvan foto’s en informatie vvan 
-        indivudele kunstenaaars zijn  te vinden
-        </p>      
-        <p>
-        <b>Laag Kerkfotografie</b><br>
-        Een eerste selectie van gebouwen op de website kerkfotografie.nl waarvan uit de
-        foto’s blijkt dat er monumentaal glas aanwezig is.
-        </p>
-        
-        <p>
-        <b>Laag Boeken</b><br>
-        Gebouwen waarvan boeken met foto’s en beschrijvingen van monumentaal glas zijn te vinden.
-        </p>
+        beeldbank zijn opgenomen.</p>
 
-        <p>
-        <b>Laag Pers</b><br>
+        <p><b>Laag Kerkfotografie</b><br>
+        Een eerste selectie van gebouwen op de website kerkfotografie.nl waarvan uit de
+        foto’s blijkt dat er monumentaal glas aanwezig is.</p>
+
+        <p><b>Laag Boeken</b><br>
+        Gebouwen waarvan boeken met foto’s en beschrijvingen van monumentaal glas zijn te vinden.</p>
+
+        <p><b>Laag Pers</b><br>
         Gebouwen waarvan actuele berichten over monumentaal glas in kranten, tijdschriften,
-        op Facebook of LinkedIn verschenen zijn.
-        </p>
+        op Facebook of LinkedIn verschenen zijn.</p>
 
         <p>
         Iedere laag is met vinkjes in de legenda aan of uit te zetten.
