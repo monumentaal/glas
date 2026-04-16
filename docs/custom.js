@@ -245,10 +245,9 @@ content.innerHTML = "";
 
     content.innerHTML = html;
     overlay.setPosition(coord);
-let linksId = props.link_id;
+llet linksId = props.link_id;
 
 if (linksId) {
-
     fetch("links.json")
         .then(response => response.json())
         .then(data => {
