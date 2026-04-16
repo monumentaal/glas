@@ -338,3 +338,38 @@ function showInfo() {
 
     document.body.appendChild(box);
 }
+setTimeout(function () {
+
+    // kaart centreren
+    if (window.map) {
+        map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
+        map.getView().setZoom(8);
+    }
+
+    // infoblok maken
+    if (!document.querySelector(".info-panel")) {
+
+        let div = document.createElement("div");
+        div.className = "info-panel";
+
+        div.innerHTML = `
+            <div class="info-header">monumentaal glas op de kaart</div>
+
+            <div class="info-content" style="display:block;">
+                <div>Zoek:</div>
+                <input type="text" id="searchBox" placeholder="Zoek..." />
+
+                <div style="margin-top:8px;">
+                    Klik op een marker voor informatie.
+                </div>
+
+                <div style="margin-top:10px;">
+                    <button onclick="showInfo()">📘 Toelichting</button>
+                </div>
+            </div>
+        `;
+
+        document.getElementById("map").appendChild(div);
+    }
+
+}, 1000);
