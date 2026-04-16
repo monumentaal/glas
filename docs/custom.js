@@ -297,7 +297,7 @@ function showInfo() {
 
     document.body.appendChild(box);
 
-    fetch("info.html")
+    fetch(window.location.pathname.replace("index.html","") + "info.html")
         .then(r => r.text())
         .then(html => {
             document.getElementById("infoContent").innerHTML = html;
