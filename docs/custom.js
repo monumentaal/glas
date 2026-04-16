@@ -3,7 +3,7 @@ let lastClickedFeature = null;
 
 
 // ---------- start ----------
-window.addEventListener("load", function init() {
+function init() {
 
     if (!window.map || !window.layersList) {
         setTimeout(init, 300);
@@ -152,10 +152,24 @@ if (searchBox) {
         setTimeout(openFromId, 200);
     });
 
-}); // ✅ INIT CORRECT AFGESLOTEN
+} // einde init
 
+window.addEventListener("load", init);
+function init() {
 
+    if (!window.map || !window.layersList) {
+        setTimeout(init, 300);
+        return;
+    }
 
+    let mapDiv = document.getElementById("map");
+    if (!mapDiv) return;
+
+    // jouw bestaande code hier...
+
+}
+
+window.addEventListener("load", init);
 // ---------- openen via ID ----------
 function openFromId() {
 
