@@ -65,14 +65,17 @@ if (searchBox) {
 
                     for (let key in props) {
 
-                        if (key === "geometry" || key === "id" || key === "link") continue;
+                        for (let key in props) {
 
-                        let value = String(props[key]).toLowerCase();
+    if (key === "geometry" || key === "trefwoorden") continue;
 
-                        if (value.includes(query)) {
-                            searchResults.push(f);
-                            break;
-                        }
+    if (key === "link_id" && props[key]) {
+        html += '<b>Links</b>: <a href="#" onclick="showLinks(' + props[key] + '); return false;">Bekijk bronnen</a><br>';
+        continue;
+    }
+
+    html += "<b>" + key + "</b>: " + props[key] + "<br>";
+}
                     }
 
                     if (f.get("features")) {
@@ -417,3 +420,26 @@ setTimeout(function () {
         document.getElementById("map").appendChild(div);
     }
 }, 1000);
+function showLinks(id) {
+
+    let content = document.getElementById("popup-content");
+
+    fetch("links.json")
+        .then(response => response.json())
+        .then(data => {
+
+            if (!data[id]) return;
+
+            let linksHtml = "<hr><b>Bronnen</b><br>";
+
+            data[id].forEach(function(item) {
+                linksHtml +=
+                    '<div style="margin:4px 0;">🔗 ' +
+                    '<a href="' + item.url + '" target="_blank" rel="noopener noreferrer">' +
+                    item.titel +
+                    '</a></div>';
+            });
+
+            content.innerHTML += linksHtml;
+        });
+}
