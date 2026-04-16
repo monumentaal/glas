@@ -1,5 +1,6 @@
 // ---------- globale variabelen ----------
 let lastClickedFeature = null;
+let searchResults = [];
 
 // ---------- start ----------
 window.addEventListener("load", function () {
@@ -31,6 +32,8 @@ window.addEventListener("load", function () {
                     <div>Zoek:</div>
                     <input type="text" id="searchBox" placeholder="Zoek..." style="width:100%;padding:6px;">
 
+                    <div id="searchResults" style="margin-top:8px;"></div>
+
                     <div style="margin-top:8px;">
                         Klik op een marker voor informatie.
                     </div>
@@ -52,7 +55,8 @@ window.addEventListener("load", function () {
 
                 if (e.key !== "Enter") return;
 
-                let query = this.value.toLowerCase();
+                let query = this.value.toLowerCase().trim();
+                searchResults = [];
 
                 layersList.forEach(function (layer) {
 
@@ -62,35 +66,34 @@ window.addEventListener("load", function () {
                     if (!source.getFeatures) return;
 
                     source.getFeatures().forEach(function (f) {
+                        searchFeature(f, query);
 
-                        let props = f.getProperties();
-
-                        for (let key in props) {
-
-                            if (key === "geometry") continue;
-
-                            let value = String(props[key]).toLowerCase();
-
-                            if (value.includes(query)) {
-
-                                let coord = f.getGeometry().getCoordinates();
-
-                                if (coord[0] < 10) {
-                                    coord = ol.proj.fromLonLat(coord);
-                                }
-
-                                map.getView().animate({
-                                    center: coord,
-                                    zoom: 18,
-                                    duration: 800
-                                });
-
-                                openPopup(f, coord);
-                                return;
-                            }
+                        if (f.get("features")) {
+                            f.get("features").forEach(function(inner) {
+                                searchFeature(inner, query);
+                            });
                         }
                     });
                 });
+
+                showResultsList();
+
+                if (searchResults.length > 0) {
+                    let f = searchResults[0];
+                    let coord = f.getGeometry().getCoordinates();
+
+                    if (coord[0] < 10) {
+                        coord = ol.proj.fromLonLat(coord);
+                    }
+
+                    map.getView().animate({
+                        center: coord,
+                        zoom: 18,
+                        duration: 800
+                    });
+
+                    openPopup(f, coord);
+                }
             });
         }
 
@@ -113,6 +116,85 @@ window.addEventListener("load", function () {
     }, 1000);
 });
 
+// ---------- zoeken helper ----------
+function searchFeature(f, query) {
+
+    let props = f.getProperties();
+
+    for (let key in props) {
+
+        if (key === "geometry") continue;
+
+        let val = props[key];
+        if (val === null || val === "" || val === undefined) continue;
+
+        let value = String(val).toLowerCase();
+
+        if (value.includes(query)) {
+            searchResults.push(f);
+            break;
+        }
+    }
+}
+
+// ---------- resultatenlijst ----------
+function showResultsList() {
+
+    let box = document.getElementById("searchResults");
+    if (!box) return;
+
+    box.innerHTML = "";
+
+    if (searchResults.length === 0) {
+        box.innerHTML = "<i>Geen resultaten</i>";
+        return;
+    }
+
+    if (searchResults.length === 1) {
+        return;
+    }
+
+    let html = "<b>Resultaten:</b><br>";
+
+    searchResults.forEach(function (f, i) {
+
+        let naam =
+            f.get("plaats") ||
+            f.get("gebouw") ||
+            f.get("kerknaam") ||
+            f.get("titel") ||
+            ("Resultaat " + (i + 1));
+
+        html += '<div style="margin:3px 0;">' +
+            '<a href="#" onclick="zoomToResult(' + i + '); return false;">' +
+            naam +
+            '</a></div>';
+    });
+
+    box.innerHTML = html;
+}
+
+// ---------- zoom naar resultaat ----------
+function zoomToResult(i) {
+
+    let f = searchResults[i];
+    if (!f) return;
+
+    let coord = f.getGeometry().getCoordinates();
+
+    if (coord[0] < 10) {
+        coord = ol.proj.fromLonLat(coord);
+    }
+
+    map.getView().animate({
+        center: coord,
+        zoom: 18,
+        duration: 800
+    });
+
+    openPopup(f, coord);
+}
+
 // ---------- popup ----------
 function openPopup(feature, coord) {
 
@@ -133,28 +215,34 @@ function openPopup(feature, coord) {
 
         if (key === "geometry") continue;
 
-        // gewone link klikbaar
-        if (key === "link" && props[key]) {
-            html += '<b>Link</b>: <a href="' + props[key] + '" target="_blank">' +
-                    props[key] +
+        let val = props[key];
+
+        if (val === null || val === "" || val === undefined || val === "null") {
+            continue;
+        }
+
+        // gewone link
+        if (key === "link") {
+            html += '<b>Link</b>: <a href="' + val + '" target="_blank">' +
+                    val +
                     '</a><br>';
             continue;
         }
 
-        // link_id naar bronnenlijst
-        if (key === "link_id" && props[key]) {
-            html += '<b>Links</b>: <a href="#" onclick="showLinks(' + props[key] + '); return false;">Bekijk bronnen</a><br>';
+        // link_id
+        if (key === "link_id") {
+            html += '<b>Links</b>: <a href="#" onclick="showLinks(' + val + '); return false;">Bekijk bronnen</a><br>';
             continue;
         }
 
-        html += "<b>" + key + "</b>: " + props[key] + "<br>";
+        html += "<b>" + key + "</b>: " + val + "<br>";
     }
 
     content.innerHTML = html;
     overlay.setPosition(coord);
 }
 
-// ---------- bronnenlijst ----------
+// ---------- bronnen ----------
 function showLinks(id) {
 
     let content = document.getElementById("popup-content");
@@ -165,13 +253,17 @@ function showLinks(id) {
 
             if (!data[id]) return;
 
-            let html = "<hr><b>Bronnen</b><br>";
+            if (content.querySelector(".linksBlock")) return;
+
+            let html = '<div class="linksBlock"><hr><b>Bronnen</b><br>';
 
             data[id].forEach(function(item) {
                 html += '<div>🔗 <a href="' + item.url + '" target="_blank">' +
                         item.titel +
                         '</a></div>';
             });
+
+            html += "</div>";
 
             content.innerHTML += html;
         });
@@ -207,39 +299,10 @@ function showInfo() {
 
         <p>
         De kaart heeft vier lagen die verwijzen naar websites met foto’s en toelichting
-        van ramen in een bepaald gebied. Dat zijn gebouwen in Oost-Brabant, het gebied
-        tussen Maas en Waal, de oostelijke mijnstreek en de Duitse website met gebouwen
-        in Limburg. De eerste drie zijn volledig opgenomen.
-        </p>
-
-        <p><b>Laag Webpagina’s</b><br>
-        Individuele webpagina’s waar gebouwen te vinden zijn met foto’s en/of gegevens
-        over monumentaal glas.</p>
-
-        <p><b>Laag Beeldbank RCE</b><br>
-        Een eerste selectie van gebouwen waarvan foto’s van monumentaal glas in de
-        beeldbank zijn opgenomen.</p>
-
-        <p><b>Laag Kerkfotografie</b><br>
-        Een eerste selectie van gebouwen op de website kerkfotografie.nl waarvan uit de
-        foto’s blijkt dat er monumentaal glas aanwezig is.</p>
-
-        <p><b>Laag Boeken</b><br>
-        Gebouwen waarvan boeken met foto’s en beschrijvingen van monumentaal glas zijn te vinden.</p>
-
-        <p><b>Laag Pers</b><br>
-        Gebouwen waarvan actuele berichten over monumentaal glas in kranten, tijdschriften,
-        op Facebook of LinkedIn verschenen zijn.</p>
-
-        <p>
-        Iedere laag is met vinkjes in de legenda aan of uit te zetten.
-        </p>
-
-        <p>
-        Het idee om een kaart te gebruiken om gegevens te presenteren heb ik te danken aan
-        Rudolf van der Tak (glazenier) en Bert van Rest (GIS-deskundige).
+        van ramen in een bepaald gebied.
         </p>
     `;
 
     document.body.appendChild(box);
 }
+
