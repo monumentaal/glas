@@ -112,5 +112,81 @@ function showLinks(id) {
 }
 
 function showInfo() {
-    alert("Hier komt jouw toelichting terug.");
+
+    let old = document.getElementById("infoWindow");
+    if (old) old.remove();
+
+    let box = document.createElement("div");
+    box.id = "infoWindow";
+
+    box.style.position = "fixed";
+    box.style.top = "10%";
+    box.style.left = "10%";
+    box.style.width = "80%";
+    box.style.height = "75%";
+    box.style.background = "white";
+    box.style.border = "1px solid #999";
+    box.style.padding = "15px";
+    box.style.zIndex = "9999";
+    box.style.overflowY = "auto";
+    box.style.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
+
+    box.innerHTML = `
+        <div style="text-align:right;">
+            <button onclick="document.getElementById('infoWindow').remove()">✖ Sluiten</button>
+        </div>
+
+        <h2>Toelichting</h2>
+
+        <p>
+        De kaart heeft vier lagen die verwijzen naar websites met foto’s en toelichting
+        van ramen in een bepaald gebied. Dat zijn gebouwen in Oost-Brabant, het gebied
+        tussen Maas en Waal, de oostelijke mijnstreek en de Duitse website met gebouwen
+        in Limburg. De eerste drie zijn volledig opgenomen.
+        </p>
+
+        <p>
+        <b>Laag Webpagina’s</b><br>
+        Individuele webpagina’s waar gebouwen te vinden zijn met foto’s en/of gegevens
+        over monumentaal glas.
+        </p>
+
+        <p>
+        <b>Laag Beeldbank RCE</b><br>
+        Een eerste selectie van gebouwen waarvan foto’s van monumentaal glas in de
+        beeldbank zijn opgenomen.
+        </p>
+        <p>
+        <b>Laag kuntenaars</b><br>
+        Een eerste selectie van gebouwen waarvan foto’s en informatie vvan 
+        indivudele kunstenaaars zijn  te vinden
+        </p>      
+        <p>
+        <b>Laag Kerkfotografie</b><br>
+        Een eerste selectie van gebouwen op de website kerkfotografie.nl waarvan uit de
+        foto’s blijkt dat er monumentaal glas aanwezig is.
+        </p>
+        
+        <p>
+        <b>Laag Boeken</b><br>
+        Gebouwen waarvan boeken met foto’s en beschrijvingen van monumentaal glas zijn te vinden.
+        </p>
+
+        <p>
+        <b>Laag Pers</b><br>
+        Gebouwen waarvan actuele berichten over monumentaal glas in kranten, tijdschriften,
+        op Facebook of LinkedIn verschenen zijn.
+        </p>
+
+        <p>
+        Iedere laag is met vinkjes in de legenda aan of uit te zetten.
+        </p>
+
+        <p>
+        Het idee om een kaart te gebruiken om gegevens te presenteren heb ik te danken aan
+        Rudolf van der Tak (glazenier) en Bert van Rest (GIS-deskundige).
+        </p>
+    `;
+
+    document.body.appendChild(box);
 }
