@@ -151,6 +151,7 @@ function showResultsList() {
     }
 
     if (searchResults.length === 1) {
+        zoomToResult(0); 
         return;
     }
 
