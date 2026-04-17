@@ -1,3 +1,21 @@
+/* ===== popup breder maken (eenmalig toevoegen bovenin custom.js) ===== */
+const popupStyle = document.createElement("style");
+popupStyle.innerHTML = `
+.ol-popup{
+    min-width:560px !important;
+    max-width:820px !important;
+}
+#popup-content{
+    max-height:600px;
+    overflow-y:auto;
+    line-height:1.5;
+}
+`;
+document.head.appendChild(popupStyle);
+
+
+
+
 // ---------- globale variabelen ----------
 let lastClickedFeature = null;
 let searchResults = [];
