@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>links.json maker</title>
+
+<style>
+body{
+    font-family:Arial;
+    max-width:900px;
+    margin:30px auto;
+    padding:20px;
+}
+textarea,input{
+    width:100%;
+    padding:8px;
+    margin:6px 0;
+}
+button{
+    padding:10px 16px;
+    margin-top:10px;
+}
+pre{
+    background:#f4f4f4;
+    padding:15px;
+    white-space:pre-wrap;
+}
+</style>
+</head>
+<body>
+
+<h2>links.json bijwerken</h2>
+
+<label>link_id nummer</label>
+<input type="text" id="blokId" placeholder="bijv. 2">
+
+<label>Plaatsnaam</label>
+<input type="text" id="plaats" placeholder="bijv. Steenwijk">
+
+<label>Plak links (één per regel)</label>
+<textarea id="urls" rows="10"></textarea>
+
+<button onclick="maakJson()">Maak JSON blok</button>
+
+<h3>Resultaat</h3>
+<pre id="resultaat"></pre>
+
+<script>
+function maakJson(){
+
+    let id = document.getElementById("blokId").value.trim();
+    let plaats = document.getElementById("plaats").value.trim();
+    let regels = document.getElementById("urls").value.trim().split("\n");
+
+    let links = regels
+        .map(x => x.trim())
+        .filter(x => x !== "");
+
+    let obj = {};
+    obj[id] = [];
+
+    links.forEach(function(url,i){
+        obj[id].push({
+            titel: plaats + " foto " + (i+1),
+            url: url
+        });
+    });
+
+    let json = JSON.stringify(obj, null, 2);
+
+    // buitenste { } weghalen zodat je kunt invoegen
+    json = json.substring(1, json.length-1).trim();
+
+    // komma ervoor
+    json = ",\n" + json;
+
+    document.getElementById("resultaat").textContent = json;
+}
+</script>
+
+</body>
+</html>
