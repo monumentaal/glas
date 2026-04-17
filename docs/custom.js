@@ -201,51 +201,7 @@ function zoomToResult(i) {
 }
 
 // ---------- popup ----------
-function openPopup(feature, coord) {
-
-    lastClickedFeature = feature;
-
-    let overlay = map.getOverlays().getArray()[0];
-    let content = document.getElementById("popup-content");
-
-    if (!overlay || !content) return;
-
-    content.innerHTML = "";
-    overlay.setPosition(undefined);
-
-    let props = feature.getProperties();
-    let html = "";
-
-    for (let key in props) {
-
-        if (key === "geometry") continue;
-
-        let val = props[key];
-
-        if (val === null || val === "" || val === undefined || val === "null") {
-            continue;
-        }
-
-        // gewone link
-        if (key === "link") {
-            html += '<b>Link</b>: <a href="' + val + '" target="_blank">' +
-                    val +
-                    '</a><br>';
-            continue;
-        }
-
-        // link_id
-        if (key === "link_id") {
-            html += '<b>Links</b>: <a href="#" onclick="showLinks(' + val + '); return false;">Bekijk bronnen</a><br>';
-            continue;
-        }
-
-        html += "<b>" + key + "</b>: " + val + "<br>";
-    }
-
-    content.innerHTML = html;
-    overlay.setPosition(coord);
-}
+V
 
 // ---------- bronnen ----------
 function showLinks(id) {
