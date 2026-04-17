@@ -282,7 +282,7 @@ function showInfo() {
             document.getElementById("infoContent").innerHTML = html;
         });
 }
-* ===== nieuwe openPopup() ===== */
+//* ===== nieuwe openPopup() ===== */
 function openPopup(feature, coord) {
 
     lastClickedFeature = feature;
