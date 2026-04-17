@@ -374,5 +374,37 @@ function openPopup(feature, coord) {
 
     content.innerHTML = html;
     overlay.setPosition(coord);
+    addShareButtonToPopup();
 }
 
+function addShareButtonToPopup() {
+
+    let popup = document.getElementById("popup-content");
+    if (!popup || !lastClickedFeature) return;
+
+    if (popup.querySelector(".share-btn")) return;
+
+    let id = lastClickedFeature.get("id");
+    if (!id) return;
+
+    let btn = document.createElement("button");
+    btn.className = "share-btn";
+    btn.innerText = "🔗 deel deze locatie";
+    btn.style.marginTop = "12px";
+    btn.style.padding = "6px 10px";
+    btn.style.cursor = "pointer";
+
+    btn.onclick = function () {
+
+        let url =
+            window.location.origin +
+            window.location.pathname +
+            "?id=" + id;
+
+        navigator.clipboard.writeText(url)
+            .then(() => alert("Link gekopieerd"))
+            .catch(() => alert(url));
+    };
+
+    popup.appendChild(btn);
+}
