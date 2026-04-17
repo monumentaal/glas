@@ -29,6 +29,11 @@ window.addEventListener("load", function () {
         map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
         map.getView().setZoom(8);
 
+        setTimeout(function () {
+        map.getView().setCenter(ol.proj.fromLonLat([5.4, 52.15]));
+        map.getView().setZoom(8);
+        }, 200);
+
         // ---------- infoblok ----------
         if (!document.querySelector(".info-panel")) {
 
