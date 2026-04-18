@@ -227,7 +227,7 @@ function showResultsList() {
         html += `
             <div style="margin:5px 0;">
                 <a href="#"
-                   onclick="zoomToResult(${i}); return false;">
+                   oonclick="return selectSearchResult(${i});"
                    ${tekst}
                 </a>
             </div>
@@ -262,6 +262,21 @@ function zoomToResult(i) {
             openPopup(f, coord);
         }
     );
+}function zoomToResult(i) {
+
+    let f = searchResults[i];
+    if (!f) return;
+
+    let coord = f.getGeometry().getCoordinates();
+
+    if (coord[0] < 10) {
+        coord = ol.proj.fromLonLat(coord);
+    }
+
+    map.getView().setCenter(coord);
+    map.getView().setZoom(18);
+
+    openPopup(f, coord);
 }
 
 // ---------- bronnen ----------
