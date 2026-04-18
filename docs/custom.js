@@ -105,13 +105,15 @@ function showLinks(linkId){
  fetch(window.location.pathname.replace('index.html','')+'links.json')
  .then(r=>r.json())
  .then(data=>{
-   const rows=(Array.isArray(data)?data:Object.values(data)).filter(item=>String(item.link_id)===String(linkId));
-   const target=document.getElementById('extra-links-'+linkId);
+   const rows = data[String(linkId)] || [];
+   const target = document.getElementById('extra-links-'+linkId);
    if(!target) return;
-   if(rows.length===0){ target.innerHTML=''; return; }
-   let html='<div style="margin-top:8px;"><b>nog link naar informatie</b></div>';
-   rows.forEach(item=>{ html += '<div style="margin-top:4px;"><a href="'+item.url+'" target="_blank">'+item.titel+'</a></div>'; });
-   target.innerHTML=html;
+   let html='';
+   rows.forEach(item=>{
+     const cleanUrl = String(item.url||'').replace(/"/g,'');
+     html += '<div style="margin-top:4px;"><a href="'+cleanUrl+'" target="_blank">'+item.titel+'</a></div>';
+   });
+   target.innerHTML = '<a href="#" onclick="showLinks('+linkId+'); return false;"><u>nog meer informatie</u></a>' + html;
  });
 }
 
