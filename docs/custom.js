@@ -449,3 +449,7 @@ function addShareButtonToPopup() {
 
     popup.appendChild(btn);
 }
+function selectSearchResult(i) {
+    zoomToResult(i);
+    return false;
+}
