@@ -265,30 +265,26 @@ function zoomToResult(i) {
 }
 
 // ---------- bronnen ----------
-function showLinks(id) {
+function zoomToResult(i) {
 
-    let content = document.getElementById("popup-content");
+    let f = searchResults[i];
+    if (!f) return;
 
-    fetch("links.json")
-        .then(r => r.json())
-        .then(data => {
+    let coord = f.getGeometry().getCoordinates();
 
-            if (!data[id]) return;
+    if (coord[0] < 10) {
+        coord = ol.proj.fromLonLat(coord);
+    }
 
-            if (content.querySelector(".linksBlock")) return;
+    map.getView().animate({
+        center: coord,
+        zoom: 18,
+        duration: 500
+    });
 
-            let html = '<div class="linksBlock"><hr><b>Bronnen</b><br>';
-
-            data[id].forEach(function(item) {
-                html += '<div>🔗 <a href="' + item.url + '" target="_blank">' +
-                        item.titel +
-                        '</a></div>';
-            });
-
-            html += "</div>";
-
-            content.innerHTML += html;
-        });
+    setTimeout(function () {
+        openPopup(f, coord);
+    }, 550);
 }
 
 function showInfo() {
