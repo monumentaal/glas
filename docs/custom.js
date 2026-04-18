@@ -92,7 +92,7 @@ function openPopup(feature,coord){
  for(let key in props){ if(['geometry','id','plaats','gebouw','kerknaam','titel'].includes(key)) continue; let val=props[key]; if(val==null||val===''||val==='null') continue;
    if(key==='link'||key==='bestand'){ html+=`<div style="margin:6px 0;"><a href="${val}" target="_blank"><u>link naar informatie</u></a></div><div id="extra-links-${val}" style="margin-top:6px;"></div>`; continue; }
    if(key==='link_id'){
-   html += `<div style="margin:6px 0;"><a href="#" onclick="showLinks(${val}); return false;"><u>link naar informatie</u></a></div>`;
+   html += `<div style="margin:6px 0;"><a href="#" onclick="showLinks(${val}); return false;"><u>link naar informatie</u></a></div><div style="margin-top:6px;">nog meer informatie</div>`;
    html += `<div id="extra-links-${val}" style="margin-top:6px;"></div>`;
    continue;
  }
@@ -102,7 +102,7 @@ function openPopup(feature,coord){
 }
 
 function showLinks(linkId){
- fetch(window.location.pathname.replace('index.html','')+'link.json')
+ fetch(window.location.pathname.replace('index.html','')+'links.json')
  .then(r=>r.json())
  .then(data=>{
    const rows=data.filter(item=>String(item.link_id)===String(linkId));
