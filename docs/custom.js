@@ -161,11 +161,8 @@ function searchFeature(f, query) {
 }
 
 // ---------- resultatenlijst ----------
+/* ===== vervang showResultsList() ===== */
 function showResultsList() {
-
-    if (searchResults.length > 0) {
-        zoomToResult(0);
-    }
 
     let box = document.getElementById("searchResults");
     if (!box) return;
@@ -177,32 +174,73 @@ function showResultsList() {
         return;
     }
 
-    if (searchResults.length === 1) {
-        zoomToResult(0); 
-        return;
-    }
+    /* alfabetisch sorteren op plaats + gebouw */
+    searchResults.sort(function(a, b) {
 
-    let html = "<b>Resultaten:</b><br>";
+        let naamA =
+            (a.get("plaats") || "") + " " +
+            (a.get("gebouw") || a.get("kerknaam") || a.get("titel") || "");
 
-    searchResults.forEach(function (f, i) {
+        let naamB =
+            (b.get("plaats") || "") + " " +
+            (b.get("gebouw") || b.get("kerknaam") || b.get("titel") || "");
 
-        let naam =
-            f.get("plaats") ||
+        return naamA.localeCompare(naamB, "nl");
+    });
+
+    let html = `
+        <div style="
+            border:1px solid #ccc;
+            background:#fff;
+            padding:8px;
+            margin-top:8px;
+            max-height:340px;
+            overflow-y:auto;
+        ">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:6px;
+            ">
+                <b>${searchResults.length} resultaten</b>
+
+                <button onclick="
+                    document.getElementById('searchResults').innerHTML='';
+                ">✖</button>
+            </div>
+    `;
+
+    searchResults.forEach(function(f, i) {
+
+        let plaats = f.get("plaats") || "";
+        let gebouw =
             f.get("gebouw") ||
             f.get("kerknaam") ||
             f.get("titel") ||
-            ("Resultaat " + (i + 1));
+            "";
 
-        html += '<div style="margin:3px 0;">' +
-            '<a href="#" onclick="zoomToResult(' + i + '); return false;">' +
-            naam +
-            '</a></div>';
+        let tekst = plaats;
+        if (gebouw) tekst += ", " + gebouw;
+
+        html += `
+            <div style="margin:5px 0;">
+                <a href="#"
+                   onclick="zoomToResult(${i}); return false;">
+                   ${tekst}
+                </a>
+            </div>
+        `;
     });
+
+    html += "</div>";
 
     box.innerHTML = html;
 }
 
-// ---------- zoom naar resultaat ----------
+
+/* ===== controleer / vervang ook zoomToResult() ===== */
 function zoomToResult(i) {
 
     let f = searchResults[i];
@@ -217,13 +255,11 @@ function zoomToResult(i) {
     map.getView().animate({
         center: coord,
         zoom: 18,
-        duration: 800
+        duration: 500
     });
 
     openPopup(f, coord);
 }
-
-
 // ---------- bronnen ----------
 function showLinks(id) {
 
