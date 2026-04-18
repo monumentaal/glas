@@ -118,3 +118,4 @@ function showLinks(linkId){
 }
 
 function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
+
