@@ -118,7 +118,7 @@ function showLinks(linkId){
      const cleanUrl = String(item.url||'').replace(/"/g,'');
      html += '<div style="margin-top:4px;"><a href="'+cleanUrl+'" target="_blank">'+item.titel+'</a></div>';
    });
-   arget.innerHTML = html;
+   target.innerHTML = html;
  });
 }
 
