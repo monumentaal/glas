@@ -78,18 +78,58 @@ function searchFeature(f,query){
 }
 
 function showResultsList(){
- let box=document.getElementById('searchResults'); if(!box) return; box.innerHTML='';
- if(searchResults.length===0){ box.innerHTML='<i>Geen resultaten</i>'; return; }
- searchResults.sort(function(a,b){
-   let naamA=(a.get('plaats')||'')+' '+(a.get('gebouw')||a.get('kerknaam')||a.get('titel')||'');
-   let naamB=(b.get('plaats')||'')+' '+(b.get('gebouw')||b.get('kerknaam')||b.get('titel')||'');
-   return naamA.localeCompare(naamB,'nl');
- });
- let html=`<div style="border:1px solid #ccc;background:#fff;padding:8px;margin-top:8px;max-height:340px;overflow-y:auto;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><b>${searchResults.length} resultaten</b><button onclick="document.getElementById('searchResults').innerHTML=''">✖</button></div>`;
- searchResults.forEach(function(f,i){ let plaats=f.get('plaats')||''; let gebouw=f.get('gebouw')||f.get('kerknaam')||f.get('titel')||''; let tekst=plaats+(gebouw?', '+gebouw:''); let symbool='📍'; let layernaam=f.get('layer')||f.get('laag')||f.get('categorie')||''; if(layernaam){ symbool='🔹'; } html+=`<div style="margin:5px 0;"><a href="#" onclick="return selectSearchResult(${i});">${symbool} ${tekst}</a></div>`;});
- html+='</div>'; box.innerHTML=html;
-}
 
+    let box = document.getElementById('searchResults');
+    if(!box) return;
+
+    box.innerHTML = '';
+
+    if(searchResults.length === 0){
+        box.innerHTML = '<i>Geen resultaten</i>';
+        return;
+    }
+
+    searchResults.sort(function(a,b){
+        let naamA =
+            (a.get('plaats') || '') + ' ' +
+            (a.get('gebouw') || a.get('kerknaam') || a.get('titel') || '');
+
+        let naamB =
+            (b.get('plaats') || '') + ' ' +
+            (b.get('gebouw') || b.get('kerknaam') || b.get('titel') || '');
+
+        return naamA.localeCompare(naamB, 'nl');
+    });
+
+    let html = `
+        <div style="border:1px solid #ccc;background:#fff;padding:8px;margin-top:8px;max-height:340px;overflow-y:auto;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <b>${searchResults.length} resultaten</b>
+                <button onclick="document.getElementById('searchResults').innerHTML=''">✖</button>
+            </div>
+    `;
+
+    searchResults.forEach(function(f,i){
+
+        let plaats = f.get('plaats') || '';
+        let gebouw = f.get('gebouw') || f.get('kerknaam') || f.get('titel') || '';
+        let tekst = plaats + (gebouw ? ', ' + gebouw : '');
+
+        let symbool = '📍';
+
+        html += `
+            <div style="margin:5px 0;">
+                <a href="#" onclick="return selectSearchResult(${i});">
+                    ${symbool} ${tekst}
+                </a>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+
+    box.innerHTML = html;
+}
 function zoomToResult(i){
  let f=searchResults[i]; if(!f) return; let geom=f.getGeometry(); let coord=geom.getType()==='Point'?geom.getCoordinates():ol.extent.getCenter(geom.getExtent());
  if(coord[0]<10) coord=ol.proj.fromLonLat(coord);
