@@ -147,22 +147,76 @@ function showInfo(){
 }
 
 function openPopup(feature,coord){
- lastClickedFeature=feature;
- let overlay=map.getOverlays().getArray()[0]; let content=document.getElementById('popup-content'); if(!overlay||!content) return;
- content.innerHTML=''; overlay.setPosition(undefined);
- let props=feature.getProperties(); let plaats=props.plaats||''; let gebouw=props.gebouw||props.kerknaam||''; let titel=props.titel||'';
- let kop=(plaats&&gebouw)?plaats+', '+gebouw:(plaats&&titel)?plaats+', '+titel:(plaats||gebouw||titel||'locatie');
- let html=`<div style="font-size:18px;font-weight:bold;margin-bottom:10px;">${kop}</div>`;
- for(let key in props){ if(['geometry','id','plaats','gebouw','kerknaam','titel'].includes(key)) continue; let val=props[key]; if(val==null||val===''||val==='null') continue;
-   if(key==='link'||key==='bestand'){ html+=`<div style="margin:6px 0;"><a href="${val}" target="_blank"><u>link naar informatie</u></a></div><div id="extra-links-${val}" style="margin-top:6px;"><a href="#" onclick="showLinks(${val}); return false;"><u>nog meer informatie</u></a></div>`; continue; }
-   if(key==='link_id'){
-   html += `<div style="margin:6px 0;"><a href="#" onclick="showLinks(${val}); return false;"><u>link naar informatie</u></a></div>`;
-   html += `<div id="extra-links-${val}" style="margin-top:6px;"><a href="#" onclick="showLinks(${val}); return false;"><u>nog meer informatie</u></a></div>`;
-   continue;
+
+ lastClickedFeature = feature;
+
+ let overlay = map.getOverlays().getArray()[0];
+ let content = document.getElementById('popup-content');
+
+ if(!overlay || !content) return;
+
+ content.innerHTML = '';
+ overlay.setPosition(undefined);
+
+ let props = feature.getProperties();
+
+ let plaats = props.plaats || '';
+ let gebouw = props.gebouw || props.kerknaam || '';
+ let titel  = props.titel || '';
+
+ let kop =
+   (plaats && gebouw) ? plaats + ', ' + gebouw :
+   (plaats && titel)  ? plaats + ', ' + titel :
+   (plaats || gebouw || titel || 'locatie');
+
+ let html = `
+   <div style="font-size:18px;font-weight:bold;margin-bottom:10px;">
+     ${kop}
+   </div>
+ `;
+
+ for(let key in props){
+
+   if(['geometry','id','plaats','gebouw','kerknaam','titel'].includes(key)) continue;
+
+   let val = props[key];
+
+   if(val === null || val === '' || val === undefined || val === 'null') continue;
+
+   // gewone link
+   if(key === 'link' || key === 'bestand'){
+      html += `
+        <div style="margin:6px 0;">
+          <a href="${val}" target="_blank">
+            <u>link naar informatie</u>
+          </a>
+        </div>
+      `;
+      continue;
+   }
+
+   // extra links via links.json
+   if(key === 'link_id'){
+
+      if(val === 0 || val === '0') continue;
+
+      html += `
+        <div id="extra-links-${val}" style="margin-top:6px;">
+          <a href="#" onclick="showLinks(${val}); return false;">
+            <u>nog meer informatie</u>
+          </a>
+        </div>
+      `;
+      continue;
+   }
+
+   // gewone velden
+   html += `<div style="margin-top:4px;">${val}</div>`;
  }
-   html+=`<div style="margin-top:4px;">${val}</div>`;
- }
- content.innerHTML=html; overlay.setPosition(coord); addShareButtonToPopup();
+
+ content.innerHTML = html;
+ overlay.setPosition(coord);
+ addShareButtonToPopup();
 }
 
 function showLinks(linkId){
