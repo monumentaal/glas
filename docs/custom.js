@@ -68,7 +68,10 @@ function bindSearch(){
      source.getFeatures().forEach(function(f){ searchFeature(f,query); if(f.get('features')) f.get('features').forEach(inner=>searchFeature(inner,query)); });
    });
    showResultsList();
-   if(searchResults.length>0) zoomToResult(0);
+   if(searchResults.length > 0){
+    highlightSearchResults();
+    fitSearchResults();
+   }
  });
 }
 
@@ -236,3 +239,56 @@ function showLinks(linkId){
 }
 
 function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
+
+function fitSearchResults(){
+
+    if(searchResults.length === 0) return;
+
+    let extent = ol.extent.createEmpty();
+
+    searchResults.forEach(function(f){
+
+        let geom = f.getGeometry();
+        if(!geom) return;
+
+        ol.extent.extend(extent, geom.getExtent());
+    });
+
+    map.getView().fit(extent, {
+        padding: [60,60,60,60],
+        duration: 800,
+        maxZoom: 15
+    });
+}
+
+function highlightSearchResults(){
+
+    searchResults.forEach(function(f){
+
+        if(!f || !f.setStyle) return;
+
+        f.setStyle(new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 9,
+                fill: new ol.style.Fill({
+                    color: 'rgba(255,255,0,0.9)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#ff0000',
+                    width: 2
+                })
+            })
+        }));
+    });
+
+    setTimeout(function(){
+
+        searchResults.forEach(function(f){
+            if(f && f.setStyle){
+                f.setStyle(null);
+            }
+        });
+
+    }, 5000);
+}
+
