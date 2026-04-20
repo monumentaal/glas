@@ -140,8 +140,6 @@ function zoomToResult(i){
     let f = searchResults[i];
     if(!f) return;
 
-    highlightSearchResults();
-
     let geom = f.getGeometry();
 
     let coord = geom.getType() === 'Point'
@@ -160,7 +158,11 @@ function zoomToResult(i){
 
     setTimeout(function(){
         openPopup(f, coord);
-    }, 1200);
+    }, 1100);
+
+    setTimeout(function(){
+        openPopup(f, coord);
+    }, 1600);
 }
 
 function selectSearchResult(i){ zoomToResult(i); return false; }
@@ -313,6 +315,6 @@ function highlightSearchResults(){
             }
         });
 
-    }, 5000);
+    }, 15000);
 }
 
