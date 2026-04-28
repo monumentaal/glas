@@ -54,11 +54,25 @@ function createInfoPanel(){
  let div=document.createElement('div');
  div.className='info-panel';
  div.style.cssText='position:absolute;top:10px;left:10px;z-index:9999;background:white;padding:10px;width:320px;box-shadow:0 2px 8px rgba(0,0,0,0.3)';
- div.innerHTML=`<div class="info-header"><b>monumentaal glas op de kaart</b></div><div class="info-content" style="display:block; margin-top:10px;"><div>Zoek:</div><input type="text" id="searchBox" placeholder="Zoek..." style="width:100%;padding:6px;"><div id="searchResults" style="margin-top:8px;"></div><div style="margin-top:8px;">Klik op een marker voor informatie.</div><div style="margin-top:10px;"><button onclick="showInfo()">📘 Toelichting</button></div></div>`;
+ 
+ div.innerHTML = `
+  <div class="info-header"><b>monumentaal glas op de kaart</b></div>
+  <div class="info-content" style="display:block; margin-top:10px;">
+    <div>Zoek:</div>
+    <input type="text" id="searchBox" placeholder="Zoek..." style="width:100%;padding:6px;">
+    <div style="margin-top:10px; display:flex; gap:5px;">
+       <button onclick="searchNearby()" style="flex:1; cursor:pointer;">📍 In de buurt (10km)</button>
+    </div>
+    <div id="searchResults" style="margin-top:8px;"></div>
+    <div style="margin-top:8px;">Klik op een marker voor informatie.</div>
+    <div style="margin-top:10px;"><button onclick="showInfo()">📘 Toelichting</button></div>
+  </div>`;
+ 
  document.getElementById('map').appendChild(div);
 }
 
 function bindSearch(){
+ clearPreviousHighlights();
  let searchBox=document.getElementById('searchBox'); if(!searchBox) return;
  searchBox.addEventListener('keydown', function(e){
    if(e.key!=='Enter') return;
@@ -383,4 +397,78 @@ function openSharedSearch(){
     highlightSearchResults();
     fitSearchResults();
 }
+function searchNearby() {
+    if (!navigator.geolocation) {
+        alert("Geolocatie wordt niet ondersteund.");
+        return;
+    }
+    // Reset oude highlights
+    searchResults.forEach(f => { if(f && f.setStyle) f.setStyle(null); });
 
+    navigator.geolocation.getCurrentPosition(function(position) {
+        const userLonLat = [position.coords.longitude, position.coords.latitude];
+        searchResults = [];
+        const radiusKm = 10;
+
+        layersList.forEach(function(layer) {
+            if (!layer.getSource || !layer.getSource().getFeatures) return;
+            layer.getSource().getFeatures().forEach(function(f) {
+                checkDistance(f, userLonLat, radiusKm);
+                if (f.get('features')) f.get('features').forEach(inner => checkDistance(inner, userLonLat, radiusKm));
+            });
+        });
+
+        showResultsList();
+        if (searchResults.length > 0) {
+            highlightSearchResults(); // Gebruikt je bestaande functie
+            fitSearchResults();       // Gebruikt je bestaande functie
+        } else {
+            alert("Niets gevonden binnen 10km.");
+        }
+    });
+}
+
+function checkDistance(f, userLonLat, radiusKm) {
+    let geom = f.getGeometry();
+    if (!geom) return;
+    let featCoord = geom.getType() === 'Point' ? geom.getCoordinates() : ol.extent.getCenter(geom.getExtent());
+    // Nauwkeurige berekening voor EPSG:4326
+    const distance = ol.sphere.getDistance(userLonLat, featCoord) / 1000;
+    if (distance <= radiusKm) searchResults.push(f);
+}
+function searchNearby() {
+    if (!navigator.geolocation) {
+        alert("Geolocatie wordt niet ondersteund door deze browser.");
+        return;
+    }
+    
+    // De 3e functie aanroepen om de kaart eerst 'schoon' te maken
+    clearPreviousHighlights();
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        const userLonLat = [position.coords.longitude, position.coords.latitude];
+        searchResults = [];
+        const radiusKm = 10;
+
+        layersList.forEach(function(layer) {
+            if (!layer.getSource || !layer.getSource().getFeatures) return;
+            layer.getSource().getFeatures().forEach(function(f) {
+                checkDistance(f, userLonLat, radiusKm);
+                // Ook zoeken in clusters
+                if (f.get('features')) {
+                    f.get('features').forEach(inner => checkDistance(inner, userLonLat, radiusKm));
+                }
+            });
+        });
+
+        showResultsList();
+        if (searchResults.length > 0) {
+            highlightSearchResults(); 
+            fitSearchResults();
+        } else {
+            alert("Geen monumentaal glas gevonden binnen 10km.");
+        }
+    }, function() {
+        alert("Kan locatie niet ophalen. Controleer je privacy-instellingen.");
+    });
+}
