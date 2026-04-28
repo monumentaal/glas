@@ -445,24 +445,36 @@ function checkDistance(f, userLonLat, radiusKm) {
         ? geom.getCoordinates() 
         : ol.extent.getCenter(geom.getExtent());
 
-    // Controleer of de coördinaten niet per ongeluk omgedraaid zijn
-    // In Nederland is Lon rond de 4-7 en Lat rond de 51-53.
-    // Als de eerste waarde > 40 is, zijn ze waarschijnlijk omgedraaid.
-    let lonLatToUse = featCoord;
-    if (featCoord[0] > 40 && featCoord[1] < 10) {
-        lonLatToUse = [featCoord[1], featCoord[0]];
-    }
-    
-    const distance = ol.sphere.getDistance(userLonLat, lonLatToUse) / 1000;
+    let finalLonLat;
 
-    // Log de afstand naar de console om te debuggen (F12)
-    console.log("Afstand tot marker:", distance.toFixed(2), "km", lonLatToUse);
+    // CHECK: Zijn de coördinaten in meters? (bijv. 150000 of 6000000)
+    if (Math.abs(featCoord[0]) > 500) {
+        // Omzetten van meters (EPSG:3857 of EPSG:28992) naar graden (EPSG:4326)
+        // We gaan ervan uit dat de kaart-view projectie de bron is
+        finalLonLat = ol.proj.toLonLat(featCoord, map.getView().getProjection());
+    } else {
+        // Het zijn al graden, maar staan ze in Lat/Lon of Lon/Lat?
+        let lon, lat;
+        if (Math.abs(featCoord[0]) > Math.abs(featCoord[1])) {
+            lat = featCoord[0];
+            lon = featCoord[1];
+        } else {
+            lon = featCoord[0];
+            lat = featCoord[1];
+        }
+        finalLonLat = [lon, lat];
+    }
+
+    // Bereken de afstand met de nu gegarandeerde [Lon, Lat] in graden
+    const distance = ol.sphere.getDistance(userLonLat, finalLonLat) / 1000;
+
+    // Debugging in F12 console
+    console.log(`Gevonden op ${distance.toFixed(2)} km. Coördinaten gebruikt:`, finalLonLat);
 
     if (distance <= radiusKm) {
         searchResults.push(f);
     }
 }
-
 function clearPreviousHighlights() {
     // Wis de lijst met resultaten
     searchResults = [];
