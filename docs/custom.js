@@ -440,8 +440,24 @@ window.searchNearby = function() {
 function checkDistance(f, userLonLat, radiusKm) {
     let geom = f.getGeometry();
     if (!geom) return;
-    let featCoord = geom.getType() === 'Point' ? geom.getCoordinates() : ol.extent.getCenter(geom.getExtent());
-    const distance = ol.sphere.getDistance(userLonLat, featCoord) / 1000;
+    
+    let featCoord = geom.getType() === 'Point' 
+        ? geom.getCoordinates() 
+        : ol.extent.getCenter(geom.getExtent());
+
+    // Controleer of de coördinaten niet per ongeluk omgedraaid zijn
+    // In Nederland is Lon rond de 4-7 en Lat rond de 51-53.
+    // Als de eerste waarde > 40 is, zijn ze waarschijnlijk omgedraaid.
+    let lonLatToUse = featCoord;
+    if (featCoord[0] > 40 && featCoord[1] < 10) {
+        lonLatToUse = [featCoord[1], featCoord[0]];
+    }
+    
+    const distance = ol.sphere.getDistance(userLonLat, lonLatToUse) / 1000;
+
+    // Log de afstand naar de console om te debuggen (F12)
+    console.log("Afstand tot marker:", distance.toFixed(2), "km", lonLatToUse);
+
     if (distance <= radiusKm) {
         searchResults.push(f);
     }
