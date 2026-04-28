@@ -397,52 +397,17 @@ function openSharedSearch(){
     highlightSearchResults();
     fitSearchResults();
 }
-function searchNearby() {
+
+
+// --- NIEUWE FUNCTIES ONDERAAN CUSTOM.JS ---
+
+window.searchNearby = function() {
     if (!navigator.geolocation) {
         alert("Geolocatie wordt niet ondersteund.");
         return;
     }
-    // Reset oude highlights
-    searchResults.forEach(f => { if(f && f.setStyle) f.setStyle(null); });
-
-    navigator.geolocation.getCurrentPosition(function(position) {
-        const userLonLat = [position.coords.longitude, position.coords.latitude];
-        searchResults = [];
-        const radiusKm = 10;
-
-        layersList.forEach(function(layer) {
-            if (!layer.getSource || !layer.getSource().getFeatures) return;
-            layer.getSource().getFeatures().forEach(function(f) {
-                checkDistance(f, userLonLat, radiusKm);
-                if (f.get('features')) f.get('features').forEach(inner => checkDistance(inner, userLonLat, radiusKm));
-            });
-        });
-
-        showResultsList();
-        if (searchResults.length > 0) {
-            highlightSearchResults(); // Gebruikt je bestaande functie
-            fitSearchResults();       // Gebruikt je bestaande functie
-        } else {
-            alert("Niets gevonden binnen 10km.");
-        }
-    });
-}
-
-function checkDistance(f, userLonLat, radiusKm) {
-    let geom = f.getGeometry();
-    if (!geom) return;
-    let featCoord = geom.getType() === 'Point' ? geom.getCoordinates() : ol.extent.getCenter(geom.getExtent());
-    // Nauwkeurige berekening voor EPSG:4326
-    const distance = ol.sphere.getDistance(userLonLat, featCoord) / 1000;
-    if (distance <= radiusKm) searchResults.push(f);
-}
-function searchNearby() {
-    if (!navigator.geolocation) {
-        alert("Geolocatie wordt niet ondersteund door deze browser.");
-        return;
-    }
     
-    // De 3e functie aanroepen om de kaart eerst 'schoon' te maken
+    // Roep de opschoonfunctie aan
     clearPreviousHighlights();
 
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -454,7 +419,6 @@ function searchNearby() {
             if (!layer.getSource || !layer.getSource().getFeatures) return;
             layer.getSource().getFeatures().forEach(function(f) {
                 checkDistance(f, userLonLat, radiusKm);
-                // Ook zoeken in clusters
                 if (f.get('features')) {
                     f.get('features').forEach(inner => checkDistance(inner, userLonLat, radiusKm));
                 }
@@ -466,9 +430,34 @@ function searchNearby() {
             highlightSearchResults(); 
             fitSearchResults();
         } else {
-            alert("Geen monumentaal glas gevonden binnen 10km.");
+            alert("Niets gevonden binnen 10km.");
         }
-    }, function() {
-        alert("Kan locatie niet ophalen. Controleer je privacy-instellingen.");
+    }, function(err) {
+        alert("Locatie-fout: " + err.message);
+    });
+};
+
+function checkDistance(f, userLonLat, radiusKm) {
+    let geom = f.getGeometry();
+    if (!geom) return;
+    let featCoord = geom.getType() === 'Point' ? geom.getCoordinates() : ol.extent.getCenter(geom.getExtent());
+    const distance = ol.sphere.getDistance(userLonLat, featCoord) / 1000;
+    if (distance <= radiusKm) {
+        searchResults.push(f);
+    }
+}
+
+function clearPreviousHighlights() {
+    // Wis de lijst met resultaten
+    searchResults = [];
+    // Reset alle stijlen op de kaart
+    layersList.forEach(function(layer) {
+        if (!layer.getSource || !layer.getSource().getFeatures) return;
+        layer.getSource().getFeatures().forEach(function(f) {
+            if (f.setStyle) f.setStyle(null);
+            if (f.get('features')) {
+                f.get('features').forEach(inner => { if(inner.setStyle) inner.setStyle(null); });
+            }
+        });
     });
 }
