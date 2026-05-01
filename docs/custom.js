@@ -255,7 +255,7 @@ function openPopup(feature,coord){
 
       html += `
         <div id="extra-links-${val}" style="margin-top:6px;">
-          <a href="#" onclick="showLinks(${val}); return false;">
+          <a href="#" onclick="showLinks('${val})'; return false;">
             <u>nog meer informatie</u>
           </a>
         </div>
