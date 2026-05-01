@@ -1,4 +1,10 @@
 alert("custom.js geladen");
+setTimeout(function(){
+    alert("test create panel");
+    createInfoPanel();
+}, 2000);
+
+
 const popupStyle = document.createElement('style');
 popupStyle.innerHTML = `
 .ol-popup{min-width:560px !important;max-width:820px !important;}
