@@ -9,7 +9,7 @@ var map = new ol.Map({
 });
 
 //initial view - epsg:3857 coordinates if not "Match project CRS"
-map.getView().fit([269494.464864, 6565568.090401, 976020.864875, 6968513.690407], map.getSize());
+map.getView().fit([-9938.589096, 6286642.574766, 1651093.219632, 7233960.974740], map.getSize());
 
 //full zooms only
 map.getView().setProperties({constrainResolution: true});
@@ -548,16 +548,19 @@ var bottomAttribution = new ol.control.Attribution({
 });
 map.addControl(bottomAttribution);
 
-var attributionList = document.createElement('li');
-attributionList.innerHTML = `
-	<a href="https://github.com/qgis2web/qgis2web">qgis2web</a> &middot;
-	<a href="https://openlayers.org/">OpenLayers</a> &middot;
-	<a href="https://qgis.org/">QGIS</a>	
-`;
-var bottomAttributionUl = bottomAttribution.element.querySelector('ul');
-if (bottomAttributionUl) {
-  bottomAttribution.element.insertBefore(attributionList, bottomAttributionUl);
-}
+map.once('rendercomplete', function() {
+  var bottomAttributionUl = bottomAttribution.element.querySelector('ul');
+  if (bottomAttributionUl) {
+    var layerAttrs = Array.from(bottomAttributionUl.querySelectorAll('li'))
+      .map(function(li) { return li.innerHTML.trim(); }).filter(Boolean);
+    var attribHtml = `
+    <a href="https://github.com/qgis2web/qgis2web">qgis2web</a> &middot;
+    <a href="https://openlayers.org/">OpenLayers</a> &middot;
+    <a href="https://qgis.org/">QGIS</a>`;
+    if (layerAttrs.length > 0) { attribHtml += ' &nbsp;|&nbsp; ' + layerAttrs.join(', '); }
+    bottomAttributionUl.innerHTML = '<li>' + attribHtml + '</li>';
+  }
+});
 
 
 // Disable "popup on hover" or "highlight on hover" if ol-control mouseover
