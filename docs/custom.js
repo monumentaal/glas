@@ -10,27 +10,62 @@ document.head.appendChild(popupStyle);
 let lastClickedFeature = null;
 let searchResults = [];
 
-window.addEventListener('load', function(){
- setTimeout(function(){
-   createInfoPanel();
-   bindSearch();
-   map.on('singleclick', function(evt){
-     let feature = map.forEachFeatureAtPixel(evt.pixel, f=>f, {hitTolerance:10});
-     if(feature) openPopup(feature, evt.coordinate);
-   });
-   function setStart(){
-     map.getView().setCenter(ol.proj.fromLonLat([5.4,52.15]));
-     map.getView().setZoom(8);
-   }
-   setStart();
-   setTimeout(setStart,500);
-   setTimeout(setStart,1500);
-   setTimeout(setStart,3000);
-   setTimeout(openSharedLocation,3500);
-   setTimeout(openSharedSearch,3600);
- },1000);
-});
+function startApp(){
 
+    // wacht tot map bestaat
+    if(typeof map === 'undefined' || !map.getView){
+        setTimeout(startApp, 500);
+        return;
+    }
+
+    // wacht tot layers geladen zijn
+    if(typeof layersList === 'undefined' || layersList.length === 0){
+        setTimeout(startApp, 500);
+        return;
+    }
+
+    // wacht tot er echt features zijn (BELANGRIJK)
+    let hasFeatures = false;
+
+    layersList.forEach(function(layer){
+        if(layer.getSource && layer.getSource().getFeatures){
+            if(layer.getSource().getFeatures().length > 0){
+                hasFeatures = true;
+            }
+        }
+    });
+
+    if(!hasFeatures){
+        setTimeout(startApp, 500);
+        return;
+    }
+
+    // ===== PAS HIER START JE APP =====
+
+    createInfoPanel();
+    bindSearch();
+
+    map.on('singleclick', function(evt){
+        let feature = map.forEachFeatureAtPixel(evt.pixel, f=>f, {hitTolerance:10});
+        if(feature) openPopup(feature, evt.coordinate);
+    });
+
+    function setStart(){
+        map.getView().setCenter(ol.proj.fromLonLat([5.4,52.15]));
+        map.getView().setZoom(8);
+    }
+
+    setStart();
+
+    setTimeout(setStart,500);
+    setTimeout(setStart,1500);
+
+    setTimeout(openSharedLocation,2000);
+    setTimeout(openSharedSearch,2500);
+}
+
+// start proces
+startApp();
 function openSharedLocation(){
  const params = new URLSearchParams(window.location.search);
  const id = params.get('id');
