@@ -1,4 +1,6 @@
 
+Excel naar links.json
+
 {
   "1": [
     {
@@ -268,6 +270,26 @@
     {
       "titel": "ruimte",
       "url": "https://www.youtube.com/watch?v=r5sAabr-NhY"
+    }
+  ],
+  "16": [
+    {
+      "titel": "foto",
+      "url": "https://www.grootheerenveen.nl/nieuws/algemeen/130584/van-jaren-70-naar-toekomstbestendig-anna-schotanus-ondergaat-"
+    }
+  ],
+  "assen01": [
+    {
+      "titel": "foto 1",
+      "url": "https://www.gervaniersel.nl/werken/glas/assenbijgewerkt1/"
+    },
+    {
+      "titel": "foto 2",
+      "url": "https://www.gervaniersel.nl/werken/glas/assenbijgewerkt2/"
+    },
+    {
+      "titel": "foto 3",
+      "url": "https://www.gervaniersel.nl/werken/glas/assenbijgewerkt3/"
     }
   ]
 }
