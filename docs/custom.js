@@ -1,5 +1,4 @@
-/* Volledig herbouwde custom.js met behoud van bestaande functionaliteit */
-/* ===== popup breder maken ===== */
+alert("custom.js geladen");
 const popupStyle = document.createElement('style');
 popupStyle.innerHTML = `
 .ol-popup{min-width:560px !important;max-width:820px !important;}
