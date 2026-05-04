@@ -342,7 +342,8 @@ function showLinks(linkId){
 
             const img = document.createElement("img");
             img.src = cleanUrl;
-
+        
+                     
 img.onerror = function(){
 
     // vervang door kaartje als afbeelding geblokkeerd is
@@ -365,7 +366,7 @@ img.onerror = function(){
         <div>${item.titel || 'foto'}</div>
         <div style="font-size:10px;color:#666;">klik om te openen</div>
     `;
-
+}
 card.onclick = function(){
 
     let currentIndex = rows.indexOf(item);
