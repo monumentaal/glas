@@ -348,41 +348,96 @@ function showLinks(linkId){
             img.style.border = "2px solid white";
             img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.4)";
 
-            // klik = groot tonen
-            img.onclick = function(){
+           img.onclick = function(){
 
-                const viewer = document.createElement("div");
+    let currentIndex = rows.indexOf(item);
 
-                viewer.style.position = "fixed";
-                viewer.style.top = "0";
-                viewer.style.left = "0";
-                viewer.style.width = "100%";
-                viewer.style.height = "100%";
-                viewer.style.background = "rgba(0,0,0,0.6)";
-                viewer.style.display = "flex";
-                viewer.style.justifyContent = "center";
-                viewer.style.alignItems = "center";
-                viewer.style.zIndex = "100000";
+    const viewer = document.createElement("div");
+    viewer.style.position = "fixed";
+    viewer.style.top = "0";
+    viewer.style.left = "0";
+    viewer.style.width = "100%";
+    viewer.style.height = "100%";
+    viewer.style.background = "rgba(0,0,0,0.6)";
+    viewer.style.display = "flex";
+    viewer.style.flexDirection = "column";
+    viewer.style.justifyContent = "center";
+    viewer.style.alignItems = "center";
+    viewer.style.zIndex = "100000";
 
-                const big = document.createElement("img");
-                big.src = cleanUrl;
-                big.style.maxWidth = "90%";
-                big.style.maxHeight = "90%";
-                big.style.boxShadow = "0 4px 12px rgba(0,0,0,0.6)";
-                big.style.border = "4px solid white";
+    const big = document.createElement("img");
+    big.style.maxWidth = "90%";
+    big.style.maxHeight = "80%";
+    big.style.boxShadow = "0 4px 12px rgba(0,0,0,0.6)";
+    big.style.border = "4px solid white";
 
-                viewer.appendChild(big);
+    const caption = document.createElement("div");
+    caption.style.color = "white";
+    caption.style.marginTop = "10px";
+    caption.style.fontSize = "16px";
 
-                // klik = sluiten
-                viewer.onclick = function(){
-                    document.body.removeChild(viewer);
-                };
+    function showImage(index){
 
-                document.body.appendChild(viewer);
-            };
+        const item = rows[index];
 
-            grid.appendChild(img);
-        });
+        let url = String(item.url || '').replace(/"/g,'');
+        url = url.replace(/\/detail\/.*\/media\//, '/media/');
+
+        big.src = url;
+        caption.innerText = item.titel || "";
+
+        currentIndex = index;
+    }
+
+    // pijltjes
+    const prev = document.createElement("div");
+    prev.innerHTML = "◀";
+    prev.style.position = "absolute";
+    prev.style.left = "20px";
+    prev.style.fontSize = "40px";
+    prev.style.color = "white";
+    prev.style.cursor = "pointer";
+
+    const next = document.createElement("div");
+    next.innerHTML = "▶";
+    next.style.position = "absolute";
+    next.style.right = "20px";
+    next.style.fontSize = "40px";
+    next.style.color = "white";
+    next.style.cursor = "pointer";
+
+    prev.onclick = function(e){
+        e.stopPropagation();
+        showImage((currentIndex - 1 + rows.length) % rows.length);
+    };
+
+    next.onclick = function(e){
+        e.stopPropagation();
+        showImage((currentIndex + 1) % rows.length);
+    };
+
+    viewer.appendChild(prev);
+    viewer.appendChild(next);
+    viewer.appendChild(big);
+    viewer.appendChild(caption);
+
+    // sluiten
+    viewer.onclick = function(){
+        document.body.removeChild(viewer);
+    };
+
+    // ESC sluiten
+    document.addEventListener("keydown", function esc(e){
+        if(e.key === "Escape"){
+            document.body.removeChild(viewer);
+            document.removeEventListener("keydown", esc);
+        }
+    });
+
+    document.body.appendChild(viewer);
+
+    showImage(currentIndex);
+};
 
         container.appendChild(grid);
         gallery.style.display = "flex";
