@@ -164,7 +164,7 @@ var lyr_limburg_10 = new ol.layer.Vector({
 
 lyr_EsriStreet_0.setVisible(true);lyr_webpaginas_1.setVisible(true);lyr_boeken_2.setVisible(true);lyr_pers_3.setVisible(true);lyr_kunstenaars_4.setVisible(true);lyr_kerkfotografie_5.setVisible(true);lyr_mijnstreek_6.setVisible(true);lyr_oostbrabant_7.setVisible(true);lyr_maas_en_waal_8.setVisible(true);lyr_beeldbankRCE_9.setVisible(true);lyr_limburg_10.setVisible(true);
 var layersList = [lyr_EsriStreet_0,lyr_webpaginas_1,lyr_boeken_2,lyr_pers_3,lyr_kunstenaars_4,lyr_kerkfotografie_5,lyr_mijnstreek_6,lyr_oostbrabant_7,lyr_maas_en_waal_8,lyr_beeldbankRCE_9,lyr_limburg_10];
-lyr_webpaginas_1.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'link': 'link', 'gebouw': 'gebouw', 'extra': 'extra', 'trefwoord': 'trefwoord', });
+lyr_webpaginas_1.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'link': 'link', 'gebouw': 'gebouw', 'extra': 'extra', 'trefwoord': 'trefwoord', 'link_id': 'link_id', });
 lyr_boeken_2.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'gebouw': 'gebouw', 'titel': 'titel', 'auteur': 'auteur', 'uitgever': 'uitgever', 'isbn': 'isbn', 'trefwoord': 'trefwoord', });
 lyr_pers_3.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'gebouw': 'gebouw', 'link': 'link', 'trefwoord': 'trefwoord', 'link_id': 'link_id', });
 lyr_kunstenaars_4.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'gebouw': 'gebouw', 'kuntenaar': 'kuntenaar', 'titel': 'titel', 'link': 'link', });
@@ -174,7 +174,7 @@ lyr_oostbrabant_7.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'kerknaam
 lyr_maas_en_waal_8.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'kerk': 'kerk', 'link': 'link', 'trefwoord': 'trefwoord', });
 lyr_beeldbankRCE_9.set('fieldAliases', {'id': 'id', 'paats': 'paats', 'adres': 'adres', 'gebouw': 'gebouw', 'link': 'link', 'trefwoord': 'trefwoord', 'link_id': 'link_id', 'plaats': 'plaats', });
 lyr_limburg_10.set('fieldAliases', {'id': 'id', 'plaats': 'plaats', 'gebouw': 'gebouw', 'link': 'link', 'trefwoord': 'trefwoord', });
-lyr_webpaginas_1.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'link': 'TextEdit', 'gebouw': 'TextEdit', 'extra': 'TextEdit', 'trefwoord': '', });
+lyr_webpaginas_1.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'link': 'TextEdit', 'gebouw': 'TextEdit', 'extra': 'TextEdit', 'trefwoord': 'TextEdit', 'link_id': 'TextEdit', });
 lyr_boeken_2.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'titel': 'TextEdit', 'auteur': 'TextEdit', 'uitgever': 'TextEdit', 'isbn': 'TextEdit', 'trefwoord': '', });
 lyr_pers_3.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', 'link_id': '', });
 lyr_kunstenaars_4.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'kuntenaar': 'TextEdit', 'titel': 'TextEdit', 'link': 'TextEdit', });
@@ -184,7 +184,7 @@ lyr_oostbrabant_7.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'k
 lyr_maas_en_waal_8.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'kerk': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', });
 lyr_beeldbankRCE_9.set('fieldImages', {'id': 'TextEdit', 'paats': 'TextEdit', 'adres': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': 'TextEdit', 'link_id': 'TextEdit', 'plaats': '', });
 lyr_limburg_10.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', });
-lyr_webpaginas_1.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'link': 'no label', 'gebouw': 'no label', 'extra': 'no label', 'trefwoord': 'no label', });
+lyr_webpaginas_1.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'link': 'no label', 'gebouw': 'no label', 'extra': 'no label', 'trefwoord': 'no label', 'link_id': 'no label', });
 lyr_boeken_2.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'gebouw': 'no label', 'titel': 'no label', 'auteur': 'no label', 'uitgever': 'no label', 'isbn': 'no label', 'trefwoord': 'no label', });
 lyr_pers_3.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'gebouw': 'no label', 'link': 'no label', 'trefwoord': 'no label', 'link_id': 'no label', });
 lyr_kunstenaars_4.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'gebouw': 'no label', 'kuntenaar': 'no label', 'titel': 'no label', 'link': 'no label', });
