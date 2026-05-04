@@ -350,9 +350,21 @@ function showLinks(linkId){
                 </div>
             `;
 
-            card.onclick = function(){
-                window.open(cleanUrl, "_blank");
-            };
+          card.onclick = function(){
+
+    const container = document.getElementById("galleryContent");
+    container.innerHTML = "";
+
+    const frame = document.createElement("iframe");
+
+    frame.src = cleanUrl;
+    frame.style.width = "90vw";
+    frame.style.height = "90vh";
+    frame.style.border = "none";
+    frame.style.background = "white";
+
+    container.appendChild(frame);
+};
 
             container.appendChild(card);
         });
