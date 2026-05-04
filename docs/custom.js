@@ -312,7 +312,7 @@ function openPopup(feature,coord){
  addShareButtonToPopup();
 }
 
-function showLinks(linkId){
+ffunction showLinks(linkId){
 
     fetch(window.location.pathname.replace('index.html','') + 'links.json?v=' + Date.now())
     .then(function(r){ return r.json(); })
@@ -331,138 +331,30 @@ function showLinks(linkId){
         grid.style.flexWrap = "wrap";
         grid.style.gap = "10px";
 
-        rows.forEach(function(item, i){
+        rows.forEach(function(item){
 
             var cleanUrl = String(item.url || '').replace(/"/g,'');
 
-            // thumbnail kaartje (geen image i.v.m. blokkades)
             var card = document.createElement("div");
-            card.style.width = "150px";
-            card.style.height = "120px";
+            card.style.width = "160px";
+            card.style.minHeight = "80px";
             card.style.background = "#eee";
             card.style.border = "2px solid #ccc";
+            card.style.padding = "8px";
+            card.style.cursor = "pointer";
             card.style.display = "flex";
             card.style.flexDirection = "column";
             card.style.justifyContent = "center";
-            card.style.alignItems = "center";
-            card.style.cursor = "pointer";
 
             card.innerHTML =
-               card.innerHTML =
-    '<div style="font-weight:bold;">' + (item.titel || 'foto') + '</div>' +
-    '<div style="font-size:11px;color:#666;">klik om te openen en keer terug naar dit tabblad</div>';
+                '<div style="font-weight:bold;margin-bottom:4px;">' +
+                (item.titel || 'foto') +
+                '</div>' +
+                '<div style="font-size:11px;color:#666;">klik om te openen en keer terug naar dit tabblad</div>';
 
+            // 👉 DIRECT openen (geen tussenstap meer)
             card.onclick = function(){
-
-                var currentIndex = i;
-
-                container.innerHTML = "";
-
-                var box = document.createElement("div");
-                box.style.width = "90vw";
-                box.style.height = "90vh";
-                box.style.background = "white";
-                box.style.display = "flex";
-                box.style.flexDirection = "column";
-                box.style.position = "relative";
-
-                var topbar = document.createElement("div");
-                topbar.style.padding = "8px";
-                topbar.style.background = "#f0f0f0";
-                topbar.style.display = "flex";
-                topbar.style.justifyContent = "space-between";
-
-                var backBtn = document.createElement("button");
-                backBtn.innerHTML = "⬅ terug";
-
-                var openBtn = document.createElement("button");
-                openBtn.innerHTML = "open pagina";
-
-                var counter = document.createElement("div");
-
-                topbar.appendChild(backBtn);
-                topbar.appendChild(counter);
-                topbar.appendChild(openBtn);
-
-                var content = document.createElement("div");
-                content.style.flex = "1";
-                content.style.display = "flex";
-                content.style.flexDirection = "column";
-                content.style.justifyContent = "center";
-                content.style.alignItems = "center";
-
-                var title = document.createElement("div");
-                title.style.fontSize = "18px";
-
-                content.appendChild(title);
-
-                function updateViewer(index){
-
-                    var row = rows[index];
-
-                    var url = String(row.url || '').replace(/"/g,'');
-
-                    title.innerHTML = row.titel || "foto";
-                    counter.innerHTML = (index+1) + " / " + rows.length;
-
-                    openBtn.onclick = function(){
-                      window.open(url, "_blank", "noopener");
-                    };
-
-                    currentIndex = index;
-                }
-
-                var prev = document.createElement("div");
-                prev.innerHTML = "◀";
-                prev.style.position = "absolute";
-                prev.style.left = "10px";
-                prev.style.top = "50%";
-                prev.style.cursor = "pointer";
-
-                var next = document.createElement("div");
-                next.innerHTML = "▶";
-                next.style.position = "absolute";
-                next.style.right = "10px";
-                next.style.top = "50%";
-                next.style.cursor = "pointer";
-
-                prev.onclick = function(e){
-                    e.stopPropagation();
-                    updateViewer((currentIndex - 1 + rows.length) % rows.length);
-                };
-
-                next.onclick = function(e){
-                    e.stopPropagation();
-                    updateViewer((currentIndex + 1) % rows.length);
-                };
-
-                backBtn.onclick = function(){
-                    showLinks(linkId);
-                };
-
-                var keyHandler = function(e){
-                    if(e.key === "ArrowLeft"){
-                        updateViewer((currentIndex - 1 + rows.length) % rows.length);
-                    }
-                    if(e.key === "ArrowRight"){
-                        updateViewer((currentIndex + 1) % rows.length);
-                    }
-                    if(e.key === "Escape"){
-                        document.removeEventListener("keydown", keyHandler);
-                        showLinks(linkId);
-                    }
-                };
-
-                document.addEventListener("keydown", keyHandler);
-
-                box.appendChild(topbar);
-                box.appendChild(content);
-                box.appendChild(prev);
-                box.appendChild(next);
-
-                container.appendChild(box);
-
-                updateViewer(currentIndex);
+                window.open(cleanUrl, "_blank", "noopener");
             };
 
             grid.appendChild(card);
