@@ -315,230 +315,163 @@ function openPopup(feature,coord){
 function showLinks(linkId){
 
     fetch(window.location.pathname.replace('index.html','') + 'links.json?v=' + Date.now())
-    .then(r => r.json())
-    .then(data => {
+    .then(function(r){ return r.json(); })
+    .then(function(data){
 
-        const rows = data[String(linkId)] || [];
+        var rows = data[String(linkId)] || [];
         if(rows.length === 0) return;
 
-        const container = document.getElementById("galleryContent");
+        var container = document.getElementById("galleryContent");
         if(!container) return;
 
         container.innerHTML = "";
 
-        // grid met thumbnails
-        const grid = document.createElement("div");
+        var grid = document.createElement("div");
         grid.style.display = "flex";
         grid.style.flexWrap = "wrap";
         grid.style.gap = "10px";
-        grid.style.maxWidth = "900px";
 
-        rows.forEach(function(item){
+        rows.forEach(function(item, i){
 
-            let cleanUrl = String(item.url || '').replace(/"/g,'');
+            var cleanUrl = String(item.url || '').replace(/"/g,'');
 
-            // FIX beeldbank URL
-            cleanUrl = cleanUrl.replace(/\/detail\/.*\/media\//, '/media/');
+            // thumbnail kaartje (geen image i.v.m. blokkades)
+            var card = document.createElement("div");
+            card.style.width = "150px";
+            card.style.height = "120px";
+            card.style.background = "#eee";
+            card.style.border = "2px solid #ccc";
+            card.style.display = "flex";
+            card.style.flexDirection = "column";
+            card.style.justifyContent = "center";
+            card.style.alignItems = "center";
+            card.style.cursor = "pointer";
 
-            const img = document.createElement("img");
-            img.src = cleanUrl;
-        }   
-    }              
+            card.innerHTML =
+                '<div style="font-weight:bold;">' + (item.titel || 'foto') + '</div>' +
+                '<div style="font-size:11px;color:#666;">klik om te openen</div>';
 
-          
-img.onerror = function(){
+            card.onclick = function(){
 
-    // vervang door kaartje als afbeelding geblokkeerd is
-    const card = document.createElement("div");
+                var currentIndex = i;
 
-    card.style.width = "150px";
-    card.style.height = "150px";
-    card.style.display = "flex";
-    card.style.flexDirection = "column";
-    card.style.justifyContent = "center";
-    card.style.alignItems = "center";
-    card.style.background = "#eee";
-    card.style.border = "2px solid #ccc";
-    card.style.cursor = "pointer";
-    card.style.fontSize = "12px";
-    card.style.textAlign = "center";
+                container.innerHTML = "";
 
-    card.innerHTML = `
-        <div style="font-size:20px;">📷</div>
-        <div>${item.titel || 'foto'}</div>
-        <div style="font-size:10px;color:#666;">klik om te openen</div>
-    `;
-}
-card.onclick = function(){
+                var box = document.createElement("div");
+                box.style.width = "90vw";
+                box.style.height = "90vh";
+                box.style.background = "white";
+                box.style.display = "flex";
+                box.style.flexDirection = "column";
+                box.style.position = "relative";
 
-    let currentIndex = rows.indexOf(item);
+                var topbar = document.createElement("div");
+                topbar.style.padding = "8px";
+                topbar.style.background = "#f0f0f0";
+                topbar.style.display = "flex";
+                topbar.style.justifyContent = "space-between";
 
-    const container = document.getElementById("galleryContent");
-    container.innerHTML = "";
+                var backBtn = document.createElement("button");
+                backBtn.innerHTML = "⬅ terug";
 
-    const box = document.createElement("div");
-    box.style.width = "90vw";
-    box.style.height = "90vh";
-    box.style.background = "white";
-    box.style.display = "flex";
-    box.style.flexDirection = "column";
-    box.style.boxShadow = "0 4px 12px rgba(0,0,0,0.6)";
-    box.style.position = "relative";
+                var openBtn = document.createElement("button");
+                openBtn.innerHTML = "open pagina";
 
-    // === TOPBAR ===
-    const topbar = document.createElement("div");
-    topbar.style.padding = "8px";
-    topbar.style.background = "#f0f0f0";
-    topbar.style.display = "flex";
-    topbar.style.justifyContent = "space-between";
-    topbar.style.alignItems = "center";
+                var counter = document.createElement("div");
 
-    const backBtn = document.createElement("button");
-    backBtn.innerText = "⬅ terug";
+                topbar.appendChild(backBtn);
+                topbar.appendChild(counter);
+                topbar.appendChild(openBtn);
 
-    const openBtn = document.createElement("button");
-    openBtn.innerText = "open pagina";
+                var content = document.createElement("div");
+                content.style.flex = "1";
+                content.style.display = "flex";
+                content.style.flexDirection = "column";
+                content.style.justifyContent = "center";
+                content.style.alignItems = "center";
 
-    const counter = document.createElement("div");
+                var title = document.createElement("div");
+                title.style.fontSize = "18px";
 
-    topbar.appendChild(backBtn);
-    topbar.appendChild(counter);
-    topbar.appendChild(openBtn);
+                content.appendChild(title);
 
-    // === CONTENT ===
-    const content = document.createElement("div");
-    content.style.flex = "1";
-    content.style.display = "flex";
-    content.style.flexDirection = "column";
-    content.style.justifyContent = "center";
-    content.style.alignItems = "center";
-    content.style.textAlign = "center";
+                function updateViewer(index){
 
-    const title = document.createElement("div");
-    title.style.fontSize = "20px";
-    title.style.marginBottom = "10px";
+                    var row = rows[index];
 
-    const info = document.createElement("div");
-    info.style.fontSize = "13px";
-    info.style.color = "#666";
+                    var url = String(row.url || '').replace(/"/g,'');
 
-    content.appendChild(title);
-    content.appendChild(info);
+                    title.innerHTML = row.titel || "foto";
+                    counter.innerHTML = (index+1) + " / " + rows.length;
 
-    // === MINI THUMB STRIP ===
-    const strip = document.createElement("div");
-    strip.style.display = "flex";
-    strip.style.overflowX = "auto";
-    strip.style.gap = "6px";
-    strip.style.padding = "6px";
-    strip.style.background = "#eee";
+                    openBtn.onclick = function(){
+                        window.open(url, "_blank");
+                    };
 
-    function updateViewer(index){
+                    currentIndex = index;
+                }
 
-        const item = rows[index];
-        let cleanUrl = String(item.url || '').replace(/"/g,'');
+                var prev = document.createElement("div");
+                prev.innerHTML = "◀";
+                prev.style.position = "absolute";
+                prev.style.left = "10px";
+                prev.style.top = "50%";
+                prev.style.cursor = "pointer";
 
-        title.innerText = item.titel || "foto";
-        info.innerText = "Klik op 'open pagina' om te bekijken";
-        counter.innerText = (index + 1) + " / " + rows.length;
+                var next = document.createElement("div");
+                next.innerHTML = "▶";
+                next.style.position = "absolute";
+                next.style.right = "10px";
+                next.style.top = "50%";
+                next.style.cursor = "pointer";
 
-        openBtn.onclick = function(){
-            window.open(cleanUrl, "_blank");
-        };
+                prev.onclick = function(e){
+                    e.stopPropagation();
+                    updateViewer((currentIndex - 1 + rows.length) % rows.length);
+                };
 
-        currentIndex = index;
+                next.onclick = function(e){
+                    e.stopPropagation();
+                    updateViewer((currentIndex + 1) % rows.length);
+                };
 
-        // highlight in strip
-        Array.from(strip.children).forEach((el,i)=>{
-            el.style.border = i === index ? "2px solid black" : "2px solid transparent";
+                backBtn.onclick = function(){
+                    showLinks(linkId);
+                };
+
+                var keyHandler = function(e){
+                    if(e.key === "ArrowLeft"){
+                        updateViewer((currentIndex - 1 + rows.length) % rows.length);
+                    }
+                    if(e.key === "ArrowRight"){
+                        updateViewer((currentIndex + 1) % rows.length);
+                    }
+                    if(e.key === "Escape"){
+                        document.removeEventListener("keydown", keyHandler);
+                        showLinks(linkId);
+                    }
+                };
+
+                document.addEventListener("keydown", keyHandler);
+
+                box.appendChild(topbar);
+                box.appendChild(content);
+                box.appendChild(prev);
+                box.appendChild(next);
+
+                container.appendChild(box);
+
+                updateViewer(currentIndex);
+            };
+
+            grid.appendChild(card);
         });
-    }
 
-    // === STRIP vullen ===
-    rows.forEach((item, i)=>{
-        const thumb = document.createElement("div");
-        thumb.style.width = "50px";
-        thumb.style.height = "50px";
-        thumb.style.background = "#ccc";
-        thumb.style.cursor = "pointer";
-        thumb.style.display = "flex";
-        thumb.style.alignItems = "center";
-        thumb.style.justifyContent = "center";
-        thumb.innerText = i+1;
-
-        thumb.onclick = function(){
-            updateViewer(i);
-        };
-
-        strip.appendChild(thumb);
+        container.appendChild(grid);
+        gallery.style.display = "flex";
     });
+}
 
-    // === PIJLTJES ===
-    const prev = document.createElement("div");
-    prev.innerHTML = "◀";
-    prev.style.position = "absolute";
-    prev.style.left = "10px";
-    prev.style.top = "50%";
-    prev.style.fontSize = "40px";
-    prev.style.cursor = "pointer";
-
-    const next = document.createElement("div");
-    next.innerHTML = "▶";
-    next.style.position = "absolute";
-    next.style.right = "10px";
-    next.style.top = "50%";
-    next.style.fontSize = "40px";
-    next.style.cursor = "pointer";
-
-    prev.onclick = e => { e.stopPropagation(); updateViewer((currentIndex - 1 + rows.length) % rows.length); };
-    next.onclick = e => { e.stopPropagation(); updateViewer((currentIndex + 1) % rows.length); };
-
-    // === SWIPE (mobiel) ===
-    let startX = 0;
-
-    box.addEventListener("touchstart", e=>{
-        startX = e.touches[0].clientX;
-    });
-
-    box.addEventListener("touchend", e=>{
-        let endX = e.changedTouches[0].clientX;
-        if(endX - startX > 50){
-            updateViewer((currentIndex - 1 + rows.length) % rows.length);
-        }
-        if(startX - endX > 50){
-            updateViewer((currentIndex + 1) % rows.length);
-        }
-    });
-
-    // === KEYBOARD ===
-    const keyHandler = function(e){
-        if(e.key === "ArrowLeft") updateViewer((currentIndex - 1 + rows.length) % rows.length);
-        if(e.key === "ArrowRight") updateViewer((currentIndex + 1) % rows.length);
-        if(e.key === "Escape"){
-            document.removeEventListener("keydown", keyHandler);
-            showLinks(linkId);
-        }
-    };
-
-    document.addEventListener("keydown", keyHandler);
-
-    // === BUTTONS ===
-    backBtn.onclick = function(){
-        document.removeEventListener("keydown", keyHandler);
-        showLinks(linkId);
-    };
-
-    // === OPBOUW ===
-    box.appendChild(topbar);
-    box.appendChild(content);
-    box.appendChild(strip);
-    box.appendChild(prev);
-    box.appendChild(next);
-
-    container.appendChild(box);
-
-    updateViewer(currentIndex);
-};
 
 function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
 
