@@ -348,8 +348,9 @@ function showLinks(linkId){
             card.style.cursor = "pointer";
 
             card.innerHTML =
-                '<div style="font-weight:bold;">' + (item.titel || 'foto') + '</div>' +
-                '<div style="font-size:11px;color:#666;">klik om te openen</div>';
+               card.innerHTML =
+    '<div style="font-weight:bold;">' + (item.titel || 'foto') + '</div>' +
+    '<div style="font-size:11px;color:#666;">klik om te openen en keer terug naar dit tabblad</div>';
 
             card.onclick = function(){
 
