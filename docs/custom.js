@@ -405,7 +405,7 @@ function showLinks(linkId){
                     counter.innerHTML = (index+1) + " / " + rows.length;
 
                     openBtn.onclick = function(){
-                        window.open(url, "_blank");
+                       window.location.href = url;
                     };
 
                     currentIndex = index;
