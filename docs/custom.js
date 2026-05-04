@@ -342,6 +342,36 @@ function showLinks(linkId){
 
             const img = document.createElement("img");
             img.src = cleanUrl;
+
+img.onerror = function(){
+
+    // vervang door kaartje als afbeelding geblokkeerd is
+    const card = document.createElement("div");
+
+    card.style.width = "150px";
+    card.style.height = "150px";
+    card.style.display = "flex";
+    card.style.flexDirection = "column";
+    card.style.justifyContent = "center";
+    card.style.alignItems = "center";
+    card.style.background = "#eee";
+    card.style.border = "2px solid #ccc";
+    card.style.cursor = "pointer";
+    card.style.fontSize = "12px";
+    card.style.textAlign = "center";
+
+    card.innerHTML = `
+        <div style="font-size:20px;">📷</div>
+        <div>${item.titel || 'foto'}</div>
+        <div style="font-size:10px;color:#666;">klik om te openen</div>
+    `;
+
+    card.onclick = function(){
+        window.open(cleanUrl, "_blank");
+    };
+
+    grid.replaceChild(card, img);
+};
             img.style.width = "150px";
             img.style.height = "150px";
             img.style.objectFit = "cover";
