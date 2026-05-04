@@ -342,7 +342,7 @@ function showLinks(linkId){
 
             const img = document.createElement("img");
             img.src = cleanUrl;
-        
+        }      
                      
 img.onerror = function(){
 
