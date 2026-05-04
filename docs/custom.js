@@ -350,22 +350,33 @@ function showLinks(linkId){
                 </div>
             `;
 
-          card.onclick = function(){
+       card.onclick = function(){
 
     const container = document.getElementById("galleryContent");
     container.innerHTML = "";
 
-    const frame = document.createElement("iframe");
+    const box = document.createElement("div");
 
-    frame.src = cleanUrl;
-    frame.style.width = "90vw";
-    frame.style.height = "90vh";
-    frame.style.border = "none";
-    frame.style.background = "white";
+    box.style.background = "white";
+    box.style.padding = "20px";
+    box.style.maxWidth = "600px";
+    box.style.boxShadow = "0 4px 12px rgba(0,0,0,0.5)";
+    box.style.textAlign = "center";
 
-    container.appendChild(frame);
+    const titel = item.titel ? item.titel : "link";
+
+    box.innerHTML =
+        '<div style="font-weight:bold;margin-bottom:10px;">' + titel + '</div>' +
+        '<div style="margin-bottom:15px;">Deze foto staat op een externe site</div>' +
+        '<button style="padding:8px 12px;cursor:pointer;">Open foto</button>';
+
+    box.querySelector("button").onclick = function(){
+        window.open(cleanUrl, "_blank");
+    };
+
+    container.appendChild(box);
 };
-
+            
             container.appendChild(card);
         });
 
