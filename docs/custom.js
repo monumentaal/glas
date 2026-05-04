@@ -342,8 +342,10 @@ function showLinks(linkId){
 
             const img = document.createElement("img");
             img.src = cleanUrl;
-        }      
-                     
+        }   
+    }              
+
+          
 img.onerror = function(){
 
     // vervang door kaartje als afbeelding geblokkeerd is
