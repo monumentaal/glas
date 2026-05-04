@@ -322,9 +322,11 @@ function showLinks(linkId){
         if(rows.length === 0) return;
 
         const container = document.getElementById("galleryContent");
+        if(!container) return;
+
         container.innerHTML = "";
 
-        // wrapper
+        // grid met thumbnails
         const grid = document.createElement("div");
         grid.style.display = "flex";
         grid.style.flexWrap = "wrap";
@@ -335,10 +337,9 @@ function showLinks(linkId){
 
             let cleanUrl = String(item.url || '').replace(/"/g,'');
 
-            // 🔥 fix voor beeldbank
+            // FIX beeldbank URL
             cleanUrl = cleanUrl.replace(/\/detail\/.*\/media\//, '/media/');
 
-            // thumbnail
             const img = document.createElement("img");
             img.src = cleanUrl;
             img.style.width = "150px";
@@ -348,102 +349,109 @@ function showLinks(linkId){
             img.style.border = "2px solid white";
             img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.4)";
 
-           img.onclick = function(){
+            img.onclick = function(){
 
-    let currentIndex = rows.indexOf(item);
+                let currentIndex = rows.indexOf(item);
 
-    const viewer = document.createElement("div");
-    viewer.style.position = "fixed";
-    viewer.style.top = "0";
-    viewer.style.left = "0";
-    viewer.style.width = "100%";
-    viewer.style.height = "100%";
-    viewer.style.background = "rgba(0,0,0,0.6)";
-    viewer.style.display = "flex";
-    viewer.style.flexDirection = "column";
-    viewer.style.justifyContent = "center";
-    viewer.style.alignItems = "center";
-    viewer.style.zIndex = "100000";
+                const viewer = document.createElement("div");
+                viewer.style.position = "fixed";
+                viewer.style.top = "0";
+                viewer.style.left = "0";
+                viewer.style.width = "100%";
+                viewer.style.height = "100%";
+                viewer.style.background = "rgba(0,0,0,0.5)";
+                viewer.style.display = "flex";
+                viewer.style.flexDirection = "column";
+                viewer.style.justifyContent = "center";
+                viewer.style.alignItems = "center";
+                viewer.style.zIndex = "100000";
 
-    const big = document.createElement("img");
-    big.style.maxWidth = "90%";
-    big.style.maxHeight = "80%";
-    big.style.boxShadow = "0 4px 12px rgba(0,0,0,0.6)";
-    big.style.border = "4px solid white";
+                const big = document.createElement("img");
+                big.style.maxWidth = "90%";
+                big.style.maxHeight = "80%";
+                big.style.boxShadow = "0 4px 12px rgba(0,0,0,0.6)";
+                big.style.border = "4px solid white";
 
-    const caption = document.createElement("div");
-    caption.style.color = "white";
-    caption.style.marginTop = "10px";
-    caption.style.fontSize = "16px";
+                const caption = document.createElement("div");
+                caption.style.color = "white";
+                caption.style.marginTop = "10px";
+                caption.style.fontSize = "16px";
 
-    function showImage(index){
+                function showImage(index){
 
-        const item = rows[index];
+                    const item = rows[index];
 
-        let url = String(item.url || '').replace(/"/g,'');
-        url = url.replace(/\/detail\/.*\/media\//, '/media/');
+                    let url = String(item.url || '').replace(/"/g,'');
+                    url = url.replace(/\/detail\/.*\/media\//, '/media/');
 
-        big.src = url;
-        caption.innerText = item.titel || "";
+                    big.src = url;
+                    caption.innerText = item.titel || "";
 
-        currentIndex = index;
-    }
+                    currentIndex = index;
+                }
 
-    // pijltjes
-    const prev = document.createElement("div");
-    prev.innerHTML = "◀";
-    prev.style.position = "absolute";
-    prev.style.left = "20px";
-    prev.style.fontSize = "40px";
-    prev.style.color = "white";
-    prev.style.cursor = "pointer";
+                // pijltje links
+                const prev = document.createElement("div");
+                prev.innerHTML = "◀";
+                prev.style.position = "absolute";
+                prev.style.left = "20px";
+                prev.style.fontSize = "40px";
+                prev.style.color = "white";
+                prev.style.cursor = "pointer";
 
-    const next = document.createElement("div");
-    next.innerHTML = "▶";
-    next.style.position = "absolute";
-    next.style.right = "20px";
-    next.style.fontSize = "40px";
-    next.style.color = "white";
-    next.style.cursor = "pointer";
+                // pijltje rechts
+                const next = document.createElement("div");
+                next.innerHTML = "▶";
+                next.style.position = "absolute";
+                next.style.right = "20px";
+                next.style.fontSize = "40px";
+                next.style.color = "white";
+                next.style.cursor = "pointer";
 
-    prev.onclick = function(e){
-        e.stopPropagation();
-        showImage((currentIndex - 1 + rows.length) % rows.length);
-    };
+                prev.onclick = function(e){
+                    e.stopPropagation();
+                    showImage((currentIndex - 1 + rows.length) % rows.length);
+                };
 
-    next.onclick = function(e){
-        e.stopPropagation();
-        showImage((currentIndex + 1) % rows.length);
-    };
+                next.onclick = function(e){
+                    e.stopPropagation();
+                    showImage((currentIndex + 1) % rows.length);
+                };
 
-    viewer.appendChild(prev);
-    viewer.appendChild(next);
-    viewer.appendChild(big);
-    viewer.appendChild(caption);
+                viewer.appendChild(prev);
+                viewer.appendChild(next);
+                viewer.appendChild(big);
+                viewer.appendChild(caption);
 
-    // sluiten
-    viewer.onclick = function(){
-        document.body.removeChild(viewer);
-    };
+                // sluiten bij klik
+                viewer.onclick = function(){
+                    document.body.removeChild(viewer);
+                    document.removeEventListener("keydown", escHandler);
+                };
 
-    // ESC sluiten
-    document.addEventListener("keydown", function esc(e){
-        if(e.key === "Escape"){
-            document.body.removeChild(viewer);
-            document.removeEventListener("keydown", esc);
-        }
-    });
+                // ESC sluiten
+                const escHandler = function(e){
+                    if(e.key === "Escape"){
+                        document.body.removeChild(viewer);
+                        document.removeEventListener("keydown", escHandler);
+                    }
+                };
 
-    document.body.appendChild(viewer);
+                document.addEventListener("keydown", escHandler);
 
-    showImage(currentIndex);
-};
+                document.body.appendChild(viewer);
+
+                showImage(currentIndex);
+            };
+
+            // 👇 BELANGRIJK
+            grid.appendChild(img);
+        });
 
         container.appendChild(grid);
         gallery.style.display = "flex";
     });
 }
-
 function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
 
 function fitSearchResults(){
