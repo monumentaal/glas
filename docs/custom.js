@@ -1,6 +1,6 @@
 
 setTimeout(function(){
-    alert("test create panel");
+    
     createInfoPanel();
 }, 2000);
 
