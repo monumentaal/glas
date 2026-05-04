@@ -319,7 +319,6 @@ function showLinks(linkId){
     .then(data => {
 
         const rows = data[String(linkId)] || [];
-
         if(rows.length === 0) return;
 
         const container = document.getElementById("galleryContent");
@@ -327,32 +326,34 @@ function showLinks(linkId){
 
         rows.forEach(function(item, i){
 
-            const img = document.createElement("img");
+            const frame = document.createElement("iframe");
 
             const cleanUrl = String(item.url || '').replace(/"/g,'');
 
-            img.src = cleanUrl;
-            img.style.maxWidth = "300px";
-            img.style.maxHeight = "300px";
-            img.style.position = "absolute";
-            img.style.top = (i * 20) + "px";
-            img.style.left = (i * 20) + "px";
-            img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.5)";
-            img.style.border = "3px solid white";
-            img.style.cursor = "pointer";
+            frame.src = cleanUrl;
+            frame.style.width = "500px";
+            frame.style.height = "400px";
+            frame.style.position = "absolute";
+            frame.style.top = (i * 30) + "px";
+            frame.style.left = (i * 30) + "px";
+            frame.style.border = "3px solid white";
+            frame.style.boxShadow = "0 4px 12px rgba(0,0,0,0.5)";
+            frame.style.background = "white";
 
             // klik = sluiten
-            img.onclick = function(){
+            frame.onclick = function(){
                 gallery.style.display = "none";
                 container.innerHTML = "";
             };
 
-            container.appendChild(img);
+            container.appendChild(frame);
         });
 
         gallery.style.display = "flex";
     });
 }
+
+
 function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
 
 function fitSearchResults(){
@@ -562,7 +563,7 @@ gallery.style.top = "0";
 gallery.style.left = "0";
 gallery.style.width = "100%";
 gallery.style.height = "100%";
-gallery.style.background = "rgba(0,0,0,0.7)";
+gallery.style.background = "rgba(0,0,0,0.3)";
 gallery.style.display = "none";
 gallery.style.zIndex = "99999";
 gallery.style.justifyContent = "center";
