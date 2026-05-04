@@ -324,62 +324,67 @@ function showLinks(linkId){
         const container = document.getElementById("galleryContent");
         container.innerHTML = "";
 
-        rows.forEach(function(item, i){
+        // wrapper
+        const grid = document.createElement("div");
+        grid.style.display = "flex";
+        grid.style.flexWrap = "wrap";
+        grid.style.gap = "10px";
+        grid.style.maxWidth = "900px";
 
-            const cleanUrl = String(item.url || '').replace(/"/g,'');
+        rows.forEach(function(item){
 
-            const card = document.createElement("div");
+            let cleanUrl = String(item.url || '').replace(/"/g,'');
 
-            card.style.width = "260px";
-            card.style.height = "120px";
-            card.style.position = "absolute";
-            card.style.top = (i * 25) + "px";
-            card.style.left = (i * 25) + "px";
-            card.style.background = "white";
-            card.style.border = "2px solid #ccc";
-            card.style.boxShadow = "0 4px 10px rgba(0,0,0,0.4)";
-            card.style.padding = "10px";
-            card.style.cursor = "pointer";
+            // 🔥 fix voor beeldbank
+            cleanUrl = cleanUrl.replace(/\/detail\/.*\/media\//, '/media/');
 
-            card.innerHTML = `
-                <div style="font-weight:bold;margin-bottom:6px;">
-                    ${item.titel || 'link'}
-                </div>
-                <div style="font-size:12px;color:#666;">
-                    klik om te openen
-                </div>
-            `;
+            // thumbnail
+            const img = document.createElement("img");
+            img.src = cleanUrl;
+            img.style.width = "150px";
+            img.style.height = "150px";
+            img.style.objectFit = "cover";
+            img.style.cursor = "pointer";
+            img.style.border = "2px solid white";
+            img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.4)";
 
-       card.onclick = function(){
+            // klik = groot tonen
+            img.onclick = function(){
 
-    const container = document.getElementById("galleryContent");
-    container.innerHTML = "";
+                const viewer = document.createElement("div");
 
-    const box = document.createElement("div");
+                viewer.style.position = "fixed";
+                viewer.style.top = "0";
+                viewer.style.left = "0";
+                viewer.style.width = "100%";
+                viewer.style.height = "100%";
+                viewer.style.background = "rgba(0,0,0,0.6)";
+                viewer.style.display = "flex";
+                viewer.style.justifyContent = "center";
+                viewer.style.alignItems = "center";
+                viewer.style.zIndex = "100000";
 
-    box.style.background = "white";
-    box.style.padding = "20px";
-    box.style.maxWidth = "600px";
-    box.style.boxShadow = "0 4px 12px rgba(0,0,0,0.5)";
-    box.style.textAlign = "center";
+                const big = document.createElement("img");
+                big.src = cleanUrl;
+                big.style.maxWidth = "90%";
+                big.style.maxHeight = "90%";
+                big.style.boxShadow = "0 4px 12px rgba(0,0,0,0.6)";
+                big.style.border = "4px solid white";
 
-    const titel = item.titel ? item.titel : "link";
+                viewer.appendChild(big);
 
-    box.innerHTML =
-        '<div style="font-weight:bold;margin-bottom:10px;">' + titel + '</div>' +
-        '<div style="margin-bottom:15px;">Deze foto staat op een externe site</div>' +
-        '<button style="padding:8px 12px;cursor:pointer;">Open foto</button>';
+                // klik = sluiten
+                viewer.onclick = function(){
+                    document.body.removeChild(viewer);
+                };
 
-    box.querySelector("button").onclick = function(){
-        window.open(cleanUrl, "_blank");
-    };
+                document.body.appendChild(viewer);
+            };
 
-    container.appendChild(box);
-};
-            
-            container.appendChild(card);
+            grid.appendChild(img);
         });
 
+        container.appendChild(grid);
         gallery.style.display = "flex";
     });
 }
