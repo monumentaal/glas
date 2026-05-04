@@ -366,122 +366,177 @@ img.onerror = function(){
         <div style="font-size:10px;color:#666;">klik om te openen</div>
     `;
 
-    card.onclick = function(){
-        window.open(cleanUrl, "_blank");
+card.onclick = function(){
+
+    let currentIndex = rows.indexOf(item);
+
+    const container = document.getElementById("galleryContent");
+    container.innerHTML = "";
+
+    const box = document.createElement("div");
+    box.style.width = "90vw";
+    box.style.height = "90vh";
+    box.style.background = "white";
+    box.style.display = "flex";
+    box.style.flexDirection = "column";
+    box.style.boxShadow = "0 4px 12px rgba(0,0,0,0.6)";
+    box.style.position = "relative";
+
+    // === TOPBAR ===
+    const topbar = document.createElement("div");
+    topbar.style.padding = "8px";
+    topbar.style.background = "#f0f0f0";
+    topbar.style.display = "flex";
+    topbar.style.justifyContent = "space-between";
+    topbar.style.alignItems = "center";
+
+    const backBtn = document.createElement("button");
+    backBtn.innerText = "⬅ terug";
+
+    const openBtn = document.createElement("button");
+    openBtn.innerText = "open pagina";
+
+    const counter = document.createElement("div");
+
+    topbar.appendChild(backBtn);
+    topbar.appendChild(counter);
+    topbar.appendChild(openBtn);
+
+    // === CONTENT ===
+    const content = document.createElement("div");
+    content.style.flex = "1";
+    content.style.display = "flex";
+    content.style.flexDirection = "column";
+    content.style.justifyContent = "center";
+    content.style.alignItems = "center";
+    content.style.textAlign = "center";
+
+    const title = document.createElement("div");
+    title.style.fontSize = "20px";
+    title.style.marginBottom = "10px";
+
+    const info = document.createElement("div");
+    info.style.fontSize = "13px";
+    info.style.color = "#666";
+
+    content.appendChild(title);
+    content.appendChild(info);
+
+    // === MINI THUMB STRIP ===
+    const strip = document.createElement("div");
+    strip.style.display = "flex";
+    strip.style.overflowX = "auto";
+    strip.style.gap = "6px";
+    strip.style.padding = "6px";
+    strip.style.background = "#eee";
+
+    function updateViewer(index){
+
+        const item = rows[index];
+        let cleanUrl = String(item.url || '').replace(/"/g,'');
+
+        title.innerText = item.titel || "foto";
+        info.innerText = "Klik op 'open pagina' om te bekijken";
+        counter.innerText = (index + 1) + " / " + rows.length;
+
+        openBtn.onclick = function(){
+            window.open(cleanUrl, "_blank");
+        };
+
+        currentIndex = index;
+
+        // highlight in strip
+        Array.from(strip.children).forEach((el,i)=>{
+            el.style.border = i === index ? "2px solid black" : "2px solid transparent";
+        });
+    }
+
+    // === STRIP vullen ===
+    rows.forEach((item, i)=>{
+        const thumb = document.createElement("div");
+        thumb.style.width = "50px";
+        thumb.style.height = "50px";
+        thumb.style.background = "#ccc";
+        thumb.style.cursor = "pointer";
+        thumb.style.display = "flex";
+        thumb.style.alignItems = "center";
+        thumb.style.justifyContent = "center";
+        thumb.innerText = i+1;
+
+        thumb.onclick = function(){
+            updateViewer(i);
+        };
+
+        strip.appendChild(thumb);
+    });
+
+    // === PIJLTJES ===
+    const prev = document.createElement("div");
+    prev.innerHTML = "◀";
+    prev.style.position = "absolute";
+    prev.style.left = "10px";
+    prev.style.top = "50%";
+    prev.style.fontSize = "40px";
+    prev.style.cursor = "pointer";
+
+    const next = document.createElement("div");
+    next.innerHTML = "▶";
+    next.style.position = "absolute";
+    next.style.right = "10px";
+    next.style.top = "50%";
+    next.style.fontSize = "40px";
+    next.style.cursor = "pointer";
+
+    prev.onclick = e => { e.stopPropagation(); updateViewer((currentIndex - 1 + rows.length) % rows.length); };
+    next.onclick = e => { e.stopPropagation(); updateViewer((currentIndex + 1) % rows.length); };
+
+    // === SWIPE (mobiel) ===
+    let startX = 0;
+
+    box.addEventListener("touchstart", e=>{
+        startX = e.touches[0].clientX;
+    });
+
+    box.addEventListener("touchend", e=>{
+        let endX = e.changedTouches[0].clientX;
+        if(endX - startX > 50){
+            updateViewer((currentIndex - 1 + rows.length) % rows.length);
+        }
+        if(startX - endX > 50){
+            updateViewer((currentIndex + 1) % rows.length);
+        }
+    });
+
+    // === KEYBOARD ===
+    const keyHandler = function(e){
+        if(e.key === "ArrowLeft") updateViewer((currentIndex - 1 + rows.length) % rows.length);
+        if(e.key === "ArrowRight") updateViewer((currentIndex + 1) % rows.length);
+        if(e.key === "Escape"){
+            document.removeEventListener("keydown", keyHandler);
+            showLinks(linkId);
+        }
     };
 
-    grid.replaceChild(card, img);
+    document.addEventListener("keydown", keyHandler);
+
+    // === BUTTONS ===
+    backBtn.onclick = function(){
+        document.removeEventListener("keydown", keyHandler);
+        showLinks(linkId);
+    };
+
+    // === OPBOUW ===
+    box.appendChild(topbar);
+    box.appendChild(content);
+    box.appendChild(strip);
+    box.appendChild(prev);
+    box.appendChild(next);
+
+    container.appendChild(box);
+
+    updateViewer(currentIndex);
 };
-            img.style.width = "150px";
-            img.style.height = "150px";
-            img.style.objectFit = "cover";
-            img.style.cursor = "pointer";
-            img.style.border = "2px solid white";
-            img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.4)";
 
-            img.onclick = function(){
-
-                let currentIndex = rows.indexOf(item);
-
-                const viewer = document.createElement("div");
-                viewer.style.position = "fixed";
-                viewer.style.top = "0";
-                viewer.style.left = "0";
-                viewer.style.width = "100%";
-                viewer.style.height = "100%";
-                viewer.style.background = "rgba(0,0,0,0.5)";
-                viewer.style.display = "flex";
-                viewer.style.flexDirection = "column";
-                viewer.style.justifyContent = "center";
-                viewer.style.alignItems = "center";
-                viewer.style.zIndex = "100000";
-
-                const big = document.createElement("img");
-                big.style.maxWidth = "90%";
-                big.style.maxHeight = "80%";
-                big.style.boxShadow = "0 4px 12px rgba(0,0,0,0.6)";
-                big.style.border = "4px solid white";
-
-                const caption = document.createElement("div");
-                caption.style.color = "white";
-                caption.style.marginTop = "10px";
-                caption.style.fontSize = "16px";
-
-                function showImage(index){
-
-                    const item = rows[index];
-
-                    let url = String(item.url || '').replace(/"/g,'');
-                    url = url.replace(/\/detail\/.*\/media\//, '/media/');
-
-                    big.src = url;
-                    caption.innerText = item.titel || "";
-
-                    currentIndex = index;
-                }
-
-                // pijltje links
-                const prev = document.createElement("div");
-                prev.innerHTML = "◀";
-                prev.style.position = "absolute";
-                prev.style.left = "20px";
-                prev.style.fontSize = "40px";
-                prev.style.color = "white";
-                prev.style.cursor = "pointer";
-
-                // pijltje rechts
-                const next = document.createElement("div");
-                next.innerHTML = "▶";
-                next.style.position = "absolute";
-                next.style.right = "20px";
-                next.style.fontSize = "40px";
-                next.style.color = "white";
-                next.style.cursor = "pointer";
-
-                prev.onclick = function(e){
-                    e.stopPropagation();
-                    showImage((currentIndex - 1 + rows.length) % rows.length);
-                };
-
-                next.onclick = function(e){
-                    e.stopPropagation();
-                    showImage((currentIndex + 1) % rows.length);
-                };
-
-                viewer.appendChild(prev);
-                viewer.appendChild(next);
-                viewer.appendChild(big);
-                viewer.appendChild(caption);
-
-                // sluiten bij klik
-                viewer.onclick = function(){
-                    document.body.removeChild(viewer);
-                    document.removeEventListener("keydown", escHandler);
-                };
-
-                // ESC sluiten
-                const escHandler = function(e){
-                    if(e.key === "Escape"){
-                        document.body.removeChild(viewer);
-                        document.removeEventListener("keydown", escHandler);
-                    }
-                };
-
-                document.addEventListener("keydown", escHandler);
-
-                document.body.appendChild(viewer);
-
-                showImage(currentIndex);
-            };
-
-            // 👇 BELANGRIJK
-            grid.appendChild(img);
-        });
-
-        container.appendChild(grid);
-        gallery.style.display = "flex";
-    });
-}
 function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
 
 function fitSearchResults(){
