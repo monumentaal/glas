@@ -313,21 +313,46 @@ function openPopup(feature,coord){
 }
 
 function showLinks(linkId){
- fetch(window.location.pathname.replace('index.html','')+'links.json')
- .then(r=>r.json())
- .then(data=>{
-   const rows = data[String(linkId)] || [];
-   const target = document.getElementById('extra-links-'+linkId);
-   if(!target) return;
-   let html='';
-   rows.forEach(item=>{
-     const cleanUrl = String(item.url||'').replace(/"/g,'');
-     html += '<div style="margin-top:4px;"><a href="'+cleanUrl+'" target="_blank">'+item.titel+'</a></div>';
-   });
-  target.innerHTML = html;;
- });
-}
 
+    fetch(window.location.pathname.replace('index.html','') + 'links.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(data => {
+
+        const rows = data[String(linkId)] || [];
+
+        if(rows.length === 0) return;
+
+        const container = document.getElementById("galleryContent");
+        container.innerHTML = "";
+
+        rows.forEach(function(item, i){
+
+            const img = document.createElement("img");
+
+            const cleanUrl = String(item.url || '').replace(/"/g,'');
+
+            img.src = cleanUrl;
+            img.style.maxWidth = "300px";
+            img.style.maxHeight = "300px";
+            img.style.position = "absolute";
+            img.style.top = (i * 20) + "px";
+            img.style.left = (i * 20) + "px";
+            img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.5)";
+            img.style.border = "3px solid white";
+            img.style.cursor = "pointer";
+
+            // klik = sluiten
+            img.onclick = function(){
+                gallery.style.display = "none";
+                container.innerHTML = "";
+            };
+
+            container.appendChild(img);
+        });
+
+        gallery.style.display = "flex";
+    });
+}
 function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
 
 function fitSearchResults(){
@@ -529,3 +554,34 @@ function clearPreviousHighlights() {
         });
     });
 }
+const gallery = document.createElement('div');
+
+gallery.id = "photoGallery";
+gallery.style.position = "fixed";
+gallery.style.top = "0";
+gallery.style.left = "0";
+gallery.style.width = "100%";
+gallery.style.height = "100%";
+gallery.style.background = "rgba(0,0,0,0.7)";
+gallery.style.display = "none";
+gallery.style.zIndex = "99999";
+gallery.style.justifyContent = "center";
+gallery.style.alignItems = "center";
+
+gallery.innerHTML = `
+    <div id="galleryContent" style="
+        position:relative;
+        max-width:90%;
+        max-height:90%;
+    "></div>
+`;
+
+document.body.appendChild(gallery);
+
+// sluiten bij klik buiten
+gallery.onclick = function(e){
+    if(e.target.id === "photoGallery"){
+        gallery.style.display = "none";
+        document.getElementById("galleryContent").innerHTML = "";
+    }
+};
