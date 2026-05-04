@@ -1,4 +1,4 @@
-alert("custom.js geladen");
+
 setTimeout(function(){
     alert("test create panel");
     createInfoPanel();
