@@ -312,7 +312,7 @@ function openPopup(feature,coord){
  addShareButtonToPopup();
 }
 
-function showLinks(linkId){
+ffunction showLinks(linkId){
 
     fetch(window.location.pathname.replace('index.html','') + 'links.json?v=' + Date.now())
     .then(r => r.json())
@@ -326,33 +326,40 @@ function showLinks(linkId){
 
         rows.forEach(function(item, i){
 
-            const frame = document.createElement("iframe");
-
             const cleanUrl = String(item.url || '').replace(/"/g,'');
 
-            frame.src = cleanUrl;
-            frame.style.width = "500px";
-            frame.style.height = "400px";
-            frame.style.position = "absolute";
-            frame.style.top = (i * 30) + "px";
-            frame.style.left = (i * 30) + "px";
-            frame.style.border = "3px solid white";
-            frame.style.boxShadow = "0 4px 12px rgba(0,0,0,0.5)";
-            frame.style.background = "white";
+            const card = document.createElement("div");
 
-            // klik = sluiten
-            frame.onclick = function(){
-                gallery.style.display = "none";
-                container.innerHTML = "";
+            card.style.width = "260px";
+            card.style.height = "120px";
+            card.style.position = "absolute";
+            card.style.top = (i * 25) + "px";
+            card.style.left = (i * 25) + "px";
+            card.style.background = "white";
+            card.style.border = "2px solid #ccc";
+            card.style.boxShadow = "0 4px 10px rgba(0,0,0,0.4)";
+            card.style.padding = "10px";
+            card.style.cursor = "pointer";
+
+            card.innerHTML = `
+                <div style="font-weight:bold;margin-bottom:6px;">
+                    ${item.titel || 'link'}
+                </div>
+                <div style="font-size:12px;color:#666;">
+                    klik om te openen
+                </div>
+            `;
+
+            card.onclick = function(){
+                window.open(cleanUrl, "_blank");
             };
 
-            container.appendChild(frame);
+            container.appendChild(card);
         });
 
         gallery.style.display = "flex";
     });
 }
-
 
 function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
 
