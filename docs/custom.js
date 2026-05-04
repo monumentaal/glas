@@ -312,7 +312,7 @@ function openPopup(feature,coord){
  addShareButtonToPopup();
 }
 
-ffunction showLinks(linkId){
+function showLinks(linkId){
 
     fetch(window.location.pathname.replace('index.html','') + 'links.json?v=' + Date.now())
     .then(r => r.json())
