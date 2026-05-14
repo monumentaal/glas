@@ -272,7 +272,7 @@ function openPopup(feature,coord){
 
  for(let key in props){
 
-   if(['geometry','id','plaats','gebouw','kerknaam','titel'].includes(key)) continue;
+   if(['geometry','plaats','gebouw','kerknaam','titel'].includes(key)) continue;
 
    let val = props[key];
 
