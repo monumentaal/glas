@@ -252,12 +252,14 @@ function openPopup(feature,coord){
  overlay.setPosition(undefined);
 
  let props = feature.getProperties();
-
+ 
+ let id = props.id || '';
  let plaats = props.plaats || '';
  let gebouw = props.gebouw || props.kerknaam || '';
  let titel  = props.titel || '';
 
  let kop =
+   (id) ? id + :
    (plaats && gebouw) ? plaats + ', ' + gebouw :
    (plaats && titel)  ? plaats + ', ' + titel :
    (plaats || gebouw || titel || 'locatie');
