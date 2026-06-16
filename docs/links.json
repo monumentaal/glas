@@ -1,4 +1,5 @@
 
+Excel naar links.json
 
 {
   "1": [
@@ -275,16 +276,128 @@
   ],
   "17": [
     {
-      "titel": "foto 1",
+      "titel": "totaal",
       "url": "https://www.gervaniersel.nl/werken/glas/assenbijgewerkt1/"
     },
     {
-      "titel": "foto 2",
+      "titel": "vanaf links",
       "url": "https://www.gervaniersel.nl/werken/glas/assenbijgewerkt2/"
     },
     {
-      "titel": "foto 3",
+      "titel": "vanaf rechts",
       "url": "https://www.gervaniersel.nl/werken/glas/assenbijgewerkt3/"
+    }
+  ],
+  "18": [
+    {
+      "titel": "jonas en de walvis",
+      "url": "https://www.gervaniersel.nl/werken/glas/antwoordkerkglas1bijgewerkt/"
+    },
+    {
+      "titel": "duif",
+      "url": "https://www.gervaniersel.nl/werken/glas/antwoordkerkduifbewerkt/"
+    },
+    {
+      "titel": "detail",
+      "url": "https://www.gervaniersel.nl/werken/glas/antwoorddetailbijgewerkt/"
+    },
+    {
+      "titel": "sloop",
+      "url": "https://gereformeerdekerken.info/2017/12/06/antwoordkerk-hoogvliet-wordt-gesloopt/"
+    }
+  ],
+  "19": [
+    {
+      "titel": "jacobs worsteling",
+      "url": "https://www.gervaniersel.nl/werken/wandschilderingen/andreaskerkraam2bijgewerkt/"
+    },
+    {
+      "titel": "doop in de jordaan",
+      "url": "https://www.gervaniersel.nl/werken/wandschilderingen/andreaskerkraam1bijgewerkt/"
+    }
+  ],
+  "20": [
+    {
+      "titel": "totaal",
+      "url": "https://www.gervaniersel.nl/werken/glas/apeldoorn2bijgewerkt/"
+    },
+    {
+      "titel": "links",
+      "url": "https://www.gervaniersel.nl/schoolapeldoornbijgesneden/"
+    },
+    {
+      "titel": "rechts",
+      "url": "https://www.gervaniersel.nl/werken/glas/apeldoorn1bijgewerkt/"
+    }
+  ],
+  "21": [
+    {
+      "titel": "detail",
+      "url": "https://www.gervaniersel.nl/wp-content/uploads/2015/12/hoogheemraadschap1bijgewerkt.jpg"
+    },
+    {
+      "titel": "totaal",
+      "url": "https://www.gervaniersel.nl/wp-content/uploads/2015/12/hoogheemraadschap2bijgewerkt.jpg"
+    },
+    {
+      "titel": "van buiten",
+      "url": "https://www.gervaniersel.nl/wp-content/uploads/2015/12/HoogheemrRKDbijgewerkt.jpg"
+    }
+  ],
+  "22": [
+    {
+      "titel": "van buiten",
+      "url": "https://www.gervaniersel.nl/werken/glas/heuvelbuitenbijgewerkt/"
+    },
+    {
+      "titel": "detail",
+      "url": "https://www.gervaniersel.nl/werken/glas/heuveljuli2bijgewerkt/"
+    },
+    {
+      "titel": "binnen met Ger van Iersel",
+      "url": "https://www.gervaniersel.nl/werken/glas/pa-bij-de-heuvel/"
+    }
+  ],
+  "23": [
+    {
+      "titel": "raam 1 de moeder",
+      "url": "https://www.youtube.com/watch?v=4y9RaEWeayM"
+    },
+    {
+      "titel": "raam 2 de liefde",
+      "url": "https://www.youtube.com/watch?v=AL6MsTn6q08"
+    },
+    {
+      "titel": "raam 3 de identiteit",
+      "url": "https://www.youtube.com/watch?v=k2FmZewMgM0"
+    },
+    {
+      "titel": "raam 4 het huwelijk",
+      "url": "https://www.youtube.com/watch?v=unArbJX_Xls"
+    },
+    {
+      "titel": "raam 5 schepping",
+      "url": "https://www.youtube.com/watch?v=SQskD_75oM4"
+    },
+    {
+      "titel": "raam 6 de arbeid",
+      "url": "https://www.youtube.com/watch?v=tJrY9LCAJ3I"
+    },
+    {
+      "titel": "raam 7 dood",
+      "url": "https://www.youtube.com/watch?v=M3grXXRuJzg"
+    },
+    {
+      "titel": "raam 8 de kerk",
+      "url": "https://www.youtube.com/watch?v=LyTx2ywMnZw"
+    },
+    {
+      "titel": "raam 9 de natuur",
+      "url": "https://www.youtube.com/watch?v=M2yPHXwx1wA"
+    },
+    {
+      "titel": "raam 10 monarchie",
+      "url": "https://www.youtube.com/watch?v=R9JOn22ojkU"
     }
   ]
 }
