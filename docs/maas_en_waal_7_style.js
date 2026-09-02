@@ -1,7 +1,7 @@
 var size = 0;
 var placement = 'point';
 
-var style_kerkfotografie_5 = function(feature, resolution){
+var style_maas_en_waal_7 = function(feature, resolution){
     var context = {
         feature: feature,
         variables: {}
@@ -23,8 +23,8 @@ var style_kerkfotografie_5 = function(feature, resolution){
         labelText = String("");
     }
     var style = [ new ol.style.Style({
-        image: new ol.style.Circle({radius: 4.0 + size,
-            displacement: [0, 0], stroke: new ol.style.Stroke({color: 'rgba(50,87,128,1.0)', lineDash: null, lineCap: 'butt', lineJoin: 'miter', width: 1.52}), fill: new ol.style.Fill({color: 'rgba(178,223,138,1.0)'})}),
+        image: new ol.style.Circle({radius: 6.0 + size,
+            displacement: [0, 0], stroke: new ol.style.Stroke({color: 'rgba(35,35,35,1.0)', lineDash: null, lineCap: 'butt', lineJoin: 'miter', width: 0.0}), fill: new ol.style.Fill({color: 'rgba(243,166,178,1.0)'})}),
         text: createTextStyle(feature, resolution, labelText, labelFont,
                               labelFill, placement, bufferColor,
                               bufferWidth, textAlign, offsetX, offsetY, overflow, repeat)
