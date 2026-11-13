@@ -1,3 +1,4 @@
+
 name: Geocode new locations
 
 on:
@@ -16,20 +17,22 @@ jobs:
 
       - name: Write test feature
         run: |
-          echo 'var json_community = {
-             "type": "FeatureCollection",
-             "features": [
-          {
-          "type": "Feature",
-          "properties": {
-            "name": "Test locatie",
-            "url": "https://example.com",
-            "description": "test"
-          },
-          "geometry": {
-            "type": "Point",
-            "coordinates": [4.90, 52.37]
-          }
-        }
-      ]
-    };' > docs/data/community.js
+          cat > docs/data/community.js <<'EOF'
+          var json_community = {
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {
+                  "name": "Test locatie",
+                  "url": "https://example.com",
+                  "description": "test"
+                },
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [4.90, 52.37]
+                }
+              }
+            ]
+          };
+          EOF
