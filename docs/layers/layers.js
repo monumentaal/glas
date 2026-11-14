@@ -182,7 +182,7 @@ lyr_kerkfotografie_5.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit',
 lyr_mijnstreek_6.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', });
 lyr_maas_en_waal_7.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'kerk': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', });
 lyr_oostbrabant_8.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': '', 'link': '', 'trefwoord': '', 'link_id': '', });
-lyr_beeldbankRCE_9.set('fieldImages', {'id': 'TextEdit', 'paats': 'TextEdit', 'adres': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': 'TextEdit', 'link_id': 'TextEdit', 'plaats': '', });
+lyr_beeldbankRCE_9.set('fieldImages', {'id': 'TextEdit', 'paats': 'TextEdit', 'adres': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': 'TextEdit', 'link_id': 'TextEdit', 'plaats': 'TextEdit', });
 lyr_limburg_10.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', });
 lyr_pers_1.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'gebouw': 'no label', 'link': 'no label', 'trefwoord': 'no label', 'link_id': 'no label', });
 lyr_webpaginas_2.set('fieldLabels', {'id': 'no label', 'plaats': 'no label', 'link': 'no label', 'gebouw': 'no label', 'extra': 'no label', 'trefwoord': 'no label', 'link_id': 'no label', });
