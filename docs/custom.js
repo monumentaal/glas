@@ -1,9 +1,6 @@
-
 setTimeout(function(){
-    
     createInfoPanel();
 }, 2000);
-
 
 const popupStyle = document.createElement('style');
 popupStyle.innerHTML = `
@@ -17,19 +14,16 @@ let searchResults = [];
 
 function startApp(){
 
-    // wacht tot map bestaat
     if(typeof map === 'undefined' || !map.getView){
         setTimeout(startApp, 500);
         return;
     }
 
-    // wacht tot layers geladen zijn
     if(typeof layersList === 'undefined' || layersList.length === 0){
         setTimeout(startApp, 500);
         return;
     }
 
-    // wacht tot er echt features zijn (BELANGRIJK)
     let hasFeatures = false;
 
     layersList.forEach(function(layer){
@@ -45,13 +39,13 @@ function startApp(){
         return;
     }
 
-    // ===== PAS HIER START JE APP =====
-
     createInfoPanel();
     bindSearch();
 
     map.on('singleclick', function(evt){
-        let feature = map.forEachFeatureAtPixel(evt.pixel, f=>f, {hitTolerance:10});
+        let feature = map.forEachFeatureAtPixel(
+            evt.pixel, f=>f, {hitTolerance:10}
+        );
         if(feature) openPopup(feature, evt.coordinate);
     });
 
@@ -69,71 +63,266 @@ function startApp(){
     setTimeout(openSharedSearch,2500);
 }
 
-// start proces
 startApp();
+
 function openSharedLocation(){
- const params = new URLSearchParams(window.location.search);
- const id = params.get('id');
- if(!id) return;
- layersList.forEach(function(layer){
-   if(!layer.getSource) return;
-   let source = layer.getSource();
-   if(!source.getFeatures) return;
-   source.getFeatures().forEach(function(f){
-     if(String(f.get('id')) !== String(id)) return;
-     let geom = f.getGeometry();
-     let coord = geom.getType()==='Point' ? geom.getCoordinates() : ol.extent.getCenter(geom.getExtent());
-     map.getView().animate({center:coord,zoom:18,duration:800});
-     setTimeout(function(){ openPopup(f,coord); },900);
-   });
- });
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if(!id) return;
+
+    layersList.forEach(function(layer){
+        if(!layer.getSource) return;
+        let source = layer.getSource();
+        if(!source.getFeatures) return;
+
+        source.getFeatures().forEach(function(f){
+            if(String(f.get('id')) !== String(id)) return;
+
+            let geom = f.getGeometry();
+            let coord = geom.getType()==='Point'
+                ? geom.getCoordinates()
+                : ol.extent.getCenter(geom.getExtent());
+
+            map.getView().animate({
+                center:coord,
+                zoom:18,
+                duration:800
+            });
+
+            setTimeout(function(){
+                openPopup(f,coord);
+            },900);
+        });
+    });
 }
 
 function createInfoPanel(){
- if(document.querySelector('.info-panel')) return;
- let div=document.createElement('div');
- div.className='info-panel';
- div.style.cssText='position:absolute;top:10px;left:10px;z-index:9999;background:white;padding:10px;width:320px;box-shadow:0 2px 8px rgba(0,0,0,0.3)';
- 
- div.innerHTML = `
-  <div class="info-header"><b>monumentaal glas op de kaart</b></div>
-  <div class="info-content" style="display:block; margin-top:10px;">
-    <div>Zoek:</div>
-    <input type="text" id="searchBox" placeholder="Zoek..." style="width:100%;padding:6px;">
-    <div style="margin-top:10px; display:flex; gap:5px;">
-       <button onclick="searchNearby()" style="flex:1; cursor:pointer;">📍 In de buurt (10km)</button>
-    </div>
-    <div id="searchResults" style="margin-top:8px;"></div>
-    <div style="margin-top:8px;">Klik op een marker voor informatie.</div>
-    <div style="margin-top:10px;"><button onclick="showInfo()">📘 Toelichting</button></div>
-  </div>`;
- 
- document.getElementById('map').appendChild(div);
+
+    if(document.querySelector('.info-panel')) return;
+
+    let div=document.createElement('div');
+    div.className='info-panel';
+    div.style.cssText='position:absolute;top:10px;left:10px;z-index:9999;background:white;padding:10px;width:320px;box-shadow:0 2px 8px rgba(0,0,0,0.3)';
+
+    div.innerHTML = `
+        <div class="info-header"><b>monumentaal glas op de kaart</b></div>
+        <div class="info-content" style="display:block; margin-top:10px;">
+            <div>Zoek:</div>
+            <input type="text" id="searchBox" placeholder="Zoek..." style="width:100%;padding:6px;">
+            <div style="margin-top:10px; display:flex; gap:5px;">
+                <button onclick="searchNearby()" style="flex:1; cursor:pointer;">📍 In de buurt (10km)</button>
+            </div>
+            <div id="searchResults" style="margin-top:8px;"></div>
+            <div style="margin-top:8px;">Klik op een marker voor informatie.</div>
+            <div style="margin-top:10px;"><button onclick="showInfo()">📘 Toelichting</button></div>
+        </div>`;
+
+    document.getElementById('map').appendChild(div);
 }
 
 function bindSearch(){
- clearPreviousHighlights();
- let searchBox=document.getElementById('searchBox'); if(!searchBox) return;
- searchBox.addEventListener('keydown', function(e){
-   if(e.key!=='Enter') return;
-   let query=this.value.toLowerCase().trim();
-   searchResults=[];
-   layersList.forEach(function(layer){
-     if(!layer.getSource) return; let source=layer.getSource(); if(!source.getFeatures) return;
-     source.getFeatures().forEach(function(f){ searchFeature(f,query); if(f.get('features')) f.get('features').forEach(inner=>searchFeature(inner,query)); });
-   });
-   showResultsList();
-   if(searchResults.length > 0){
-    highlightSearchResults();
-    fitSearchResults();
-   }
- });
+
+    clearPreviousHighlights();
+
+    let searchBox=document.getElementById('searchBox');
+    if(!searchBox) return;
+
+    searchBox.addEventListener('keydown', function(e){
+
+        if(e.key!=='Enter') return;
+
+        let query=this.value.toLowerCase().trim();
+        searchResults=[];
+
+        layersList.forEach(function(layer){
+
+            if(!layer.getSource) return;
+
+            let source=layer.getSource();
+            if(!source.getFeatures) return;
+
+            source.getFeatures().forEach(function(f){
+                searchFeature(f,query);
+
+                if(f.get('features')){
+                    f.get('features').forEach(inner=>searchFeature(inner,query));
+                }
+            });
+        });
+
+        showResultsList();
+
+        if(searchResults.length > 0){
+            highlightSearchResults();
+            fitSearchResults();
+        }
+    });
 }
 
 function searchFeature(f,query){
- let props=f.getProperties();
- for(let key in props){ if(key==='geometry') continue; let val=props[key]; if(val==null||val==='') continue; if(String(val).toLowerCase().includes(query)){ searchResults.push(f); break; }}
+
+    let props=f.getProperties();
+
+    for(let key in props){
+        if(key==='geometry') continue;
+
+        let val=props[key];
+
+        if(val==null || val==='') continue;
+
+        if(String(val).toLowerCase().includes(query)){
+            searchResults.push(f);
+            break;
+        }
+    }
 }
+
+
+/* =================================================
+   NIEUW: SYMBOOL VAN DE BETREFFENDE QGIS-LAAG
+   ================================================= */
+
+function getLayerSymbol(feature){
+
+    let foundLayer = null;
+
+    if(typeof layersList === 'undefined'){
+        return '<span style="color:#777;">●</span>';
+    }
+
+    layersList.forEach(function(layer){
+
+        if(foundLayer || !layer.getSource) return;
+
+        let source = layer.getSource();
+
+        if(!source || !source.getFeatures) return;
+
+        source.getFeatures().forEach(function(item){
+
+            if(foundLayer) return;
+
+            if(item === feature){
+                foundLayer = layer;
+                return;
+            }
+
+            let children = item.get && item.get('features');
+
+            if(children && children.indexOf(feature) !== -1){
+                foundLayer = layer;
+            }
+        });
+    });
+
+    if(!foundLayer){
+        return '<span style="color:#777;">●</span>';
+    }
+
+    try {
+
+        let styleFunction = foundLayer.getStyleFunction();
+        let resolution = map.getView().getResolution();
+
+        let styles = styleFunction
+            ? styleFunction(feature, resolution)
+            : foundLayer.getStyle();
+
+        if(!Array.isArray(styles)){
+            styles = styles ? [styles] : [];
+        }
+
+        for(let i = 0; i < styles.length; i++){
+
+            let style = styles[i];
+            if(!style) continue;
+
+            let imageStyle = style.getImage
+                ? style.getImage()
+                : null;
+
+            if(imageStyle){
+
+                if(imageStyle.getSrc && imageStyle.getSrc()){
+
+                    return '<img src="' + imageStyle.getSrc() +
+                        '" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px;">';
+                }
+
+                let fill = imageStyle.getFill
+                    ? imageStyle.getFill()
+                    : null;
+
+                let stroke = imageStyle.getStroke
+                    ? imageStyle.getStroke()
+                    : null;
+
+                let fillColor = fill && fill.getColor
+                    ? fill.getColor()
+                    : '#888888';
+
+                let strokeColor = stroke && stroke.getColor
+                    ? stroke.getColor()
+                    : '#555555';
+
+                let strokeWidth = stroke && stroke.getWidth
+                    ? stroke.getWidth()
+                    : 1;
+
+                let radius = imageStyle.getRadius
+                    ? imageStyle.getRadius()
+                    : 6;
+
+                if(Array.isArray(fillColor)){
+                    fillColor = 'rgba(' + fillColor.join(',') + ')';
+                }
+
+                if(Array.isArray(strokeColor)){
+                    strokeColor = 'rgba(' + strokeColor.join(',') + ')';
+                }
+
+                return '<span style="display:inline-block;width:' +
+                    Math.max(8, radius * 2) +
+                    'px;height:' +
+                    Math.max(8, radius * 2) +
+                    'px;border-radius:50%;background:' +
+                    fillColor +
+                    ';border:' +
+                    strokeWidth +
+                    'px solid ' +
+                    strokeColor +
+                    ';vertical-align:middle;margin-right:4px;"></span>';
+            }
+
+            let layerFill = style.getFill
+                ? style.getFill()
+                : null;
+
+            if(layerFill && layerFill.getColor){
+
+                let color = layerFill.getColor();
+
+                if(Array.isArray(color)){
+                    color = 'rgba(' + color.join(',') + ')';
+                }
+
+                return '<span style="display:inline-block;width:12px;height:12px;background:' +
+                    color +
+                    ';vertical-align:middle;margin-right:4px;"></span>';
+            }
+        }
+
+    } catch(e){
+        console.log('Laagsymbool kon niet worden opgehaald:', e);
+    }
+
+    return '<span style="color:#777;">●</span>';
+}
+
+
+/* =================================================
+   ZOEKRESULTATEN TONEN
+   ================================================= */
 
 function showResultsList(){
 
@@ -148,6 +337,7 @@ function showResultsList(){
     }
 
     searchResults.sort(function(a,b){
+
         let naamA =
             (a.get('plaats') || '') + ' ' +
             (a.get('gebouw') || a.get('kerk') || a.get('titel') || '');
@@ -162,14 +352,12 @@ function showResultsList(){
     let html = `
         <div style="border:1px solid #ccc;background:#fff;padding:8px;margin-top:8px;max-height:340px;overflow-y:auto;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            
-               <div>
-                <b>${searchResults.length} resultaten</b>
-                 <button onclick="shareSearchResults()" style="margin-left:8px;">
-                 🔗 Deel
-                </button>
-               </div>
-                
+                <div>
+                    <b>${searchResults.length} resultaten</b>
+                    <button onclick="shareSearchResults()" style="margin-left:8px;">
+                        🔗 Deel
+                    </button>
+                </div>
                 <button onclick="document.getElementById('searchResults').innerHTML=''">✖</button>
             </div>
     `;
@@ -180,7 +368,8 @@ function showResultsList(){
         let gebouw = f.get('gebouw') || f.get('kerk') || f.get('titel') || '';
         let tekst = plaats + (gebouw ? ', ' + gebouw : '');
 
-        let symbool = '*';
+        // Hier wordt het laagsymbool opgehaald
+        let symbool = getLayerSymbol(f);
 
         html += `
             <div style="margin:5px 0;">
@@ -195,7 +384,6 @@ function showResultsList(){
 
     box.innerHTML = html;
 }
-
 
 function zoomToResult(i){
 
@@ -227,97 +415,115 @@ function zoomToResult(i){
     }, 1600);
 }
 
-function selectSearchResult(i){ zoomToResult(i); return false; }
+function selectSearchResult(i){
+    zoomToResult(i);
+    return false;
+}
 
 function showInfo(){
- let old=document.getElementById('infoWindow'); if(old) old.remove();
- let box=document.createElement('div'); 
- box.id='infoWindow'; 
- box.style.cssText='position:fixed;top:5%;left:10%;width:80%;height:90%;background:white;border:1px solid #999;padding:15px;z-index:9999;overflow-y:auto';
- box.innerHTML=`<div style="text-align:right;"><button onclick="document.getElementById('infoWindow').remove()">✖ Sluiten</button></div><div id="infoContent">Laden...</div>`;
- document.body.appendChild(box);
- fetch(window.location.pathname.replace('index.html','')+'info.html').then(r=>r.text()).then(html=>{document.getElementById('infoContent').innerHTML=html;});
+
+    let old=document.getElementById('infoWindow');
+    if(old) old.remove();
+
+    let box=document.createElement('div');
+    box.id='infoWindow';
+
+    box.style.cssText='position:fixed;top:5%;left:10%;width:80%;height:90%;background:white;border:1px solid #999;padding:15px;z-index:9999;overflow-y:auto';
+
+    box.innerHTML=`
+        <div style="text-align:right;">
+            <button onclick="document.getElementById('infoWindow').remove()">✖ Sluiten</button>
+        </div>
+        <div id="infoContent">Laden...</div>`;
+
+    document.body.appendChild(box);
+
+    fetch(window.location.pathname.replace('index.html','')+'info.html')
+        .then(r=>r.text())
+        .then(html=>{
+            document.getElementById('infoContent').innerHTML=html;
+        });
 }
 
 function openPopup(feature,coord){
 
- lastClickedFeature = feature;
+    lastClickedFeature = feature;
 
- let overlay = map.getOverlays().getArray()[0];
- let content = document.getElementById('popup-content');
+    let overlay = map.getOverlays().getArray()[0];
+    let content = document.getElementById('popup-content');
 
- if(!overlay || !content) return;
+    if(!overlay || !content) return;
 
- content.innerHTML = '';
- overlay.setPosition(undefined);
+    content.innerHTML = '';
+    overlay.setPosition(undefined);
 
- let props = feature.getProperties();
- 
+    let props = feature.getProperties();
 
- let plaats = props.plaats || '';
- let gebouw = props.gebouw || props.kerk || '';
- let titel  = props.titel || '';
+    let plaats = props.plaats || '';
+    let gebouw = props.gebouw || props.kerk || '';
+    let titel  = props.titel || '';
 
- let kop =
-   
-   (plaats && gebouw) ? plaats + ', ' + gebouw :
-   (plaats && titel)  ? plaats + ', ' + titel :
-   (plaats || gebouw || titel || 'locatie');
+    let kop =
+        (plaats && gebouw) ? plaats + ', ' + gebouw :
+        (plaats && titel)  ? plaats + ', ' + titel :
+        (plaats || gebouw || titel || 'locatie');
 
- let html = `
-   <div style="font-size:18px;font-weight:bold;margin-bottom:10px;">
-     ${kop}
-   </div>
- `;
-
- for(let key in props){
-
-   if(['geometry','plaats','gebouw','kerk','titel'].includes(key)) continue;
-
-   let val = props[key];
-
-   if(val === null || val === '' || val === undefined || val === 'null') continue;
-
-   // gewone link
-   if(key === 'link' || key === 'bestand'){
-      html += `
-        <div style="margin:6px 0;">
-          <a href="${val}" target="_blank">
-            <u>link naar informatie</u>
-          </a>
+    let html = `
+        <div style="font-size:18px;font-weight:bold;margin-bottom:10px;">
+            ${kop}
         </div>
-      `;
-      continue;
-   }
+    `;
 
-   // extra links via links.json
-   if(key === 'link_id'){
+    for(let key in props){
 
-      if(val === 0 || val === '0') continue;
+        if(['geometry','plaats','gebouw','kerk','titel'].includes(key)) continue;
 
-      html += `
-        <div id="extra-links-${val}" style="margin-top:6px;">
-          <a href="#" onclick="showLinks('${val}'); return false;">
-            <u>nog meer informatie</u>
-          </a>
-        </div>
-      `;
-      continue;
-   }
+        let val = props[key];
 
-   // gewone velden
-   html += `<div style="margin-top:4px;">${val}</div>`;
- }
+        if(val === null || val === '' || val === undefined || val === 'null') continue;
 
- content.innerHTML = html;
- overlay.setPosition(coord);
- addShareButtonToPopup();
+        if(key === 'link' || key === 'bestand'){
+
+            html += `
+                <div style="margin:6px 0;">
+                    <a href="${val}" target="_blank">
+                        <u>link naar informatie</u>
+                    </a>
+                </div>
+            `;
+
+            continue;
+        }
+
+        if(key === 'link_id'){
+
+            if(val === 0 || val === '0') continue;
+
+            html += `
+                <div id="extra-links-${val}" style="margin-top:6px;">
+                    <a href="#" onclick="showLinks('${val}'); return false;">
+                        <u>nog meer informatie</u>
+                    </a>
+                </div>
+            `;
+
+            continue;
+        }
+
+        html += `<div style="margin-top:4px;">${val}</div>`;
+    }
+
+    content.innerHTML = html;
+    overlay.setPosition(coord);
+    addShareButtonToPopup();
 }
 
 function showLinks(linkId){
 
     fetch(window.location.pathname.replace('index.html','') + 'links.json?v=' + Date.now())
-    .then(function(r){ return r.json(); })
+    .then(function(r){
+        return r.json();
+    })
     .then(function(data){
 
         var rows = data[String(linkId)] || [];
@@ -354,7 +560,6 @@ function showLinks(linkId){
                 '</div>' +
                 '<div style="font-size:11px;color:#666;">klik om te openen en keer terug naar dit tabblad</div>';
 
-            // 👉 DIRECT openen (geen tussenstap meer)
             card.onclick = function(){
                 window.open(cleanUrl, "_blank", "noopener");
             };
@@ -367,8 +572,32 @@ function showLinks(linkId){
     });
 }
 
+function addShareButtonToPopup(){
 
-function addShareButtonToPopup(){ let popup=document.getElementById('popup-content'); if(!popup||!lastClickedFeature) return; if(popup.querySelector('.share-btn')) return; let id=lastClickedFeature.get('id'); if(!id) return; let btn=document.createElement('button'); btn.className='share-btn'; btn.innerText='🔗 deel deze locatie'; btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer'; btn.onclick=function(){ let url=window.location.origin+window.location.pathname+'?id='+id; navigator.clipboard.writeText(url).then(()=>alert('Link staat op klembord')).catch(()=>alert(url));}; popup.appendChild(btn); }
+    let popup=document.getElementById('popup-content');
+
+    if(!popup || !lastClickedFeature) return;
+    if(popup.querySelector('.share-btn')) return;
+
+    let id=lastClickedFeature.get('id');
+    if(!id) return;
+
+    let btn=document.createElement('button');
+    btn.className='share-btn';
+    btn.innerText='🔗 deel deze locatie';
+    btn.style.cssText='margin-top:12px;padding:6px 10px;cursor:pointer';
+
+    btn.onclick=function(){
+
+        let url=window.location.origin+window.location.pathname+'?id='+id;
+
+        navigator.clipboard.writeText(url)
+            .then(()=>alert('Link staat op klembord'))
+            .catch(()=>alert(url));
+    };
+
+    popup.appendChild(btn);
+}
 
 function fitSearchResults(){
 
@@ -441,6 +670,7 @@ function shareSearchResults(){
 function openSharedSearch(){
 
     let box = document.getElementById('searchBox');
+
     if(!box || typeof layersList === 'undefined'){
         setTimeout(openSharedSearch, 1000);
         return;
@@ -452,12 +682,12 @@ function openSharedSearch(){
     if(!q) return;
 
     box.value = q;
-
     searchResults = [];
 
     layersList.forEach(function(layer){
 
         if(!layer.getSource) return;
+
         let source = layer.getSource();
         if(!source.getFeatures) return;
 
@@ -479,62 +709,81 @@ function openSharedSearch(){
 }
 
 
-// --- NIEUWE FUNCTIES ONDERAAN CUSTOM.JS ---
+/* =================================================
+   ZOEKEN IN DE BUURT
+   ================================================= */
 
 window.searchNearby = function() {
+
     if (!navigator.geolocation) {
         alert("Geolocatie wordt niet ondersteund.");
         return;
     }
-    
-    // Roep de opschoonfunctie aan
+
     clearPreviousHighlights();
 
     navigator.geolocation.getCurrentPosition(function(position) {
-        const userLonLat = [position.coords.longitude, position.coords.latitude];
+
+        const userLonLat = [
+            position.coords.longitude,
+            position.coords.latitude
+        ];
+
         searchResults = [];
         const radiusKm = 10;
 
         layersList.forEach(function(layer) {
+
             if (!layer.getSource || !layer.getSource().getFeatures) return;
+
             layer.getSource().getFeatures().forEach(function(f) {
+
                 checkDistance(f, userLonLat, radiusKm);
+
                 if (f.get('features')) {
-                    f.get('features').forEach(inner => checkDistance(inner, userLonLat, radiusKm));
+                    f.get('features').forEach(inner =>
+                        checkDistance(inner, userLonLat, radiusKm)
+                    );
                 }
             });
         });
 
         showResultsList();
+
         if (searchResults.length > 0) {
-            highlightSearchResults(); 
+            highlightSearchResults();
             fitSearchResults();
         } else {
             alert("Niets gevonden binnen 10km.");
         }
+
     }, function(err) {
         alert("Locatie-fout: " + err.message);
     });
 };
 
 function checkDistance(f, userLonLat, radiusKm) {
+
     let geom = f.getGeometry();
     if (!geom) return;
-    
-    let featCoord = geom.getType() === 'Point' 
-        ? geom.getCoordinates() 
+
+    let featCoord = geom.getType() === 'Point'
+        ? geom.getCoordinates()
         : ol.extent.getCenter(geom.getExtent());
 
     let finalLonLat;
 
-    // CHECK: Zijn de coördinaten in meters? (bijv. 150000 of 6000000)
     if (Math.abs(featCoord[0]) > 500) {
-        // Omzetten van meters (EPSG:3857 of EPSG:28992) naar graden (EPSG:4326)
-        // We gaan ervan uit dat de kaart-view projectie de bron is
-        finalLonLat = ol.proj.toLonLat(featCoord, map.getView().getProjection());
+
+        finalLonLat = ol.proj.toLonLat(
+            featCoord,
+            map.getView().getProjection()
+        );
+
     } else {
-        // Het zijn al graden, maar staan ze in Lat/Lon of Lon/Lat?
+
         let lon, lat;
+
         if (Math.abs(featCoord[0]) > Math.abs(featCoord[1])) {
             lat = featCoord[0];
             lon = featCoord[1];
@@ -542,33 +791,51 @@ function checkDistance(f, userLonLat, radiusKm) {
             lon = featCoord[0];
             lat = featCoord[1];
         }
+
         finalLonLat = [lon, lat];
     }
 
-    // Bereken de afstand met de nu gegarandeerde [Lon, Lat] in graden
-    const distance = ol.sphere.getDistance(userLonLat, finalLonLat) / 1000;
+    const distance = ol.sphere.getDistance(
+        userLonLat,
+        finalLonLat
+    ) / 1000;
 
-    // Debugging in F12 console
-    console.log(`Gevonden op ${distance.toFixed(2)} km. Coördinaten gebruikt:`, finalLonLat);
+    console.log(
+        `Gevonden op ${distance.toFixed(2)} km. Coördinaten gebruikt:`,
+        finalLonLat
+    );
 
     if (distance <= radiusKm) {
         searchResults.push(f);
     }
 }
+
 function clearPreviousHighlights() {
-    // Wis de lijst met resultaten
+
     searchResults = [];
-    // Reset alle stijlen op de kaart
+
     layersList.forEach(function(layer) {
+
         if (!layer.getSource || !layer.getSource().getFeatures) return;
+
         layer.getSource().getFeatures().forEach(function(f) {
+
             if (f.setStyle) f.setStyle(null);
+
             if (f.get('features')) {
-                f.get('features').forEach(inner => { if(inner.setStyle) inner.setStyle(null); });
+                f.get('features').forEach(inner => {
+                    if(inner.setStyle) inner.setStyle(null);
+                });
             }
         });
     });
 }
+
+
+/* =================================================
+   FOTO-GALERIJ
+   ================================================= */
+
 const gallery = document.createElement('div');
 
 gallery.id = "photoGallery";
@@ -593,10 +860,12 @@ gallery.innerHTML = `
 
 document.body.appendChild(gallery);
 
-// sluiten bij klik buiten
 gallery.onclick = function(e){
+
     if(e.target.id === "photoGallery"){
+
         gallery.style.display = "none";
+
         document.getElementById("galleryContent").innerHTML = "";
     }
 };
