@@ -150,11 +150,11 @@ function showResultsList(){
     searchResults.sort(function(a,b){
         let naamA =
             (a.get('plaats') || '') + ' ' +
-            (a.get('gebouw') || a.get('kerknaam') || a.get('titel') || '');
+            (a.get('gebouw') || a.get('kerk') || a.get('titel') || '');
 
         let naamB =
             (b.get('plaats') || '') + ' ' +
-            (b.get('gebouw') || b.get('kerknaam') || b.get('titel') || '');
+            (b.get('gebouw') || b.get('kerk') || b.get('titel') || '');
 
         return naamA.localeCompare(naamB, 'nl');
     });
@@ -177,7 +177,7 @@ function showResultsList(){
     searchResults.forEach(function(f,i){
 
         let plaats = f.get('plaats') || '';
-        let gebouw = f.get('gebouw') || f.get('kerknaam') || f.get('titel') || '';
+        let gebouw = f.get('gebouw') || f.get('kerk') || f.get('titel') || '';
         let tekst = plaats + (gebouw ? ', ' + gebouw : '');
 
         let symbool = '*';
@@ -272,7 +272,7 @@ function openPopup(feature,coord){
 
  for(let key in props){
 
-   if(['geometry','plaats','gebouw','kerknaam','titel'].includes(key)) continue;
+   if(['geometry','plaats','gebouw','kerk','titel'].includes(key)) continue;
 
    let val = props[key];
 
