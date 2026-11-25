@@ -180,7 +180,7 @@ lyr_boeken_3.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw
 lyr_kunstenaars_4.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'kuntenaar': 'TextEdit', 'titel': 'TextEdit', 'link': 'TextEdit', });
 lyr_kerkfotografie_5.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'tefwoord': '', 'trefwoord': '', });
 lyr_mijnstreek_6.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', });
-lyr_maas_en_waal_7.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'kerk': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', });
+lyr_maas_en_waal_7.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'kerk': 'TextEdit', 'link': 'TextEdit', 'trefwoord': 'TextEdit', });
 lyr_oostbrabant_8.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': '', 'link': '', 'trefwoord': '', 'link_id': '', });
 lyr_beeldbankRCE_9.set('fieldImages', {'fid': 'TextEdit', 'id': 'TextEdit', 'adres': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': 'TextEdit', 'link_id': 'TextEdit', 'plaats': 'TextEdit', });
 lyr_limburg_10.set('fieldImages', {'id': 'TextEdit', 'plaats': 'TextEdit', 'gebouw': 'TextEdit', 'link': 'TextEdit', 'trefwoord': '', });
