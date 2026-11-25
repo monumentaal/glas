@@ -255,7 +255,7 @@ function openPopup(feature,coord){
  
 
  let plaats = props.plaats || '';
- let gebouw = props.gebouw || props.kerknaam || '';
+ let gebouw = props.gebouw || props.kerk || '';
  let titel  = props.titel || '';
 
  let kop =
