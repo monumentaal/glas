@@ -19,11 +19,11 @@ var style_oostbrabant_8 = function(feature, resolution){
     var overflow = false;
     var repeat = 0;
     var placement = 'point';
-    if (feature.get("kerknaam") !== null) {
-        labelText = String(feature.get("kerknaam"));
+    if (exp_label_oostbrabant_8_eval_expression(context) !== null) {
+        labelText = String(exp_label_oostbrabant_8_eval_expression(context));
     }
     var style = [ new ol.style.Style({
-        image: new ol.style.Circle({radius: 6.0 + size,
+        image: new ol.style.Circle({radius: 5.0 + size,
             displacement: [0, 0], stroke: new ol.style.Stroke({color: 'rgba(61,128,53,1.0)', lineDash: null, lineCap: 'butt', lineJoin: 'miter', width: 1.52}), fill: new ol.style.Fill({color: 'rgba(84,176,74,1.0)'})}),
         text: createTextStyle(feature, resolution, labelText, labelFont,
                               labelFill, placement, bufferColor,
