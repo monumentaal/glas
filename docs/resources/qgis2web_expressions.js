@@ -763,3 +763,17 @@ function fnc__specialcol_(values, context) {
 function fnc_project_color(values, context) {
     return false;
 };
+
+
+
+function exp_label_oostbrabant_8_eval_expression(context) {
+    // kerknaam
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return feature.get('kerknaam') ;
+    } else {
+        return feature.get('kerknaam') ;
+    }
+}
